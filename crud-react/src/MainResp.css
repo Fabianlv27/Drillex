@@ -1,0 +1,21 @@
+@media (min-width:1000px) {
+    nav p{
+      
+        left: 6vw;
+    }
+    nav img{
+        margin-left: 1vw;
+    }
+    .cardContainer div{
+        height: 18rem;
+        width: 25vw;
+    }
+    .cardContainer div p{
+        font-size: 25px;
+    }
+    .cardContainer div h3{
+        font-size: 25px;
+    }
+    
+
+}

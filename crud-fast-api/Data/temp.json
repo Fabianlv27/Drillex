@@ -1,0 +1,438 @@
+{
+    "Letter": "G",
+    "Phr": [
+        {
+            "Name": "Go after",
+            "Gerund": "Going after",
+            "Past": "Went after",
+            "Meaning": "To pursue or chase someone or something",
+            "Examples": [
+                "He went after the thief who stole his wallet.",
+                "She's going after her dream of becoming an artist.",
+                "The dog went after the cat that entered the yard.",
+                "They're going after a new market for their products.",
+                "I'm going after the promotion with everything I've got."
+            ],
+            "Synonyms": ["Chase", "Pursue"],
+            "Antonyms": ["Retreat", "Give up"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give away",
+            "Gerund": "Giving away",
+            "Past": "Gave away",
+            "Meaning": "To give something to someone without expecting payment",
+            "Examples": [
+                "She gave away all her old clothes to charity.",
+                "They gave away free samples of the new product.",
+                "He gave away his books to friends before moving.",
+                "The store gave away gift cards to loyal customers.",
+                "We gave away our tickets to the concert because we couldn't attend."
+            ],
+            "Synonyms": ["Donate", "Gift"],
+            "Antonyms": ["Sell", "Charge"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give back",
+            "Gerund": "Giving back",
+            "Past": "Gave back",
+            "Meaning": "To return something to its rightful owner or origin",
+            "Examples": [
+                "He gave back the money he found on the street.",
+                "They're giving back to the community by volunteering.",
+                "She gave back the borrowed book to the library.",
+                "The company gives back a portion of its profits to charity.",
+                "We should give back to those who have helped us along the way."
+            ],
+            "Synonyms": ["Return", "Repay"],
+            "Antonyms": ["Keep", "Take"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get over",
+            "Gerund": "Getting over",
+            "Past": "Got over",
+            "Meaning": "To recover from something, such as an illness or emotional setback",
+            "Examples": [
+                "She's trying to get over a bad breakup.",
+                "He got over his cold quickly with rest and medication.",
+                "They're getting over the shock of the accident.",
+                "It takes time to get over the loss of a loved one.",
+                "We need to get over our fear of failure and move forward."
+            ],
+            "Synonyms": ["Recover from", "Move past"],
+            "Antonyms": ["Suffer from", "Be stuck in"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get along",
+            "Gerund": "Getting along",
+            "Past": "Got along",
+            "Meaning": "To have a good relationship or rapport with someone",
+            "Examples": [
+                "They get along well with their neighbors.",
+                "She finds it easy to get along with her coworkers.",
+                "Despite their differences, they manage to get along.",
+                "He gets along with everyone he meets.",
+                "It's important to get along with your classmates."
+            ],
+            "Synonyms": ["Coexist", "Be on good terms"],
+            "Antonyms": ["Conflict", "Disagree"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give in",
+            "Gerund": "Giving in",
+            "Past": "Gave in",
+            "Meaning": "To surrender or yield to pressure or persuasion",
+            "Examples": [
+                "She finally gave in to his demands.",
+                "They gave in to temptation and ate the cake.",
+                "He gave in to peer pressure and joined the group.",
+                "The government gave in to protesters' demands.",
+                "I refuse to give in to fear and will continue fighting for what's right."
+            ],
+            "Synonyms": ["Submit", "Concede"],
+            "Antonyms": ["Resist", "Stand firm"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go off",
+            "Gerund": "Going off",
+            "Past": "Went off",
+            "Meaning": "To explode, make a sudden loud noise, or stop working",
+            "Examples": [
+                "The alarm clock went off at 6 AM.",
+                "The fireworks went off with a bang.",
+                "The car alarm went off in the middle of the night.",
+                "The lights went off during the storm.",
+                "The bomb went off in the city center."
+            ],
+            "Synonyms": ["Explode", "Sound"],
+            "Antonyms": ["Stay on", "Remain silent"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give out",
+            "Gerund": "Giving out",
+            "Past": "Gave out",
+            "Meaning": "To distribute or provide something to others",
+            "Examples": [
+                "She gave out cookies to the children at the party.",
+                "They gave out flyers to advertise the event.",
+                "He gave out instructions before starting the project.",
+                "The charity gave out blankets to the homeless.",
+                "We should give out compliments more often."
+            ],
+            "Synonyms": ["Distribute", "Hand out"],
+            "Antonyms": ["Receive", "Keep"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go on",
+            "Gerund": "Going on",
+            "Past": "Went on",
+            "Meaning": "To continue or proceed",
+            "Examples": [
+                "The show must go on, despite the technical difficulties.",
+                "She went on to pursue her dream of becoming an astronaut.",
+                "The meeting went on for hours without reaching a conclusion.",
+                "Life goes on, even after setbacks and challenges.",
+                "He went on with his speech despite the interruption."
+            ],
+            "Synonyms": ["Continue", "Proceed"],
+            "Antonyms": ["Stop", "Cease"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give up",
+            "Gerund": "Giving up",
+            "Past": "Gave up",
+            "Meaning": "To surrender, quit, or stop trying",
+            "Examples": [
+                "She refused to give up, despite facing numerous obstacles.",
+                "They gave up searching for the lost treasure.",
+                "He gave up smoking for the sake of his health.",
+                "The team never gave up, even when trailing by a large margin.",
+                "I won't give up on my dreams, no matter what."
+            ],
+            "Synonyms": ["Quit", "Abandon"],
+            "Antonyms": ["Persist", "Keep trying"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get off",
+            "Gerund": "Getting off",
+            "Past": "Got off",
+            "Meaning": "To leave a vehicle or a mode of transportation",
+            "Examples": [
+                "She got off the bus at the next stop.",
+                "They got off the train at the wrong station.",
+                "He got off his bike and walked it up the hill.",
+                "The passengers got off the airplane after it landed.",
+                "We need to get off the subway at the next station."
+            ],
+            "Synonyms": ["Alight", "Dismount"],
+            "Antonyms": ["Get on", "Board"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give up on",
+            "Gerund": "Giving up on",
+            "Past": "Gave up on",
+            "Meaning": "To stop believing in or supporting someone or something",
+            "Examples": [
+                "She refused to give up on her dreams, despite the challenges.",
+                "They gave up on the idea of finding a solution.",
+                "He gave up on his friend after numerous disappointments.",
+                "The company gave up on the failing project.",
+                "We should never give up on those we care about."
+            ],
+            "Synonyms": ["Abandon", "Lose faith in"],
+            "Antonyms": ["Believe in", "Support"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get on",
+            "Gerund": "Getting on",
+            "Past": "Got on",
+            "Meaning": "To board or enter a vehicle or a mode of transportation",
+            "Examples": [
+                "She got on the bus and found a seat near the window.",
+                "They got on the subway at the busy station.",
+                "He got on his bike and started pedaling.",
+                "The passengers got on the ferry to the island.",
+                "We need to get on the train before it departs."
+            ],
+            "Synonyms": ["Board", "Enter"],
+            "Antonyms": ["Get off", "Alight"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go over",
+            "Gerund": "Going over",
+            "Past": "Went over",
+            "Meaning": "To review, examine, or discuss something in detail",
+            "Examples": [
+                "She went over the details of the project with her team.",
+                "They need to go over the contract before signing it.",
+                "He went over his notes before the exam.",
+                "The teacher went over the lesson to ensure everyone understood.",
+                "Let's go over the plan one more time to make sure it's perfect."
+            ],
+            "Synonyms": ["Review", "Examine"],
+            "Antonyms": ["Skip", "Ignore"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give in to",
+            "Gerund": "Giving in to",
+            "Past": "Gave in to",
+            "Meaning": "To yield or submit to someone or something, especially reluctantly",
+            "Examples": [
+                "She gave in to temptation and ate the chocolate cake.",
+                "They gave in to pressure and agreed to the demands.",
+                "He gave in to exhaustion and went to bed early.",
+                "The government gave in to protesters' demands after weeks of demonstrations.",
+                "We should never give in to fear."
+            ],
+            "Synonyms": ["Surrender to", "Yield to"],
+            "Antonyms": ["Resist", "Defy"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go through",
+            "Gerund": "Going through",
+            "Past": "Went through",
+            "Meaning": "To experience or endure something difficult or unpleasant",
+            "Examples": [
+                "She went through a lot of hardship before achieving success.",
+                "They went through a tough time after losing their job.",
+                "He went through a messy divorce last year.",
+                "The company is going through a period of restructuring.",
+                "We all have to go through challenges in life."
+            ],
+            "Synonyms": ["Experience", "Undergo"],
+            "Antonyms": ["Avoid", "Spare"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get by",
+            "Gerund": "Getting by",
+            "Past": "Got by",
+            "Meaning": "To manage to survive or cope with a situation, especially with limited resources",
+            "Examples": [
+                "She gets by on a small income by budgeting carefully.",
+                "They're just getting by until they find a new job.",
+                "He got by with the help of his friends during tough times.",
+                "The family is struggling to get by on one income.",
+                "We can get by with what we have for now."
+            ],
+            "Synonyms": ["Survive", "Cope"],
+            "Antonyms": ["Thrive", "Flourish"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give off",
+            "Gerund": "Giving off",
+            "Past": "Gave off",
+            "Meaning": "To emit or release something, such as light, heat, or odor",
+            "Examples": [
+                "The flowers gave off a pleasant fragrance.",
+                "The lamp gives off a soft glow.",
+                "The oven gives off a lot of heat when in use.",
+                "The factory gives off toxic fumes into the air.",
+                "The burning wood gives off smoke and ash."
+            ],
+            "Synonyms": ["Emit", "Release"],
+            "Antonyms": ["Absorb", "Retain"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get rid of",
+            "Gerund": "Getting rid of",
+            "Past": "Got rid of",
+            "Meaning": "To dispose of or eliminate something unwanted or unnecessary",
+            "Examples": [
+                "She got rid of all the clutter in her house.",
+                "They got rid of the old furniture to make room for new ones.",
+                "He got rid of his bad habits through sheer determination.",
+                "The company decided to get rid of non-performing assets.",
+                "We need to get rid of the pests infesting our garden."
+            ],
+            "Synonyms": ["Dispose of", "Eliminate"],
+            "Antonyms": ["Keep", "Retain"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go along with",
+            "Gerund": "Going along with",
+            "Past": "Went along with",
+            "Meaning": "To agree or comply with someone or something",
+            "Examples": [
+                "She decided to go along with the group's decision.",
+                "They went along with the plan even though they had reservations.",
+                "He went along with his friend's suggestion for dinner.",
+                "The employees went along with the new policy without much resistance.",
+                "I'll go along with your proposal if it makes sense."
+            ],
+            "Synonyms": ["Comply with", "Concur with"],
+            "Antonyms": ["Oppose", "Disagree with"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go back",
+            "Gerund": "Going back",
+            "Past": "Went back",
+            "Meaning": "To return to a previous location or state",
+            "Examples": [
+                "She decided to go back to her hometown after years of living abroad.",
+                "They went back to the restaurant where they had their first date.",
+                "He went back to school to pursue a higher degree.",
+                "The company went back to its original business model after unsuccessful experiments.",
+                "Let's go back to the drawing board and come up with a new plan."
+            ],
+            "Synonyms": ["Return", "Revert"],
+            "Antonyms": ["Move forward", "Advance"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Get ahead",
+            "Gerund": "Getting ahead",
+            "Past": "Got ahead",
+            "Meaning": "To make progress or succeed, especially in relation to others",
+            "Examples": [
+                "She works hard to get ahead in her career.",
+                "They managed to get ahead of the competition with innovative strategies.",
+                "He got ahead by studying diligently for his exams.",
+                "The company is always looking for ways to get ahead in the market.",
+                "You can get ahead in life by setting clear goals and working towards them."
+            ],
+            "Synonyms": ["Succeed", "Advance"],
+            "Antonyms": ["Fall behind", "Lag"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Give out",
+            "Gerund": "Giving out",
+            "Past": "Gave out",
+            "Meaning": "To distribute or provide something to others",
+            "Examples": [
+                "She gave out cookies to the children at the party.",
+                "They gave out flyers to advertise the event.",
+                "He gave out instructions before starting the project.",
+                "The charity gave out blankets to the homeless.",
+                "We should give out compliments more often."
+            ],
+            "Synonyms": ["Distribute", "Hand out"],
+            "Antonyms": ["Receive", "Keep"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        },
+        {
+            "Name": "Go on",
+            "Gerund": "Going on",
+            "Past": "Went on",
+            "Meaning": "To continue or proceed",
+            "Examples": [
+                "The show must go on, despite the technical difficulties.",
+                "She went on to pursue her dream of becoming an astronaut.",
+                "The meeting went on for hours without reaching a conclusion.",
+                "Life goes on, even after setbacks and challenges.",
+                "He went on with his speech despite the interruption."
+            ],
+            "Synonyms": ["Continue", "Proceed"],
+            "Antonyms": ["Stop", "Cease"],
+            "Way": "Normal",
+            "Frequency": "Common"
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        
+        
+        
+        
+        
+
+        
+         
+    ]
+}

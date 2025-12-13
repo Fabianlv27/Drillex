@@ -1,0 +1,183 @@
+.MyLists{
+    margin-top: 6rem;
+}
+@keyframes grow {
+    0% {
+        transform: scale(0.7);
+        background-color: rgba(0, 0, 0, 0);
+    }
+    100% {
+        transform: scale(1);
+        background-color: rgb(7, 33, 56); /* Aumenta el tamaño en un 50% */
+    }
+  }
+  .ListEdit{
+    padding: 10px;
+    width: 30vw;
+    height: auto;
+    background-color: rgb(7, 33, 56);
+    box-shadow: inset 0px 0px 5px #47c8ffbf;
+    border-radius: 10px;
+    border:2px solid #47c8ffbf ;
+    margin-top: 1rem;
+
+  }
+  .input-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+  
+  .ListEdit input{
+    width: 70%;
+    height: 30px;
+    border-radius: 10px;
+    background-color: #0e0c1d;
+    color: #47c8ffbf;
+    font-size: 15px;
+    border: 2px solid #0e0c1d;
+    outline: none;
+    margin-right: 0.5rem;
+    box-shadow: 0px 5px 11px #000000bf;
+  }
+
+.ListsCreatorMenu {
+    height: auto;
+    width: auto;
+    background-color: rgb(7, 33, 56);
+    box-shadow: inset 0px 0px 5px #47c8ffbf;
+    border-radius: 10px;
+    border:2px solid #47c8ffbf ;
+    outline: 3px solid #47c8ffbf ;
+    outline-offset: 3px;
+    animation: grow 1s forwards;
+    margin-top: 2rem;
+ 
+}
+.ListsCreatorMenu button{
+    margin-bottom: 5%;
+    background-color: transparent;
+    color: aliceblue;
+    font-weight: bolder;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+}
+.ListsCreatorMenu h2{
+ margin-left: 10%;   
+}
+.titleList{
+    height: 6vw;
+    width: 40vw;
+    border-radius: 20px;
+    background-color: black;
+    color: #47c8ffbf;
+    font-size: 20px;
+    border: solid rgb(98, 155, 205);
+}
+.ListsButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ListsButtons button{
+  margin: 0.5rem;
+}
+
+.inputCreateList {
+  min-height: 50px;
+  max-width: 150px;
+  padding: 0 1rem;
+  color: #fff;
+  font-size: 15px;
+  border: 1px solid #5e4dcd;
+  border-radius: 6px 0 0 6px;
+  background-color: transparent;
+}
+
+.button--submit {
+  min-height: 50px;
+  padding: .5em 1em;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #5e4dcd;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color .3s ease-in-out;
+  margin-right: 3vw;
+}
+
+.button--submit:hover {
+  background-color: #5e5dcd;
+}
+
+.inputCreateList:focus, .inputCreateList:focus-visible {
+  border-color: #3898EC;
+  outline: none;
+}
+
+/* Tarjeta individual de lista */
+.MyListsMenu {
+  background: #0a2a4a;
+  border: 2px solid #00c3ff;
+  border-radius: 1rem;
+  overflow: hidden;
+  padding: 1rem 1.25rem;
+  flex: 1 1 200px;
+  max-width: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 1rem;
+}
+
+.MyListsMenu:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.MyListsMenu h3 {
+  font-size: 1.1rem;
+  color: #00c3ff;
+  text-align: center;
+}
+
+.custom-shape-divider-top-17208831491 .shape-fill {
+  fill: #0e0c1d;
+ 
+}
+.MyListsMenuContainer{
+  margin-top: 5%;
+    height: 100vh;
+    width: 100vw ;
+ position: relative;
+    background-color: #2c3e50;
+   
+
+}
+.ListCont2{
+  width: 100%;
+  padding: 1rem;
+  height: auto;
+  position: absolute;
+  top: 7%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.custom-shape-divider-top-17208831491 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 150px;
+}
+
+

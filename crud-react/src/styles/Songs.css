@@ -1,0 +1,82 @@
+.SongsMenu{
+    height: auto;
+    margin-top: 6rem;
+    color: aliceblue
+    
+}
+.Send{
+   
+    margin-left: 1rem;
+}
+.SongsMenu p{
+    font-size: 25px;
+}
+.TextandButtonLyricMenu{
+    display: flex;
+    margin-left: 5vw;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+.searchSong{
+
+width: 100%;
+display: flex;
+flex-direction: column;
+
+margin-top: 3rem;
+align-items: center;
+}
+.searchSong input:not(.CreateMenu input){
+    margin-top: 2rem;
+    height: 2rem;
+    width: 50vw;
+    font-size: 20px;
+    background-color: #3dafdf;
+    border: none;
+    border-radius: 20px;
+    transition: 0.7s;
+}
+.searchSong input:focus:not(.CreateMenu input:focus){
+outline: none;
+transform: scale(1.1);
+box-shadow: 0px 0px 5px #3dafdf;
+}
+.searchSong button:not(.black button){
+    margin-top: 1rem;
+}
+.YoutubeMenu{
+    margin-top: 6rem;
+}
+.YoutubeButtom,.SpotifyButtom{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    font-size: 25px;
+    cursor: pointer;
+    margin: 1.5rem;
+    transition: 0.5s;
+    border: none;
+  
+}
+.YoutubeButtom:hover,.SpotifyButtom:hover{
+    transform: scale(1.1);
+    font-size: 27px;
+    color: aliceblue;
+}
+
+.YoutubeButtom{
+    background-color: rgb(242, 56, 56);
+    box-shadow: 0px 0px 10px rgb(255, 0, 0);
+}
+.SpotifyButtom{
+    background-color: rgb(13, 208, 13);
+    box-shadow: 0px 0px 10px rgb(13, 208, 13);
+}
+.lyricAndMeaning{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

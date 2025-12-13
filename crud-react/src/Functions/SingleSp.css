@@ -1,0 +1,396 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .SongCard {
+    z-index: 2;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.733);
+    backdrop-filter: blur(10px);
+  }
+  
+  .blocked {
+    pointer-events: none;
+    opacity: 0.5;
+    display: none;
+  }
+  
+  .Common {
+    font-weight: bolder;
+  }
+  
+  .definitions,
+  .examples {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .definitions p {
+    margin-bottom: 1px;
+  }
+  
+  .SmallCreator {
+    width: 100%;
+    height: 80%;
+    border: solid 1px black;
+    position: relative;
+  }
+  
+  .Commonphr {
+    font-weight: bolder;
+  }
+  
+  .sptfVisualizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2rem;
+    width: 100%;
+    height: 7rem;
+    background-color: rgba(11, 11, 11, 0.9);
+  }
+  
+  .fixedYoutubeVideo {
+    background-color: black;
+    box-shadow: 0px 0px 50px rgba(0, 195, 255, 0.268);
+  }
+  
+  .contVideoAndLyric {
+    width: 80vw;
+    height: 100%;
+    display: flex;
+    margin-top: 2rem;
+  }
+  
+  .PasteLinkYt {
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+    width: 100%;
+  }
+  
+  .containerME {
+    width: 90%;
+    max-width: 26rem;
+    max-height: 70vh;
+    margin: 5rem auto 0;
+    background-color: rgba(11, 54, 91, 0.759);
+    border-radius: 10px;
+    color: aliceblue;
+    border: solid 1px rgb(0, 195, 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+  }
+  
+  .mainConetinerMeaning {
+    width: 100%;
+    min-height: 150vh;
+    background-color: rgba(0, 0, 0, 0.732);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: auto;
+  }
+  
+  .close {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.5s;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.634);
+  }
+  
+  .close:hover {
+    transform: scale(1.1);
+    font-size: 25px;
+  }
+  
+  .TitleSecctionMeaning {
+    width: 100%;
+    height: 4rem;
+    background-color: rgb(0, 195, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.737);
+  }
+  
+  .TitleSecctionMeaning button {
+    position: absolute;
+    left: 5px;
+  }
+  
+  .MeaningWordSearched {
+    font-size: 3em;
+    font-weight: bolder;
+  }
+  
+  .inputsAndText {
+    width: 90%;
+    display: flex;
+    margin-top: 5%;
+  }
+  
+  .PhrMenu {
+    width: 90%;
+    max-width: 26rem;
+    margin: 8rem auto 5rem;
+  }
+  
+  .phrB {
+    transform: translateY(-0.5rem);
+    transition: transform 0.3s;
+  }
+  
+  .phrB:hover {
+    transform: translateY(-0.7rem);
+  }
+  
+  .VerbTenses {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5% 0;
+    text-align: center;
+  }
+  
+  .AntCardPhr,
+  .SynCardPhr {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5%;
+    font-weight: bolder;
+    text-shadow: 0px 0px 20px black;
+    padding: 10px;
+    height: 2rem;
+    font-size: 0.5rem;
+    overflow-y: scroll;
+  }
+
+  .AntCardPhr {
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.674);
+  }
+  
+  .SynCardPhr {
+    border: 2px solid rgba(0, 195, 255, 0.644);
+    background-color: rgba(0, 195, 255, 0.648);
+  }
+  
+  .levelAndFreq {
+    width: 70%;
+    margin-bottom: 5%;
+  }
+  
+  .youtubeSearch {
+    margin-top: 2rem;
+  }
+  
+  .SingleVerse {
+    width: 90%;
+    display: flex;
+    margin: 5px auto;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.178);
+  }
+  
+  .SingleVerseText {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    margin: 0.5rem auto;
+  }
+  
+  .SingleVerseText a {
+    margin: 2px;
+  }
+  
+  .timeSet {
+    cursor: pointer;
+  }
+  
+  .SignSpotMenu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20vw;
+    color: whitesmoke;
+    font-size: 20px;
+  }
+  
+  .TextSign {
+    width: 90%;
+    margin: 5vw auto;
+  }
+  
+  .lyricSP {
+    width: 90%;
+    height: 25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: whitesmoke;
+  }
+  .ManualLyric{
+    width: 100%;
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+  }
+  .ManualLyric h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e6e6e6;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .ManualLyric button{
+    font-size: 15px;
+  }
+  .ManualLyric textarea {
+    width: 30%;
+    height: 5rem;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    resize: none;
+    margin-bottom: 1rem;
+  }
+  .lyricYoutube {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: whitesmoke;
+  }
+  
+  .VerseYt {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    background-color: rgba(3, 42, 42, 0.755);
+    border: none;
+  }
+  
+  /* Media Queries */
+  
+  /* Dispositivos móviles */
+  @media (max-width: 767px) {
+    .fixedYoutubeVideo {
+      height: 14rem;
+      width: 75%;
+      max-width: none;
+      margin-top: 1.5rem;
+    }
+    .TitleSecctionMeaning,
+    .VerbTenses {
+      flex-direction: column;
+      text-align: center;
+    }
+    .MeaningWordSearched {
+      font-size: 2em;
+    }
+    .containerME {
+      width: 95%;
+      max-width: none;
+    }
+    .SignSpotMenu {
+      margin-top: 10vw;
+    }
+    .contVideoAndLyric {
+      flex-direction: column;
+margin-top: 2rem;
+    }
+    .lyricYoutube{
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    }
+  }
+  
+  /* Tablets */
+  @media (min-width: 768px) and (max-width: 999px) {
+    .fixedYoutubeVideo {
+      height: 15rem;
+      width: 90%;
+    }
+    .TitleSecctionMeaning {
+      font-size: 1.5rem;
+    }
+    .MeaningWordSearched {
+      font-size: 2.5em;
+    }
+  }
+  
+  /* Escritorio */
+  @media (min-width: 1000px) {
+    .LyricAndListCont {
+      display: flex;
+      width: 100%;
+    }
+    .contVideoAndLyric {
+      flex-direction: row;
+      margin-bottom: 5rem;
+      justify-content: space-around;
+      align-content: space-around;
+      align-items: center;
+    }
+    .lyricYoutube {
+      width: 30rem;
+    }
+    .fixedYoutubeVideo {
+      height: 22.5rem;
+      width: 40rem;
+      display: flex;
+    }
+  }
+  

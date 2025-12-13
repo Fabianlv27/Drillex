@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h2> {{data.username}}</h2>
+    <p>id: {{data.id}}</p>
+    <form action="/users/logout" method="post">
+        <input type="submit" value="logout">
+    </form>
+    <script>
+       
+       const jsonData = JSON.stringify({ data: {{ data | json }} });
+
+        // Codificar la cadena JSON como un parámetro de consulta
+        const queryString = new URLSearchParams({ jsonData }).toString();
+
+        // Redirigir al proyecto de React con la cadena de consulta
+        window.location.href = `http://localhost:5173/Hero?${queryString}`;
+        ;
+    </script>
+</body>
+</html>

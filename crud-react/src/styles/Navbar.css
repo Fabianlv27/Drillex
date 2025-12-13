@@ -1,0 +1,69 @@
+.mainHMenuNav{
+    color: skyblue;
+    margin-left: 5px;
+    border-bottom: solid 1px #a5c7ff4a;
+    cursor: pointer;
+    padding: 4px;
+}
+.menuStyle{
+        min-height: 150px;
+    width: 150px;
+    margin-top: 200px;
+    background-color: #072138;
+    border-radius: 10px;
+    padding: 5px;
+}
+.logoutButton{
+    height: 40px;
+    width: 40px;
+    background-color: transparent;
+    border : solid 1px skyblue;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s;
+    box-shadow: 0px 0px 5px rgba(135, 207, 235, 0.612);
+    margin-top: 1rem;
+    color: skyblue;
+    font-size: 20px;
+}
+.NavMenusCont{
+    width: auto;
+    display: flex;
+    margin-left: 1rem;
+}
+.NavMenusCont p{
+        border-right: solid 1px #87ceeb26;
+    color: #87ceeb;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+.NavMenusCont p:not(.SubMenuSearch p){
+    margin-left: 1.5rem;
+
+
+}
+.SingleSubMenu{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.SingleSubMenu:hover{
+    background-color: #87cfeb28;
+}
+.SubMenuSearch{
+    width: auto;
+    height: auto;
+    position: absolute;
+    margin-top: 2.5rem;
+    background-color: #072138;
+
+}
+.SubMenuSearch p{
+    font-size: 1rem;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.SubMenuSearch p:hover{
+    background-color: #10385ccc;
+}

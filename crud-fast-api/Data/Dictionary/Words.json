@@ -1,0 +1,2546 @@
+{
+    "A": {
+        "a": {
+            "word": "a",
+            "pronunciation": "/\u0259/",
+            "entries": [
+                {
+                    "partOfSpeech": "article",
+                    "definitions": [
+                        {
+                            "definition": "Indefinite article used before singular nouns",
+                            "example": "I saw a bird",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "very high"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Old English '\u0101n'"
+        },
+        "aa": {
+            "word": "aa",
+            "pronunciation": "/\u02c8\u0251\u02d0.\u0251\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Type of rough, jagged lava",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Hawaiian"
+        },
+        "aaa": {
+            "word": "aaa",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "abbreviation",
+                    "definitions": [
+                        {
+                            "definition": "American Automobile Association",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aah": {
+            "word": "aah",
+            "pronunciation": "/\u0251\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "interjection",
+                    "definitions": [
+                        {
+                            "definition": "Expression of surprise or pleasure",
+                            "example": "Aah! That's amazing!",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To exclaim with joy or surprise",
+                            "example": "The crowd aahed at the fireworks",
+                            "synonyms": [
+                                "exclaim",
+                                "cheer"
+                            ],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "aahed",
+                        "presentParticiple": "aahing",
+                        "thirdPerson": "aahs"
+                    }
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aahed": {
+            "word": "aahed",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Past tense of 'aah'",
+                            "example": "They aahed in delight",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aahing": {
+            "word": "aahing",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Present participle of 'aah'",
+                            "example": "She was aahing at the cute puppies",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aahs": {
+            "word": "aahs",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural form of 'aah' as a noun",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Third person singular of 'aah'",
+                            "example": "He aahs every time he sees candy",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aal": {
+            "word": "aal",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Type of Indian mulberry tree",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aalii": {
+            "word": "aalii",
+            "pronunciation": "/\u0251\u02d0\u02c8li\u02d0i\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Tropical shrub with sticky fruit",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Hawaiian"
+        },
+        "aam": {
+            "word": "aam",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Old unit of liquid measure",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Dutch 'aam'"
+        },
+        "aardvark": {
+            "word": "aardvark",
+            "pronunciation": "/\u02c8\u0251\u02d0rd.v\u0251\u02d0rk/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Nocturnal African mammal that eats ants",
+                            "example": "The aardvark dug for termites",
+                            "synonyms": [
+                                "antbear"
+                            ],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Afrikaans 'earth pig'"
+        },
+        "aardwolf": {
+            "word": "aardwolf",
+            "pronunciation": "/\u02c8\u0251\u02d0rd.w\u028alf/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Insect-eating relative of the hyena",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Afrikaans 'earth wolf'"
+        },
+        "aargh": {
+            "word": "aargh",
+            "pronunciation": "/\u0251\u02d0r\u0261/",
+            "entries": [
+                {
+                    "partOfSpeech": "interjection",
+                    "definitions": [
+                        {
+                            "definition": "Expression of frustration or pain",
+                            "example": "Aargh! I stubbed my toe!",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aaron": {
+            "word": "aaron",
+            "pronunciation": "/\u02c8\u025b\u0259r.\u0259n/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Male given name",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Hebrew"
+        },
+        "aaronic": {
+            "word": "aaronic",
+            "pronunciation": "/\u025b\u0259\u02c8r\u0252n\u026ak/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Relating to Aaron, the biblical figure",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "formal",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aaronical": {
+            "word": "aaronical",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Variant of Aaronic",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aaronite": {
+            "word": "aaronite",
+            "pronunciation": "/\u02c8\u025b\u0259r\u0259na\u026at/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Descendant of Aaron",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "religious",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aaronitic": {
+            "word": "aaronitic",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Relating to the Aaronites",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "religious",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aarrgh": {
+            "word": "aarrgh",
+            "pronunciation": "/\u0251\u02d0r\u0261/",
+            "entries": [
+                {
+                    "partOfSpeech": "interjection",
+                    "definitions": [
+                        {
+                            "definition": "Variant of 'aargh', expressing frustration",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aarrghh": {
+            "word": "aarrghh",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "interjection",
+                    "definitions": [
+                        {
+                            "definition": "Emphatic variant of 'aarrgh'",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aaru": {
+            "word": "aaru",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "In Egyptian mythology, the heavenly paradise",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "specialized",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Egyptian mythology"
+        },
+        "aas": {
+            "word": "aas",
+            "pronunciation": "/\u0251\u02d0s/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural of 'aa', a type of lava",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aasvogel": {
+            "word": "aasvogel",
+            "pronunciation": "/\u02c8\u0251\u02d0sfo\u028a\u0261\u0259l/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "South African vulture",
+                            "example": null,
+                            "synonyms": [
+                                "vulture"
+                            ],
+                            "antonyms": [],
+                            "formality": "regional",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Afrikaans 'aas' (carrion) + 'vogel' (bird)"
+        },
+        "ab": {
+            "word": "ab",
+            "pronunciation": "/\u00e6b/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Abdominal muscle (colloquial)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": "medium"
+                        },
+                        {
+                            "definition": "Short for 'about' in text messaging",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "informal",
+                            "usageFrequency": "high"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aba": {
+            "word": "aba",
+            "pronunciation": "/\u0259\u02c8b\u0251\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Arab outer garment",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "cultural",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Type of fabric made from goat or camel hair",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Arabic '\u02bfab\u0101\u02be'"
+        },
+        "abac": {
+            "word": "abac",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Obsolete term for an abacus",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaca": {
+            "word": "abaca",
+            "pronunciation": "/\u02cc\u0251\u02d0b\u0259\u02c8k\u0251\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Philippine banana plant yielding Manila hemp",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Spanish, from Tagalog 'abak\u00e1'"
+        },
+        "abacay": {
+            "word": "abacay",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Alternative name for abaca plant",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "regional",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abacate": {
+            "word": "abacate",
+            "pronunciation": "/\u0259\u02c8b\u0251\u02d0k\u0259t/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Portuguese word for avocado",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "foreign",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Portuguese"
+        },
+        "abacaxi": {
+            "word": "abacaxi",
+            "pronunciation": "/\u0259\u02ccb\u0251\u02d0k\u0259\u02c8\u0283i\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Portuguese word for pineapple",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "foreign",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Tupi 'ib\u00e1' (fruit) + 'kati' (fragrant)"
+        },
+        "abaci": {
+            "word": "abaci",
+            "pronunciation": "/\u02c8\u00e6b\u0259sa\u026a/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural of abacus (calculating tool)",
+                            "example": "The ancient Romans used abaci for calculations.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "Latin plural of abacus"
+        },
+        "abacinate": {
+            "word": "abacinate",
+            "pronunciation": "/\u0259\u02c8b\u00e6s\u026ane\u026at/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To blind by holding a red-hot metal plate before the eyes",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abacinated",
+                        "presentParticiple": "abacinating",
+                        "thirdPerson": "abacinates"
+                    }
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Latin abacinare"
+        },
+        "abacination": {
+            "word": "abacination",
+            "pronunciation": "/\u0259\u02ccb\u00e6s\u026a\u02c8ne\u026a\u0283\u0259n/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "The act of blinding someone with intense light or heat",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaciscus": {
+            "word": "abaciscus",
+            "pronunciation": "/\u02cc\u00e6b\u0259\u02c8s\u026ask\u0259s/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Small tile used in mosaics",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "Diminutive of abacus"
+        },
+        "abacist": {
+            "word": "abacist",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Person skilled in using an abacus",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "historical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aback": {
+            "word": "aback",
+            "pronunciation": "/\u0259\u02c8b\u00e6k/",
+            "entries": [
+                {
+                    "partOfSpeech": "adverb",
+                    "definitions": [
+                        {
+                            "definition": "By surprise",
+                            "example": "I was taken aback by the news.",
+                            "synonyms": [
+                                "surprised",
+                                "startled"
+                            ],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "nautical term",
+                    "definitions": [
+                        {
+                            "definition": "With sails pressed backward against the mast",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "Old English 'on b\u00e6c' (backwards)"
+        },
+        "abacterial": {
+            "word": "abacterial",
+            "pronunciation": "/\u02cce\u026ab\u00e6k\u02c8t\u026a\u0259ri\u0259l/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Not caused by bacteria",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "medical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abactinal": {
+            "word": "abactinal",
+            "pronunciation": "/\u00e6\u02c8b\u00e6kt\u026an\u0259l/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Opposite to the mouth (in starfish and other echinoderms)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "zoology",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaction": {
+            "word": "abaction",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "The stealing of cattle in herds",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Latin abactio"
+        },
+        "abactor": {
+            "word": "abactor",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "One who steals cattle in large numbers",
+                            "example": null,
+                            "synonyms": [
+                                "rustler"
+                            ],
+                            "antonyms": [],
+                            "formality": "legal/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abacus": {
+            "word": "abacus",
+            "pronunciation": "/\u02c8\u00e6b\u0259k\u0259s/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Calculating tool with beads sliding on rods",
+                            "example": "Children learn math using an abacus.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        },
+                        {
+                            "definition": "Architectural element atop a column capital",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "architecture",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Greek 'abax' (counting board)"
+        },
+        "abada": {
+            "word": "abada",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Old term for rhinoceros",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "African antelope (obsolete term)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Portuguese/Spanish, of African origin"
+        },
+        "abaddon": {
+            "word": "abaddon",
+            "pronunciation": "/\u0259\u02c8b\u00e6d\u0259n/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Biblical name for the place of destruction",
+                            "example": null,
+                            "synonyms": [
+                                "hell",
+                                "perdition"
+                            ],
+                            "antonyms": [],
+                            "formality": "religious",
+                            "usageFrequency": "low"
+                        },
+                        {
+                            "definition": "The angel of the abyss",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "religious",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Hebrew '\u0103\u1e07add\u014dn' (destruction)"
+        },
+        "abadejo": {
+            "word": "abadejo",
+            "pronunciation": "/\u0251\u02d0b\u0251\u02d0\u02c8de\u026aho\u028a/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Spanish term for codfish or pollock",
+                            "example": "El abadejo es un pescado blanco muy popular en Espa\u00f1a.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "foreign",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Spanish"
+        },
+        "abadengo": {
+            "word": "abadengo",
+            "pronunciation": "/\u0251\u02d0b\u0251\u02d0\u02c8de\u026a\u014b\u0261o\u028a/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Relating to an abbot or abbey",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "historical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Spanish, related to 'abad' (abbot)"
+        },
+        "abadia": {
+            "word": "abadia",
+            "pronunciation": "/\u0251\u02d0b\u0251\u02d0\u02c8di\u02d0\u0251\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Portuguese/Spanish term for abbey",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "foreign",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abadite": {
+            "word": "abadite",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Descendant of Abad, an Arabic name",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "specialized",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaff": {
+            "word": "abaff",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adverb",
+                    "definitions": [
+                        {
+                            "definition": "Nautical term meaning toward the stern",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic/technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaft": {
+            "word": "abaft",
+            "pronunciation": "/\u0259\u02c8b\u00e6ft/",
+            "entries": [
+                {
+                    "partOfSpeech": "preposition",
+                    "definitions": [
+                        {
+                            "definition": "Behind or toward the rear of a ship",
+                            "example": "The lifeboats are stored abaft the funnel.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "nautical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "Old English 'on b\u00e6ftan' (at the back)"
+        },
+        "abay": {
+            "word": "abay",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Obsolete term for barking or a bark",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abayah": {
+            "word": "abayah",
+            "pronunciation": "/\u0259\u02c8ba\u026a\u0259/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Traditional Arabic cloak worn by women",
+                            "example": null,
+                            "synonyms": [
+                                "aba",
+                                "hijab"
+                            ],
+                            "antonyms": [],
+                            "formality": "cultural",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Arabic '\u02bfab\u0101ya'"
+        },
+        "abaisance": {
+            "word": "abaisance",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Obsolete form of obeisance (a bow or gesture of respect)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaised": {
+            "word": "abaised",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Heraldic term meaning lowered",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "heraldry",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaiser": {
+            "word": "abaiser",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Ivory black pigment made from charred ivory",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "art/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abaisse": {
+            "word": "abaisse",
+            "pronunciation": "/\u0251\u02d0\u02c8be\u026as/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Thin pastry dough used as base in cooking",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "culinary",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "French 'abaisser' (to lower)"
+        },
+        "abaka": {
+            "word": "abaka",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Alternative spelling of abaca (Manila hemp plant)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "variant",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abalation": {
+            "word": "abalation",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Misspelling of ablation (removal of material)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "error",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abalienate": {
+            "word": "abalienate",
+            "pronunciation": "/\u00e6b\u02c8e\u026ali\u0259ne\u026at/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To transfer legal title of property",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abalienated",
+                        "presentParticiple": "abalienating",
+                        "thirdPerson": null
+                    }
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Latin 'abalienare'"
+        },
+        "abalienation": {
+            "word": "abalienation",
+            "pronunciation": "/\u00e6b\u02cce\u026ali\u0259\u02c8ne\u026a\u0283\u0259n/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Legal transfer of property rights",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abalone": {
+            "word": "abalone",
+            "pronunciation": "/\u02cc\u00e6b\u0259\u02c8lo\u028ani/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Edible sea mollusk with a ear-shaped shell lined with mother-of-pearl",
+                            "example": "We harvested abalone off the California coast.",
+                            "synonyms": [
+                                "ormer",
+                                "sea ear"
+                            ],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Spanish 'abul\u00f3n', from Rumsen (Native American) 'awlun'"
+        },
+        "abalones": {
+            "word": "abalones",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural form of abalone",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abama": {
+            "word": "abama",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Genus of large tropical American butterflies",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "zoology",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abamp": {
+            "word": "abamp",
+            "pronunciation": "/\u02c8\u00e6b\u00e6mp/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Abbreviation for abampere",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abampere": {
+            "word": "abampere",
+            "pronunciation": "/\u00e6b\u02c8\u00e6mp\u026a\u0259r/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Unit of electric current in the electromagnetic CGS system (equal to 10 amperes)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "physics",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "ab- (absolute) + ampere"
+        },
+        "abamperes": {
+            "word": "abamperes",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural of abampere",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "aband": {
+            "word": "aband",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Obsolete form of abandon",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abanded",
+                        "presentParticiple": "abanding",
+                        "thirdPerson": null
+                    }
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandon": {
+            "word": "abandon",
+            "pronunciation": "/\u0259\u02c8b\u00e6nd\u0259n/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To leave completely and finally",
+                            "example": "They had to abandon the sinking ship.",
+                            "synonyms": [
+                                "desert",
+                                "forsake"
+                            ],
+                            "antonyms": [
+                                "keep",
+                                "retain"
+                            ],
+                            "formality": "neutral",
+                            "usageFrequency": "high"
+                        },
+                        {
+                            "definition": "To give up control of",
+                            "example": "She abandoned herself to grief.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abandoned",
+                        "presentParticiple": "abandoning",
+                        "thirdPerson": "abandons"
+                    }
+                },
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Complete surrender to natural impulses",
+                            "example": "He danced with wild abandon.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Old French 'abandoner', from 'a bandon' (at one's disposal)"
+        },
+        "abandonable": {
+            "word": "abandonable",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Capable of being abandoned",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandoned": {
+            "word": "abandoned",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Having been deserted or left",
+                            "example": "An abandoned factory stood at the edge of town.",
+                            "synonyms": [
+                                "deserted",
+                                "forsaken"
+                            ],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "high"
+                        },
+                        {
+                            "definition": "Unrestrained, shameless",
+                            "example": "Abandoned behavior at the party",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandonedly": {
+            "word": "abandonedly",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adverb",
+                    "definitions": [
+                        {
+                            "definition": "In an abandoned manner; without restraint",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandonee": {
+            "word": "abandonee",
+            "pronunciation": "/\u0259\u02ccb\u00e6nd\u0259\u02c8ni\u02d0/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "One to whom something is formally abandoned (especially in insurance)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandoner": {
+            "word": "abandoner",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "One who abandons",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandoning": {
+            "word": "abandoning",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Present participle of abandon",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandonment": {
+            "word": "abandonment",
+            "pronunciation": "/\u0259\u02c8b\u00e6nd\u0259nm\u0259nt/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "The act of abandoning",
+                            "example": "The abandonment of the project disappointed many.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "high"
+                        },
+                        {
+                            "definition": "Legal relinquishment of property rights",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandons": {
+            "word": "abandons",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Third-person singular present of abandon",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                },
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural of abandon (noun form)",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "neutral",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abandum": {
+            "word": "abandum",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Legal term for property to be abandoned",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "legal/archaic",
+                            "usageFrequency": "very low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "Medieval Latin"
+        },
+        "abaser": {
+            "word": "abaser",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "One who abases or humiliates others",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abasers": {
+            "word": "abasers",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Plural of abaser",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abash": {
+            "word": "abash",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To cause to feel embarrassed or ashamed",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abashed": {
+            "word": "abashed",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Embarrassed or ashamed",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abashment": {
+            "word": "abashment",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "State of being abashed; embarrassment",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abasia": {
+            "word": "abasia",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Inability to walk due to impaired coordination",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abasic": {
+            "word": "abasic",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Relating to abasia",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abask": {
+            "word": "abask",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adverb",
+                    "definitions": [
+                        {
+                            "definition": "In the sunshine; basking",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abashless": {
+            "word": "abashless",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Unabashed; not embarrassed",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abashedness": {
+            "word": "abashedness",
+            "pronunciation": null,
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "State of being abashed",
+                            "example": null,
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": null,
+                            "usageFrequency": null
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": null
+        },
+        "abassi": {
+            "word": "abassi",
+            "pronunciation": "/\u0259\u02c8b\u00e6si/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "A historical silver coin used in Persia.",
+                            "example": "The merchant paid with an abassi.",
+                            "synonyms": [],
+                            "antonyms": [],
+                            "formality": "formal",
+                            "usageFrequency": "rare"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From Persian \u0639\u0628\u0627\u0633\u06cc ('abb\u0101s\u012b), named after Shah Abbas I."
+        },
+        "abassin": {
+            "word": "abassin",
+            "pronunciation": "/\u0259\u02c8b\u00e6s\u026an/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "Variant of 'abassi', a Persian coin.",
+                            "example": "The abassin was used in trade.",
+                            "synonyms": [
+                                "abassi"
+                            ],
+                            "antonyms": [],
+                            "formality": "formal",
+                            "usageFrequency": "rare"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [
+                "abassi"
+            ],
+            "etymology": "Variant of 'abassi'."
+        },
+        "abastard": {
+            "word": "abastard",
+            "pronunciation": "/\u0259\u02c8b\u00e6st\u0259rd/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Degenerate; corrupted from original nobility.",
+                            "example": "The abastard lineage lost its prestige.",
+                            "synonyms": [
+                                "degenerate",
+                                "debased"
+                            ],
+                            "antonyms": [
+                                "noble",
+                                "pure"
+                            ],
+                            "formality": "archaic",
+                            "usageFrequency": "obsolete"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [
+                "abastardize"
+            ],
+            "relatedForms": [],
+            "etymology": "From Middle English, meaning 'degenerate'."
+        },
+        "abastardize": {
+            "word": "abastardize",
+            "pronunciation": "/\u0259\u02c8b\u00e6st\u0259rda\u026az/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To corrupt or debase in lineage or character.",
+                            "example": "The family was abastardized by generations of poor alliances.",
+                            "synonyms": [
+                                "debase",
+                                "corrupt"
+                            ],
+                            "antonyms": [
+                                "ennoble",
+                                "purify"
+                            ],
+                            "formality": "archaic",
+                            "usageFrequency": "obsolete"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abastardized",
+                        "presentParticiple": "abastardizing",
+                        "thirdPerson": "abastardizes"
+                    }
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [
+                "abastard"
+            ],
+            "etymology": "Derived from 'abastard'."
+        },
+        "abate": {
+            "word": "abate",
+            "pronunciation": "/\u0259\u02c8be\u026at/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "To reduce in amount, degree, or intensity.",
+                            "example": "The storm began to abate by evening.",
+                            "synonyms": [
+                                "diminish",
+                                "lessen"
+                            ],
+                            "antonyms": [
+                                "increase",
+                                "intensify"
+                            ],
+                            "formality": "neutral",
+                            "usageFrequency": "high"
+                        },
+                        {
+                            "definition": "To put an end to or nullify.",
+                            "example": "The court abated the lawsuit.",
+                            "synonyms": [
+                                "terminate",
+                                "annul"
+                            ],
+                            "antonyms": [
+                                "enforce",
+                                "uphold"
+                            ],
+                            "formality": "formal",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": {
+                        "past": "abated",
+                        "presentParticiple": "abating",
+                        "thirdPerson": "abates"
+                    }
+                },
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "A reduction or decrease.",
+                            "example": "There was an abate in taxes this year.",
+                            "synonyms": [
+                                "reduction",
+                                "decline"
+                            ],
+                            "antonyms": [
+                                "increase"
+                            ],
+                            "formality": "formal",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [
+                "abatement",
+                "abater"
+            ],
+            "relatedForms": [
+                "abated",
+                "abating"
+            ],
+            "etymology": "From Old French 'abatre', meaning 'to beat down'."
+        },
+        "abatement": {
+            "word": "abatement",
+            "pronunciation": "/\u0259\u02c8be\u026atm\u0259nt/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "The act or process of reducing.",
+                            "example": "Noise abatement measures were implemented.",
+                            "synonyms": [
+                                "reduction",
+                                "diminution"
+                            ],
+                            "antonyms": [
+                                "increase"
+                            ],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [
+                "abatements"
+            ],
+            "relatedForms": [
+                "abate"
+            ],
+            "etymology": "From Old French 'abatement'."
+        },
+        "abatis": {
+            "word": "abatis",
+            "pronunciation": "/\u02c8\u00e6b\u0259t\u026as/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "A defensive obstacle made of felled trees with sharpened branches.",
+                            "example": "The soldiers constructed an abatis to block the road.",
+                            "synonyms": [
+                                "barricade",
+                                "obstruction"
+                            ],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [
+                "abatised"
+            ],
+            "relatedForms": [
+                "abatises"
+            ],
+            "etymology": "From French 'abatis', meaning 'things thrown down'."
+        },
+        "abatable": {
+            "word": "abatable",
+            "pronunciation": "/\u0259\u02c8be\u026at\u0259b\u0259l/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Capable of being abated or reduced.",
+                            "example": "The nuisance was abatable by legal action.",
+                            "synonyms": [
+                                "reducible",
+                                "diminishable"
+                            ],
+                            "antonyms": [
+                                "permanent",
+                                "irreducible"
+                            ],
+                            "formality": "formal",
+                            "usageFrequency": "low"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [
+                "abate"
+            ],
+            "etymology": "Derived from 'abate' + '-able'."
+        },
+        "abatjour": {
+            "word": "abatjour",
+            "pronunciation": "/\u0259\u02c8b\u0251\u02d0\u0292\u028ar/",
+            "entries": [
+                {
+                    "partOfSpeech": "noun",
+                    "definitions": [
+                        {
+                            "definition": "A device, such as a skylight or reflector, used to direct light into a room.",
+                            "example": "The attic was lit by an abatjour.",
+                            "synonyms": [
+                                "skylight",
+                                "reflector"
+                            ],
+                            "antonyms": [],
+                            "formality": "technical",
+                            "usageFrequency": "rare"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [],
+            "etymology": "From French 'abat-jour', meaning 'reduce daylight'."
+        },
+        "abated": {
+            "word": "abated",
+            "pronunciation": "/\u0259\u02c8be\u026at\u026ad/",
+            "entries": [
+                {
+                    "partOfSpeech": "adjective",
+                    "definitions": [
+                        {
+                            "definition": "Reduced in force or intensity.",
+                            "example": "The abated winds made sailing easier.",
+                            "synonyms": [
+                                "diminished",
+                                "lessened"
+                            ],
+                            "antonyms": [
+                                "increased",
+                                "intensified"
+                            ],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [
+                "abate"
+            ],
+            "etymology": "Past participle of 'abate'."
+        },
+        "abating": {
+            "word": "abating",
+            "pronunciation": "/\u0259\u02c8be\u026at\u026a\u014b/",
+            "entries": [
+                {
+                    "partOfSpeech": "verb",
+                    "definitions": [
+                        {
+                            "definition": "Present participle of 'abate'; reducing in intensity.",
+                            "example": "The storm is abating slowly.",
+                            "synonyms": [
+                                "diminishing",
+                                "subsiding"
+                            ],
+                            "antonyms": [
+                                "increasing"
+                            ],
+                            "formality": "neutral",
+                            "usageFrequency": "medium"
+                        }
+                    ],
+                    "conjugations": null
+                }
+            ],
+            "derivedTerms": [],
+            "relatedForms": [
+                "abate"
+            ],
+            "etymology": "Present participle of 'abate'."
+        }
+    }
+}

@@ -1,0 +1,37 @@
+{
+ "A":[
+    {
+        "id":"",
+        "name":"",
+        "past":"",
+        "gerund":"",
+        "participle":"",
+        "meaning":[
+            {
+                "definition":"",
+                "examples":[""],
+                "partOfSpeech":"",
+                "synonyms":[],
+                "antonyms":[],
+                "intensity":"",
+                "frecuency":"",
+                "image":""
+            }
+        ],
+        "conjugation":{
+            "plural":{
+                "1p":"",
+                "2p":"",
+                "3p":""
+            },
+            "singular":{
+                 "1p":"",
+                "2p":"",
+                "3p":""
+            }
+        }
+       
+
+    }
+ ]
+}

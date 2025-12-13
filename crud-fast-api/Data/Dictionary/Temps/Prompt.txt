@@ -1,0 +1,29 @@
+te voy a pasar una serie de palabras y me tienes que dar un archivo json en el cual en un array de la clave "words" se encuentren objetos de la forma: {   "word": "jump",   "pronunciation": "/dʒʌmp/",   "entries": [     {       "partOfSpeech": "verb",       "definitions": [         {           "definition": "To propel oneself upwards or forwards into the air.",           "example": "She jumped over the puddle.",           "synonyms": ["leap", "hop"],           "antonyms": ["fall"],           "formality": "neutral",           "usageFrequency": "high"         }       ],       "conjugations": {         "past": "jumped",         "presentParticiple": "jumping",         "thirdPerson": "jumps"       }     },     {       "partOfSpeech": "noun",       "definitions": [         {           "definition": "An act of jumping.",           "example": "That was a great jump.",           "synonyms": ["leap"],           "formality": "neutral"         }       ]     }   ],   "derivedTerms": ["jumper", "jumpable", "jumpiness"],   "relatedForms": ["jumpiness", "rejump"],   "etymology": "From Middle English jompen" }  ten en cuenta que debes respetar el siguiente modelo : class Definition(BaseModel):
+    definition: str
+    example: Optional[str]
+    synonyms: Optional[List[str]] = []
+    antonyms: Optional[List[str]] = []
+    formality: Optional[str]
+    usageFrequency: Optional[str]
+
+
+class Conjugations(BaseModel):
+    past: Optional[str]
+    presentParticiple: Optional[str]
+    thirdPerson: Optional[str]
+
+
+class Entry(BaseModel):
+    partOfSpeech: str
+    definitions: List[Definition]
+    conjugations: Optional[Conjugations]
+
+
+class WordModel(BaseModel):
+    word: str
+    pronunciation: Optional[str]
+    entries: List[Entry]
+    derivedTerms: Optional[List[str]] = []
+    relatedForms: Optional[List[str]] = []
+    etymology: Optional[str]
+si la palabra tiene mas de una definicion colocala

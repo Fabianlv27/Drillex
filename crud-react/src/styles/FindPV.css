@@ -1,0 +1,273 @@
+.FindPVMenuMain{
+    margin-top: 10vh;
+    align-items: center;
+    text-align: center;
+}
+.FindPVMenuMain h1{
+font-size: 2.5rem;
+margin-bottom: 1rem;
+}
+.radio-inputs {
+    position: relative;
+    display: flex;
+    border-radius: 0.5rem;
+    
+    background: rgb(39,117,117);
+background: linear-gradient(0deg, rgba(39,117,117,1) 0%, rgba(20,159,160,1) 24%, rgba(0,195,255,1) 100%);
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 90%;
+    padding: 1rem 1rem 0 1rem;
+    margin-top: 5%;
+    margin-bottom: 10%;
+  }
+  
+  .radio-inputs .radio input {
+    display: none;
+  }
+  
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border: none;
+    padding: 0.5rem 0.8rem;
+ 
+    transition: all 0.15s ease-in-out;
+    position: relative;
+  }
+  
+  .radio-inputs .radio input:checked + .name {
+    background-color: rgb(7, 33, 56) ;
+    font-weight: 600;
+  }
+  .radio-inputs .radio input + .name:hover {
+    color: white;
+  }
+  .radio-inputs .radio input:checked + .name:hover {
+    color: #ffffff;
+  }
+  
+  .radio-inputs .radio input:checked + .name::after,
+  .radio-inputs .radio input:checked + .name::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    bottom: 0;
+    
+  }
+  
+  .radio-inputs .radio input:checked + .name::after {
+    right: -10px;
+    border-bottom-left-radius: 300px;
+    box-shadow: -3px 3px 0px 3px rgb(7, 33, 56) ;
+    
+  }
+  .radio-inputs .radio input:checked + .name::before {
+    left: -10px;
+    border-bottom-right-radius: 300px;
+    box-shadow: 3px 3px 0px 3px rgb(7, 33, 56) ;
+  }
+  .name{
+font-weight: bolder;
+text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.448);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+ font-size: 20px;
+    color: rgb(255, 255, 255);
+  }
+  .MainModeMenu{
+    height: auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+   margin-left: 3%
+  }
+  .MainModeMenu p{
+  font-size: 18px;
+  margin: 2%;
+  color: aliceblue;
+  }
+  .AllModes{
+    height: auto;
+    width: 100%;
+margin-bottom: 2rem;
+  }
+  .AllModes h2{
+    margin-bottom: 5%;
+  }
+  .PVCard{
+    height: auto;
+    width: 24rem;
+    border: solid 2px rgb(0, 195, 255);
+    background-color: rgba(5, 23, 40, 0.314) ;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .TitleMenu{
+width: 100%;
+height: 7vh;
+background-color: rgb(7, 33, 56) ;
+display: flex;
+text-align: center;
+justify-content: center;
+align-items: center;
+  }
+  .Tenses{
+    margin-top:0.5rem; 
+    width: 100% ;
+    font-family:roboto;
+    margin-bottom: 1rem;
+  }
+  thead,tbody,th,td{
+border: solid 1px #00c3ff00;
+border-collapse: collapse;
+font-size: 1rem;
+text-align: center;
+  color:rgb(0, 195, 255) ;
+
+}
+thead{
+  background-color: rgba(0, 0, 0, 0.582);
+}
+tbody{
+  background-color:rgba(6, 43, 86, 0.92);
+  overflow: scroll;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+} 
+.examplesPVMenu{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+.examplesPVMenu span{
+  font-size: 1.2rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+  .singleExPv{
+
+    height: auto;
+    width: 90%;
+    text-align: left;
+        max-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: scroll;
+   margin-bottom: 5%;
+   scrollbar-width: none;
+  }
+  .singleExPv p{
+  margin-top: 5%;
+  }
+  .AntCardPhr{
+    border: solid 2px red;
+    background-color: rgba(255, 0, 0, 0.674);
+}
+.SynCardPhr{
+    border: solid 2px rgba(0, 195, 255, 0.644);
+    background-color: rgba(0, 195, 255, 0.648); 
+}
+.IntANdFr{
+    height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.IntANdFr p{
+  margin: 5%;
+}
+.ButtomsMenuPV{
+  height: auto;
+  width: 100%;
+margin-top: 5%;
+background-color: rgb(7, 33, 56);
+}
+.ButtomsMenuPV button{
+  margin: 2%;
+}
+.AddMenuPV{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
+  width: 60vw;
+  margin-bottom: 2rem;
+  background-color: rgb(7, 33, 56) ;
+  border-radius: 20px;
+  border: 4px double rgb(0, 195, 255);
+  font-size: 1.5rem;
+  color: rgb(0, 195, 255);
+}
+.Note{
+  height: auto;
+  width: 100%;
+  background-color: rgb(6, 145, 138);
+  color: black;
+  margin-left: 7%;
+  margin: 5%;
+}
+.inputAndSearch{
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5%;
+}
+.inputAndSearch button{
+  height: 4rem;
+  width: 4rem;
+  border: none;
+
+}
+.inputAndSearch input{
+  background-color: transparent;
+  border: none;
+  border-bottom: solid white;
+  color: #ffffff;
+  font-size: 15px;
+  margin-top: 1.5rem;
+}
+.inputAndSearch input:focus{
+  outline: none;
+}
+.inputAndSearch ul{
+  background: rgb(39,117,117);
+  background: linear-gradient(0deg, rgba(39,117,117,0.8038865204284839) 0%, rgba(19,92,92,0.8010853999803046) 39%, rgba(20,159,160,0.7982842795321253) 100%, rgba(0,195,255,0.7982842795321253) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.inputAndSearch li:hover{
+transform: scale(1.1);
+}
+.MainSpvCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  width: 95%;
+  color: #ffffff;
+  font-size: 20px;
+}

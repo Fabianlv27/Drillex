@@ -1,0 +1,77 @@
+  /* Contenedor */
+  .player {
+   width: 100%;
+    max-width: 520px;
+    margin-bottom: 1rem;
+    background: #0f172a;
+    color: #e6eef8;
+    border-radius: 12px;
+    padding: 5px;
+    box-shadow: 0 6px 18px rgb(2, 6, 23);
+    font-family: Inter, system-ui, Arial, sans-serif;
+  }
+
+  .row { display:flex; align-items:center; gap:12px; }
+
+  /* Artwork / icon */
+  .art {
+    width:64px; height:64px;
+    background:linear-gradient(135deg,#334155,#0ea5a7);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:18px;
+  }
+
+  /* Play button */
+  .btn {
+    background:transparent;
+    border:2px solid rgba(230,238,248,0.08);
+    padding:10px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    color:inherit;
+  }
+  .btn:focus { outline:3px solid rgba(59,130,246,0.25); }
+
+  /* Progress bar */
+  .progress {
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .progress input[type="range"] {
+    -webkit-appearance:none;
+    width:100%;
+    height:6px;
+    background: rgba(230,238,248,0.12);
+    border-radius:6px;
+    outline:none;
+    margin:0;
+  }
+  /* Thumb */
+  .progress input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance:none;
+    width:14px; height:14px; border-radius:50%;
+    background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    margin-top:-4px; /* centrar */
+  }
+  .progress input[type="range"]::-moz-range-thumb {
+    width:14px; height:14px; border-radius:50%; background:#fff;
+  }
+
+  .time {
+    font-size:13px; min-width:60px; text-align:right;
+    color: rgba(230,238,248,0.85);
+  }
+
+  /* Volumen */
+  .volume {
+    display:flex; gap:8px; align-items:center;
+    min-width:120px;
+  }
+  .volume input[type="range"] { width:80px; height:4px; }
+  .sr-only { /* accesibilidad: solo pantalla lectora */
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }

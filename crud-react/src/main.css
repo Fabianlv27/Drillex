@@ -1,0 +1,537 @@
+html, body {
+  height: 100%;
+  background-color: #0e0c1d;
+  margin: 0;
+  padding: 0;
+}
+p:not(.logo),li{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h1{
+
+   font-size:3rem;
+   color: rgb(0, 195, 255);
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+.ActionButtoms2{
+  
+  border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    font-size: 10px;
+    box-shadow: 0px 0px 5px #000000a2;
+    cursor: pointer;
+    transition: 0.5s;
+    border: none;
+    background-color: #0e0c1d;
+    color: aliceblue;
+}
+.ActionButtoms2:hover{
+  background-color: transparent;
+  box-shadow: 0px 0px 5px inset rgb(0, 195, 255);
+  box-shadow: 0px 0px 5px rgb(0, 195, 255);
+  color: rgb(0, 195, 255);
+}
+.m{
+  margin-top: 6rem;
+}
+.labelAndOption p{
+  margin-left: 2rem;
+color:  white;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:100%;
+  background: rgba(0, 0, 0, 0.84); /* Fondo oscuro semitransparente */
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  z-index: 1000; /* Asegúrate de que esté por encima de todo */
+}
+.logo{
+  font-size:4rem;
+   color: rgb(0, 195, 255);
+}
+h3{
+    color:rgb(230, 230, 230) ;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+h2{
+  color:rgb(0, 195, 255);
+ 
+ 
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+select{
+  border: solid 2px rgb(0, 195, 255);
+  height: 40px;
+  width: 120px;
+  background-color:rgb(7, 33, 56) ;
+  color: rgb(0, 195, 255);
+  box-shadow: inset 0px 0px 10px #47c8ff80;
+  cursor: pointer;
+  margin-left: 2rem;
+  margin-top: 10px;
+}
+
+nav{
+    height: 4.5rem;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(7, 33, 56, 0.733);
+   position: fixed;
+   margin-bottom: 20px;
+   z-index: 2;
+   top: 0;
+   backdrop-filter: blur(5px);
+}
+nav img{
+  height: 60px;
+  width: 60px;
+  margin-left: 3vw;
+}
+nav input{
+   background-color: transparent;
+   margin-top: 15px;
+   margin-bottom: 5px;
+   top: 10px;
+  right: 20px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: solid  rgb(0, 195, 255);;
+  color:  rgb(0, 195, 255);;
+  cursor: pointer;
+  margin-left: 20px;
+}
+.logo{
+    left: 5rem;
+}
+
+.MainBackground{
+  padding: 0;
+    min-height: 0;
+    width: 99vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #0e0c1d;
+}
+.content{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.littleMainBackground{
+  height:100%;
+  width: 100vw;
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #0e0c1d;
+}
+.navContainer{
+    height: 100%;
+    width: 100%;
+  display: flex;
+
+align-items: center;
+
+}
+.Userinf{
+    min-height: 11vh;
+    max-height: 12vh;
+    min-width: 18rem;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin-top: 1rem;
+    overflow: scroll;
+    scrollbar-width: none;
+    border: solid 1.6px rgb(22, 171, 188);
+    border-radius: 30px;
+  box-shadow:  0px 0px 20px rgba(0, 0, 0, 0.87);
+    color:  rgb(18, 184, 202); 
+    background: rgba(7, 33, 56, 0.467) ;
+  align-items: center;
+}
+
+.Userinf p:not(.UserName){
+  font-size: 25px;
+}
+.UserName{
+  font-size: 30px;
+font-weight: bolder;
+
+}
+.Userinf img{
+
+  height: 3rem;
+  width: 4rem;
+  border-radius: 10%;
+ margin-left: 1rem;
+ margin-right: 1rem;
+}
+.textUserInf{
+    position: absolute;
+    right: 20%;
+   
+    height: auto;
+    width:  auto;
+    display: flex;
+    flex-direction: column;
+}
+.cardContainer{
+  height: auto;
+  width: 100%;
+   margin-top: 40px;
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   justify-content: center;
+ background-color: rgba(90, 155, 203, 1);
+
+  
+}
+
+
+.custom-shape-divider-top-1720802046 .shape-fill {
+  fill: #0e0c1d;
+}
+.cardContainer div{
+    border: solid rgb(0, 195, 255);
+       background: rgb(7, 33, 56) ;
+       box-shadow: 0px 0px 20px rgba(1, 17, 21, 0.453) ;
+       
+    border-radius: 20px;
+    height: 14rem;
+    width: 45vw;
+    margin: 8px;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.8s;
+}
+.cardContainer div p{
+color:rgb(0, 195, 255) ;
+width: 90%;
+}
+.cardContainer div h3{
+  width: 90%;
+}
+.cardContainer div:hover{
+background-color: rgba(11, 54, 91, 0.759);
+box-shadow: 0px 0px 10px rgba(52, 185, 226, 0.363) ;
+
+transform: rotate3d(1,1,0,15deg)
+
+
+}
+.content{
+    margin-top: 140px;
+}
+
+.input {
+    color: #fff;
+    font-size: 0.9rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    border-bottom: var(--border-height) solid var(--border-before-color);
+   
+  }
+  
+  .input-border {
+    position: absolute;
+    background: var(--border-after-color);
+    height: 2px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0%);
+    transition: transform 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  }
+  
+  .input:focus {
+    outline: none;
+  }
+  
+  .input:focus + .input-border {
+    transform: scaleX(100%);
+  }
+  
+  .form-control {
+    margin: 20px;
+    position: relative;
+    transform: translateY(-20px);
+    margin-left: 1.5rem;
+    width: 350px;
+    --width-of-input: 400px;
+    box-shadow: 0px 0px 2px #dfeaee6d;
+  }
+  
+  .input-alt {
+    font-size: 1.2rem;
+    padding-inline: 1em;
+    padding-block: 0.8em;
+    width: 100%;
+    box-sizing: border-box;
+  
+
+  }
+  
+  .input-border-alt {
+    height: 3px;
+    background: linear-gradient(90deg, #ff6464 0%, #ffbf59 50%, rgb(0, 195, 255) 100%);
+    transition: transform 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  
+  .input-alt:focus + .input-border-alt {
+    transform: scaleX(100%);
+  }
+textarea{
+ 
+ background-color:rgb(7, 33, 56) ;
+ border: solid rgb(0, 195, 255);
+ box-shadow: inset 0px 0px 5px #47c8ffbf;
+margin-left: 2%;
+ color: whitesmoke;
+ border-radius: 10px;
+ font-size: 20px;
+ height: max-content;
+ width: 90%;
+}
+textarea:focus {
+  outline: none;
+}
+.ButtonAuto{
+  background-color: black;
+  border: none;
+  border-radius: 10px;
+  height: 2rem;
+  width: 3rem;
+  font-size: 20px;
+ cursor: pointer;
+ transition: 0.7s;
+}
+.on{
+  color: rgb(43, 200, 239);
+  
+  box-shadow: 0px 0px 10px rgb(43, 200, 239);
+}
+.off{
+
+color: rgb(255, 255, 255);
+
+box-shadow: 0px 0px 10px black;
+}
+
+.ActionButtoms{
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  box-shadow: 0px 0px 5px  #000000a2;
+  cursor: pointer;
+  transition: 0.5s;
+border: none;
+
+}
+.ActionButtoms:hover{
+  background-color: transparent;
+  box-shadow: 0px 0px 5px inset rgb(0, 195, 255);
+  box-shadow: 0px 0px 5px  rgb(0, 195, 255);
+
+  color: rgb(0, 195, 255);
+}
+
+.RandomCard{
+  flex: 1;
+ position: relative;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: solid 2px rgb(15 58 64);
+  background-color: rgb(9 27 49);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 28rem;
+  max-height: 30rem;
+  overflow: scroll;
+ scrollbar-width: none;
+ border-radius: 10px;
+ box-shadow: 0px 0px 40px #08ceff4a;
+}
+.RandomCard p:not(.SyA):not(.MeaningText),ul{
+  font-size: 1rem;
+  max-width: 99%;
+  color: aliceblue;
+}
+.RandomCard ul{
+  margin-bottom: 30px;
+}
+ span:not(.name){
+  font-weight: bold;
+  color: #63d0ff;
+}
+
+.RandomCard img{
+  margin-top: 5%;
+  margin-bottom: 10%;
+  height: 10rem;
+  width: 17rem;
+  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
+ 
+
+}
+.SyA{
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: aliceblue;
+  margin-left: 4%;
+  max-height: 1.5rem;
+  overflow: auto;
+  scrollbar-color: #00c3ff63 #072b53
+}
+.MeaningText{
+margin-bottom: 3%;
+  font-size: 1rem;
+  color: aliceblue;
+  
+}
+.MeaningBox{
+  height: auto;
+  width: 95%;
+  display: flex;
+  text-align: center;
+  background-color: #0f172a;
+  overflow: auto;
+  max-height: 7rem;
+  scrollbar-width: none;
+padding: 7px;
+  margin-top: 1rem;
+}
+.CloseButton{
+  position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 0px 5px black;
+    
+}
+.audioControler{
+  margin-top: 20vw;
+}
+.LyricsContainer:not(.lyricYoutube){
+ max-height: 50vh;
+  width: 30rem;
+  border: solid white;
+  display: flex;
+  flex-direction: column;
+align-items: center;
+text-align: center;
+  font-size: 20px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: none;
+    background-color: rgba(4, 29, 38, 0.782);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.649);
+    margin-left: 2rem;
+    color: whitesmoke;
+overflow: auto;
+scrollbar-width: none;
+margin-top: 2rem;
+margin-right: 2rem;
+}
+
+.LyricsContainer p{
+  font-size: 20px;
+}
+.Verso{
+  width: 90%;
+}
+.word{
+  cursor: pointer;
+  transition: 0.4s;
+}
+.word:hover{
+
+  color:rgb(0, 195, 255) ;
+}
+.MyListsButtomsShow{
+  height: 15rem;
+  width: 15rem;
+  border: solid rgb(202, 202, 202);
+  background-color: black;
+  box-shadow:  0px 0px 5px rgba(0, 0, 0, 0.773);
+margin-top: 2rem;
+margin-bottom: 2rem;
+border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+margin-left: 7rem;
+  overflow: auto;
+  align-items: center;
+}
+.MyListsButtomsShow button:not(.ShowPVButtom){
+  height: 8vw;
+width: 100%;
+margin-bottom: 0px;
+margin-top: 2px;
+  cursor: pointer;
+  background-color: black;
+  border: none;
+border-bottom: 2px solid rgba(255, 255, 255, 0.122);
+  font-size: 15px;
+  color: whitesmoke;
+  transition: 0.5s;
+}
+.MyListsButtomsShow button:hover{
+  transform: scale(1.1);
+  font-size: 17px;
+  box-shadow: inset 0px 0px 5px rgb(0, 195, 255) ;
+}
+.ShowPVButtom{
+  height: 8vw;
+  margin: 1vw;
+  cursor: pointer;
+  background-color: rgb(0, 195, 255) ;
+  border: none;
+  box-shadow: inset 0px 0px 5px rgba(238, 238, 238, 0.773);
+  font-size: 15px;
+  color: rgb(0, 0, 0);
+  transition: 0.5s;
+}
+.CreatorMenuLyric{
+  height: auto;
+  background-color: rgb(25, 25, 25);
+  width: 100%;
+  margin-top: 5rem;
+}
+.MainWordCard{
+
+font-weight: bolder;
+
+}
+@media( max-width: 1000px){
+  
+}
+.listMove:hover{
+  background-color: rgb(9, 55, 71);
+}

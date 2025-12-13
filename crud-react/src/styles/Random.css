@@ -1,0 +1,95 @@
+.ListAndStartMenu{
+    height: auto;
+    width: 100%;
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vh;
+}
+.rand{
+  flex-direction: column;
+}
+.type-random{
+  color: #63d0ff;
+}
+.syanpa{
+  width: 90%;
+  text-align: left;
+  scrollbar-width: none;
+  max-height: 10rem;
+  text-align: left;
+}
+.ListAndStartMenu button{
+    margin-top:1rem;
+    margin-left: 2rem
+}
+.RandomCard button:not(.OptionsButtoms):not(.audiob){
+  position: absolute;
+ 
+ bottom: -15px;
+}
+.ex{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  max-height: 6rem;
+  overflow: auto;
+  scrollbar-width: none;
+      border: solid 1px #0f0e0e3b;
+    box-shadow: inset 0px 0px 10px #00000094;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 1rem;
+    background-color: #0000003d;
+}
+.OptionsButtoms{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    position: absolute;
+   font-size: 20px;
+   bottom: -25px;
+   cursor: pointer;
+   transition: 0.7s;
+}
+
+.option1{
+    position: absolute;
+  transform: translateX(-8rem);
+  background-color: rgb(255, 248, 47);
+ 
+}
+.option1:hover{
+    transform: scale(1.1) translateX(-7rem);
+    box-shadow: 0px 0px 5px rgb(255, 248, 47);
+}
+.option2{
+    transform: translateX(-4rem);
+    background-color: rgb(255, 161, 47);
+  }
+  .option2:hover{
+    transform: scale(1.1) translateX(-3rem);
+    box-shadow: 0px 0px 5px rgb(255,161, 47);
+}
+  .option3{
+    transform: translateX(0rem);
+    background-color: rgb(255, 85, 47);
+
+  }
+  .option3:hover{
+    transform: scale(1.1) translateX(0.5rem);
+    box-shadow: 0px 0px 5px rgb(255, 85, 47);
+}
+  
+  .option4{
+    transform: translateX(4rem);
+    background-color: rgb(255, 0, 0);
+
+  }
+  .option4:hover{
+    transform: scale(1.1) translateX(4.2rem);
+    box-shadow: 0px 0px 5px rgb(255, 0, 0);
+}

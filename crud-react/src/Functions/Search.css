@@ -1,0 +1,37 @@
+.Modal-container{
+    position: relative;
+   height: auto;
+   margin-top: 1rem;
+   margin-bottom: 0.5rem;
+       display: flex
+;
+    flex-direction: column;
+    align-items: center;
+}
+.modal{
+    position: fixed;
+    
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ImagesGoogle{
+    margin-top: 12vw;
+    height: 90%;
+    width: 80%;
+
+}
+.ImagesGoogle img{
+height:20%;
+width:50%;
+box-shadow:  0px 0px 10px #000000;
+transition: 0.7s;
+}
+.ImagesGoogle img:hover{
+    transform: scale(1.1);
+}
