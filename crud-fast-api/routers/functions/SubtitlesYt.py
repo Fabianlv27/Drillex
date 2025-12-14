@@ -1,53 +1,64 @@
 from youtube_transcript_api import YouTubeTranscriptApi
-from fastapi import APIRouter,HTTPException
-Sub_Router= APIRouter()
+from fastapi import APIRouter, HTTPException
 
-def Transcript(id,lang):
-# Obtiene los subtítulos en inglés
+Sub_Router = APIRouter()
+
+def listar_idiomas(video_id):
+    try:
+        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+        idiomas_disponibles = []
+        for t in transcript_list:
+            idiomas_disponibles.append({
+                'idioma': t.language,
+                'código': t.language_code,
+                'generado_automáticamente': t.is_generated
+            })
+        return idiomas_disponibles
+    except Exception:
+        return []
+
+def Transcript(id, lang):
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(id)
-        # Intenta obtener los subtítulos en el idioma deseado
-        transcript = transcript_list.find_transcript([lang])
-        transcript_data = transcript.fetch()
-        print("11",transcript_data)
         
-        return {"status":0,"content":transcript_data} 
+        # Intentamos encontrar el transcript exacto o uno generado
+        try:
+            transcript = transcript_list.find_transcript([lang])
+        except:
+            # Si falla, intenta buscar autogenerados en ese idioma
+            transcript = transcript_list.find_generated_transcript([lang])
+            
+        transcript_data = transcript.fetch()
+        return {"status": 0, "content": transcript_data} 
 
     except Exception as e:
-        print(e)
-        avaliable=listar_idiomas(id)
-        if len(avaliable) ==0:
-            raise HTTPException(status_code=404, detail=f"No se encontraron subtítulos en '{lang}' o hubo un error: {e}")
-        return {"status":2,"content":avaliable}
-#get words by id path
-def listar_idiomas(video_id):
-    transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-    idiomas_disponibles = []
+        print(f"Transcript Error: {e}")
+        avaliable = listar_idiomas(id)
+        if not avaliable:
+             # Retornamos error controlado
+             return {"status": 1, "error": str(e)}
+        return {"status": 2, "content": avaliable}
 
-    for t in transcript_list:
-        idiomas_disponibles.append({
-            'idioma': t.language,
-            'código': t.language_code,
-            'generado_automáticamente': t.is_generated
-        })
-    print(idiomas_disponibles)
-    return idiomas_disponibles
 def format_time(time_in_seconds):
     minutes = int(time_in_seconds // 60)
-    seconds = round(time_in_seconds % 60, 2)  # Redondeamos a dos decimales
-    return f"{minutes}.{str(int(seconds)).zfill(2)}"  # Aseguramos que los segundos tengan dos dígitos
+    seconds = round(time_in_seconds % 60, 2)
+    return f"{minutes}.{str(int(seconds)).zfill(2)}"
 
 @Sub_Router.get("/Sub/{lang}/{id}")
-async def GetTrans(lang,id):
-    try:
-        print(id,lang)
-        Trs=Transcript(id,lang)
-        if Trs["status"]==0:
-            for Tr in Trs["content"]:
-                print(Tr.start)
-                Tr.start=format_time(Tr.start)
-            print(Trs)
-        return Trs
-    except Exception as e:
-        print(f"Error al obtener los subtítulos: {e}")
-        raise HTTPException(status_code=404, detail=f"No se encontraron subtítulos en '{lang}' o hubo un error: {e}")
+async def GetTrans(lang: str, id: str):
+    # Nota: YouTubeTranscriptApi es sincrónico, bloqueará el event loop un poco.
+    # Para producción con mucha carga, idealmente usar run_in_executor.
+    result = Transcript(id, lang)
+    
+    if result["status"] == 0:
+        # Formatear tiempos
+        for tr in result["content"]:
+            tr['start'] = format_time(tr['start'])
+        return result
+    
+    elif result["status"] == 2:
+        # Devolvemos opciones disponibles
+        return result
+    
+    else:
+        raise HTTPException(status_code=404, detail="Subtitles not found and no alternatives available")

@@ -9,7 +9,9 @@ from Data.Mysql_Connection import get_db_connection
 from dotenv import load_dotenv
 from routers.UserData.BasicUserData import  validate_user
 import redis
-
+# TIEMPOS DE VIDA
+ACCESS_TOKEN_EXPIRE_MINUTES = 15  # Corta duración (Seguridad)
+REFRESH_TOKEN_EXPIRE_DAYS = 30    # Larga duración (Comodidad)
 
 load_dotenv()
 
@@ -22,16 +24,28 @@ API_URL = "https://oauth2.googleapis.com/tokeninfo?id_token="
 # Redis para tokens
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
-def create_token(data: dict):
+def create_refresh_token(user_id: str): # Cambiado data: dict por user_id: str
     jti = str(uuid.uuid4())
-    expire = datetime.utcnow() + timedelta(seconds=TOKEN_SECONDS_EXP)
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    payload = {
+        "sub": user_id,   # Guardamos el ID en 'sub' (estándar JWT)
+        "type": "refresh", # Importante para diferenciarlo
+        "exp": expire,
+        "jti": jti
+    }
+    token = jwt.encode(payload, KEYSECRET, algorithm="HS256")
+    return token, jti, expire
+
+def create_refresh_token(data: dict):
+    jti = str(uuid.uuid4())
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     payload = {
         **data,
         "exp": expire,
         "jti": jti
     }
     token = jwt.encode(payload, KEYSECRET, algorithm="HS256")
-    return token, jti
+    return token, jti,expire
 
 async def verify_google_token(id_token: str):
     async with httpx.AsyncClient() as client:

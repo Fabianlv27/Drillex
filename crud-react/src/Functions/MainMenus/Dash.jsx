@@ -1,59 +1,32 @@
-import  { useEffect ,useContext} from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context } from "../../../Contexts/Context.jsx"; // Importa el contexto del token
+import { Context } from "../../../Contexts/Context.jsx";
+import api from "../../../api/axiosClient.js"; // Importa tu nuevo cliente
+
 function Dash() {
-  const { RHost } = useContext(Context); // Usa el token del contexto
   const history = useNavigate();
-
-  const putCookie = () => {
-    const currentPath = window.location;
-    console.log(currentPath.href);
-    try {
-      const key = currentPath.href.split("?")[1];
-      console.log(key);
-      if (key === undefined) {
-        window.location.href = `${RHost}/signin`;
-      }
-      const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-      // Formatea la fecha de expiración como se requiere para la cookie
-      const expires = expirationDate.toUTCString();
-      document.cookie = `${key} ; Expires=${expires}`;
-      console.log('puesto')
-      history("/Hero");
-    } catch (error) {
-      window.location.href = `${RHost}/signin`;
-    }
-  };
+  const { RHost, setIsLogged } = useContext(Context);
 
   useEffect(() => {
-    const handlePath = () => {
-      console.log("init");
+    const checkSession = async () => {
       try {
-        const cookies = document.cookie;
-        const cookiesArray = cookies.split(";");
-        console.log(cookiesArray);
-        var isE = false;
-        cookiesArray.forEach(async (cookie) => {
-          const [name, value] = cookie.trim().split("=");
-          if (name === "e") {
-            console.log('hay token')
-            history("/Hero");
-            isE = true;
-          }
-        });
-        if (!isE) {
-          console.log('no hay token')
-          putCookie();
-        }
+        // Hacemos una petición de prueba para ver si la cookie funciona
+        // Necesitas un endpoint en el back tipo /users/me que devuelva 200 si estás logueado
+        await api.get("/users/me/check"); 
+        
+        setIsLogged(true);
+        history("/Hero");
       } catch (error) {
-        putCookie();
+        // Si falla, es que no hay cookie o es inválida
+        console.log("No hay sesión válida");
+        window.location.href = `${RHost}/signin`;
       }
     };
-    handlePath();
-  }, []);
 
-  return <div>Dash</div>;
+    checkSession();
+  }, [history, RHost, setIsLogged]);
+
+  return <div>Loading session...</div>;
 }
 
 export default Dash;

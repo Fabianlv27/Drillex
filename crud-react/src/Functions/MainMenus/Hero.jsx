@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../../Contexts/Context";
 import { WordsContext } from "../../../Contexts/WordsContext";
+import api from "../../../api/axiosClient.js";
 function Hero() {
   const history = useNavigate();
   const { setLanguage, RHost, Ahost,Language } = useContext(Context);
@@ -86,6 +87,7 @@ function Hero() {
           return "https://flagcdn.com/w320/gb.png"; // Default to English flag
       }
     }
+    
   useEffect(() => {
    
     console.log(RHost);
@@ -94,33 +96,22 @@ function Hero() {
         const cookies = document.cookie;
         console.log(cookies);
         const cookiesArray = cookies.split(";");
-        let UJson={username:"",id:""}
         cookiesArray.forEach(async (cookie) => {
           const [name, value] = cookie.trim().split("=");
           if (name === "lang") {
             setLanguage(value);
-
           }
-          if (name === "e") {
-            try {
-              const data = await fetch(`${Ahost}/users/me/${value}`);
-              console.log(data);
-              const dj = await data.json();
-              console.log(dj);
-               UJson.username = dj[0][0];
-               UJson.id = dj[0][1];
-              console.log(dj);
-              setuserData(UJson);
-              if (dj[0][0] == "" || dj[0][1] == "") {
-               // window.location.href = `${RHost}/signin`;
-              } 
-
-            } catch (error) {
-              //window.location.href=`${RHost}/signin`
-            }
-          }
-
         });
+
+        const response = await api.get(`/users/profile`); 
+        
+        const data = response.data; // Axios devuelve los datos en .data directly
+        
+        setuserData({
+            username: data.username, // Ajusta según tu respuesta JSON
+            id: data.id
+        });
+
       } catch (error) {
     // window.location.href = `${RHost}/signin`;
       }
@@ -128,14 +119,6 @@ function Hero() {
     console.log("hero");
     fetchData();
   }, []);
-
-  const handelCreate = () => {
-    history("/createWords/create");
-  };
-
-  const handleSee = () => {
-    history("/AllLists");
-  };
 
   return (
     <div className="MainBackground">

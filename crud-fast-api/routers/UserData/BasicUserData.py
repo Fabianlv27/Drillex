@@ -1,6 +1,6 @@
 from ast import List
 from typing import Optional, TypedDict
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import jwt, JOSEError
 import mysql
@@ -9,6 +9,7 @@ import os
 from routers.functions.ValidateToken import validate_Token
 from pydantic import BaseModel
 from Models.Models import Word, WordUdpate
+from services.auth import get_current_user_id
 
 UserData_router = APIRouter()
 KEYSECRET = os.getenv("KEYSECRET")
@@ -36,54 +37,42 @@ def validate_user(data_user):
         return RedirectResponse(os.getenv("Host")+'login', status_code=302)
     return None
 
-@UserData_router.get("/users/me/{e}")
-def GetMe(e):
-    try:
-        data_user = decode_token(e)
-        print(data_user)
-        if "error" in data_user:
-            return RedirectResponse(os.getenv("Host")+'login', status_code=302)
-        
-        validation_response = validate_user(data_user)
-        print(validation_response)
-        if validation_response:
-            return validation_response
 
-        sql = 'select name_User,id_User from users where name_User=%s'
-        params = (data_user["username"],)
-        conexion = get_db_connection()
-        cursor = conexion.cursor()
-        cursor.execute(sql, params)
-        result = cursor.fetchall()
-        print('resultado')
-        print(result)
-        
-        cursor.close()
-        conexion.close()
-        if result is None:
-            return RedirectResponse(os.getenv("Host")+'login', status_code=302)
-        
-        return result
-    except JOSEError:
-        return RedirectResponse(os.getenv("Host")+'login', status_code=302)
     
 class progressData(BaseModel):
     idList:str
     game:str
 
+@UserData_router.get("/users/me") # Quitamos /{e}
+def GetMe(user_id: str = Depends(get_current_user_id)) :
+    # FastAPI ya validó el token. Aquí 'user_id' es    seguro.
+    
+    conexion = get_db_connection()
+    cursor = conexion.cursor()
+    
+    try:
+        sql = 'select name_User, id_User from users    where id_User=%s'
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchall()
 
+        if not result:
+            raise HTTPException(status_code=404,   detail="User not found")
+        
+        return result # Devuelve [[name, id]]
+    finally:
+        cursor.close()
+        conexion.close()
     
 
-@UserData_router.post("/user/progress/{e}")
-async def postProgress(e:str,data:progressData):
-    data_user = await validate_Token(e)
-    if not data_user:
-        return data_user
+@UserData_router.post("/user/progress") # Quitamos /{e}
+async def postProgress(data: progressData, user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
-        progress = "Insert into progress (id_List,game,cant_showed) values (%s,%s,%s)"
-        cursor.execute(progress, (data.idList, data.game,0))       
+        # Usamos user_id si necesitas validar que la lista pertenece al usuario, 
+        # aunque aquí solo insertas en progress
+        progress = "INSERT IGNORE INTO progress (id_List, game, cant_showed) VALUES (%s, %s, %s)"
+        cursor.execute(progress, (data.idList, data.game, 0))       
         conexion.commit()
         return {"status": True, "message": "Progress posted successfully"}
     except mysql.connector.Error as err:
@@ -128,40 +117,22 @@ def InsertMode(cursor,data):
         sql+=",".join(placeholder)+final
         cursor.execute(sql,values)
          
-def updateRight(cursor,data):
-    get_progress_right="""select id_Word from progress_right where 
-    id_List=%s and game=%s"""""
-    cursor.execute(get_progress_right,(data.idList,data.game))
-    words_right = [row[0] for row in cursor.fetchall()]
-    if data.game=="Random":
-        InsertMode(cursor,data)
+def updateRight(cursor, data, idList):
+    # Esta Query hace "INSERT" si no existe, y si existe, actualiza la fecha.
+    # Requiere que (id_List, game, id_Word) sean una clave única o compuesta en tu tabla.
     
-    InsertRight = "INSERT INTO progress_right (id_List, game,id_Word) VALUES "
-    updateRightSQL="Update progress_right set fecha=Now() where game=%s and ("
-    Values = []
-    placeholders = []
-    UpdtValues=[]
+    sql = """
+    INSERT INTO progress_right (id_List, game, id_Word, fecha) 
+    VALUES (%s, %s, %s, NOW())
+    ON DUPLICATE KEY UPDATE fecha = NOW()
+    """
+    
+    values = []
     for word in data.right:
-        if word not in words_right:
-            placeholders.append("(%s, %s,%s)")
-            Values.extend([data.idList,data.game,word])
-        else:
-            if not "or" in updateRightSQL:
-                updateRightSQL+='id=%s'
-            else:
-                updateRightSQL+='or id=%s'
-            UpdtValues.append(word)
-                
-                                     
-    if len(Values)>0 and len(placeholders)>0:
-        InsertRight+= ",".join(placeholders)
-        cursor.execute(InsertRight, tuple(Values))
-        print(cursor.statement)
+        values.append((idList, data.game, word))
         
-    if len(UpdtValues)>0:
-        updateRightSQL+=")"
-        cursor.execute(updateRightSQL,tuple(UpdtValues))
-        print(cursor.statement)
+    if values:
+        cursor.executemany(sql, values) # executemany es muy rápido para lote
     
     
     
@@ -193,21 +164,24 @@ async def getProgress(e:str,idList:str,game:str):
         cursor.close()
         conexion.close()
         
-@UserData_router.post("/user/progress/update/{e}")
-async def putProgress(e:str,data:ProgressUpdated):
-    data_user = await validate_Token(e)
-    if not data_user:
-        return data_user
+@UserData_router.post("/user/progress/update") # Quitamos /{e}
+async def putProgress(data: ProgressUpdated, user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
-        updateCant(cursor,data)
-        if data.game!="random":
-            updateRight(cursor,data)
+        updateCant(cursor, data)
+        
+        if data.game != "random":
+            # Usamos la versión optimizada
+            updateRight(cursor, data, data.idList)
         else:
-            InsertMode(cursor,data)
+            InsertMode(cursor, data)
+            
         conexion.commit()
-    except mysql.connector.Error as err :
+        return {"status": True}
+    except mysql.connector.Error as err:
         print(err)
-        return
-
+        return {"status": False, "message": str(err)}
+    finally:
+        cursor.close()
+        conexion.close()

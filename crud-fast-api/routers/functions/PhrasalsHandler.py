@@ -1,44 +1,46 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from pymongo import MongoClient
 import os
 import re
-from jose import jwt, JOSEError
-from routers.UserData.BasicUserData import get_user
-from fastapi.responses import RedirectResponse
-from pymongo import MongoClient
+
+# Importamos la seguridad centralizada
+from routers.UserData.BasicUserData import get_current_user_id
 
 Phrsals_Handler = APIRouter()
-KEYSECRET = os.getenv("KEYSECRETS")
 
-# Conexión a MongoDB
-client = MongoClient("mongodb://localhost:27017/")
-db = client["phrases_db"]
+# Conexión a MongoDB (Usando variable de entorno si existe)
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+client = MongoClient(MONGO_URI)
+db = client["phrases_db"] # Nota: En Phrasals.py usabas "DIBY", aquí "phrases_db". Asegúrate de que coincidan si deben.
 collection = db["phrasals"]
 
-@Phrsals_Handler.get('/function/obtain_phr/{e}/{text}')
-def HandlePhr(e, text):
+@Phrsals_Handler.get('/function/obtain_phr/{text}') # Quitamos /{e}
+def HandlePhr(text: str, user_id: str = Depends(get_current_user_id)):
+    # Si llega aquí, el usuario está logueado.
     try:
-        data_user = jwt.decode(e, key=KEYSECRET, algorithms=["HS256"])
-        if get_user(data_user["username"]) is None:
-            print('hola')
-            return RedirectResponse("/register", status_code=302)
-
         found_words = []
         wrdObj = []
 
-        # Obtener datos desde MongoDB
-        letters = set(word[0].upper() for word in text.split())
+        # Normalizamos el texto y buscamos por letras iniciales
+        # Nota: text.split() ya separa por espacios.
+        letters = set(word[0].upper() for word in text.split() if word)
+        
         for letter in letters:
             letter_data = collection.find_one({"Letter": letter})
-            if letter_data:
+            if letter_data and "Phr" in letter_data:
                 for phrase in letter_data["Phr"]:
                     # Verificar coincidencias en diferentes formas
                     for key in ["name", "gerund", "past"]:
-                        if re.search(r'\b{}\b'.format(re.escape(phrase[key])), text, re.IGNORECASE):
-                            found_words.append(phrase[key])
-                            if phrase not in wrdObj:
-                                wrdObj.append(phrase)
+                        if key in phrase and phrase[key]:
+                            # Usamos \b para palabra completa
+                            if re.search(r'\b{}\b'.format(re.escape(phrase[key])), text, re.IGNORECASE):
+                                found_words.append(phrase[key])
+                                # Evitamos duplicados en la lista de objetos
+                                if phrase not in wrdObj:
+                                    wrdObj.append(phrase)
+                                break # Si encontramos una forma, no hace falta buscar las otras del mismo phrasal
 
-        print(found_words)
         return {"found_words": found_words, "wrdObj": wrdObj}
-    except JOSEError:
-        print('error')
+    except Exception as e:
+        print(f"Error en HandlePhr: {e}")
+        raise HTTPException(status_code=500, detail="Error processing text")
