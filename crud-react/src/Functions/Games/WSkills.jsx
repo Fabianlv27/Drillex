@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { WordsContext } from "../../../Contexts/WordsContext";
 import { ListsContext } from "../../../Contexts/ListsContext";
 import { MdNotStarted } from "react-icons/md";
 
 import { Shuffler } from "../../Functions/Actions/Shuffler.js";
-import { GetData, UpdateProgress } from "../../../api/saveProgress.js";
+//import { GetData, UpdateProgress } from "../../../api/saveProgress.js";
 
 function WSkills() {
   const { GetWords } = useContext(WordsContext);

@@ -1,39 +1,39 @@
+import api from "../../../api/axiosClient";
 
-import { GetLocalHost } from "../../../api/api.js";
-const { host } = GetLocalHost();
+export async function WordsMatcher(idList, LyricReal, GetWords) {
+    try {
+        // Obtenemos las palabras (GetWords ya debería manejar sus errores o retornas [])
+        const Words = await GetWords(idList);
 
-export async function WordsMatcher(idList, LyricReal,GetWords) {
+        const SentData = {
+            Liryc: LyricReal.map((e) => e.replace(/\r/g, "")),
+            Words: Words,
+        };
 
-
-    const Words = await GetWords(idList);
-
- const SentData = {
-        Liryc: LyricReal.map((e) => e.replace(/\r/g, "")),
-        Words: Words,
-      };
-      const data = await fetch(`${host}/getMatches`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(SentData),
-      });
-      const Matches = await data.json();
-      console.log(Matches);
-      const AdptedMatches = { Matches, mode: 1 };
-      console.log(AdptedMatches);
-      return AdptedMatches;
-
+        const response = await api.post("/getMatches", SentData);
+        
+        const Matches = response.data;
+        console.log(Matches);
+        
+        const AdptedMatches = { Matches, mode: 1 };
+        console.log(AdptedMatches);
+        
+        return AdptedMatches;
+    } catch (error) {
+        console.error("Error in WordsMatcher:", error);
+        return { Matches: [], mode: 1 }; // Retorno seguro en caso de fallo
+    }
 }
-export const PhrMatcher =async (LyricReal) => {
-      const data = await fetch(`${host}/PhrMatches`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(LyricReal),
-      });
-      const Matches = await data.json();
-      console.log(Matches);
-      return Matches;
-}
+
+export const PhrMatcher = async (LyricReal) => {
+    try {
+        const response = await api.post("/PhrMatches", LyricReal);
+        
+        const Matches = response.data;
+        console.log(Matches);
+        return Matches;
+    } catch (error) {
+        console.error("Error in PhrMatcher:", error);
+        return [];
+    }
+};

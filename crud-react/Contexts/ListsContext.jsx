@@ -1,83 +1,73 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Context } from "./Context.jsx"; // Importa el contexto del token
-import { GetLocalHost } from "../api/api.js";
+import api from "../api/axiosClient.js"; // Importamos tu cliente Axios
+
 const ListsContext = createContext();
 
 const ListsContextProvider = ({ children }) => {
   const [SingleId, setSingleId] = useState("");
   const [UserLists, setUserLists] = useState([]);
-  const [CurrentListId, setCurrentList] = useState({ id: "" ,title:""}); // Cambia a un objeto para manejar el ID de la lista actual
-  const { Ahost } = useContext(Context); // Usa el token del contexto
-  const { getTokenFromCookies } = GetLocalHost();
-  const token = getTokenFromCookies();
-  
+  const [CurrentListId, setCurrentList] = useState({ id: "", title: "" });
+
   const GetList = async () => {
     try {
-      const data = await fetch(`${Ahost}/users/Lists/${token}`); // Usa el token aquí
-      const dj = await data.json();
+      // Axios envía la cookie automáticamente. No hace falta pasar token en URL.
+      const response = await api.get("/users/Lists"); 
+      const dj = response.data;
+      
       console.log(dj);
-      if (dj.lenght > 0) {
-        setCurrentList({ id: dj.content[0].id ,title:dj.content[0].id})
+      if (dj.content && dj.content.length > 0) {
+        // Aseguramos que content exista
+        setCurrentList({ id: dj.content[0].id, title: dj.content[0].title || dj.content[0].id });
       }
 
       setUserLists(dj.content);
-      return { id: dj.content[0].id ,title:dj.content[0].id}
+      return { id: dj.content?.[0]?.id, title: dj.content?.[0]?.title };
     } catch (error) {
-      window.location.href = `/signin`;
+      console.error("Error getting lists", error);
+      // No redirigimos manualmente, el interceptor maneja el 401 si expira la sesión
     }
   };
 
   const CreateList = async (Title) => {
-    const formDataList = {
-      name: Title,
-    };
-    console.log(formDataList);
-   const newList= await fetch(`${Ahost}/Lists/${token}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formDataList),
-    });
-    const newListJson = await newList.json();
-    console.log(newListJson);
-    setUserLists((prevLists) => [...prevLists, newListJson]);
+    try {
+      const formDataList = { name: Title };
+      const response = await api.post("/Lists", formDataList);
+      
+      const newListJson = response.data;
+      console.log(newListJson);
+      
+      // Actualizamos el estado local
+      setUserLists((prevLists) => [...prevLists, newListJson]);
+    } catch (error) {
+      console.error("Error creating list", error);
+    }
   };
   
-const editList = async (id, title) => {
-  const formDataList = {
-    name: title,
-  };  
-  console.log(formDataList);
-  const updatedList = await fetch(`${Ahost}/Lists/${token}/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formDataList),
-  });
-  const updatedListJson = await updatedList.json();
-  console.log(updatedListJson);
-  GetList(); // Actualiza la lista de listas después de editar
-}
-const deleteList = async (id) => {
-  try {
-    const response = await fetch(`${Ahost}/Lists/${token}/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Error al eliminar la lista");
+  const editList = async (id, title) => {
+    try {
+      const formDataList = { name: title };
+      await api.put(`/Lists/${id}`, formDataList);
+      
+      // Recargamos las listas para ver cambios
+      GetList(); 
+    } catch (error) {
+       console.error("Error editing list", error);
     }
-    const updatedLists = UserLists.filter((list) => list.id !== id);
-    setUserLists(updatedLists);
-  } catch (error) {
-    console.error("Error al eliminar la lista:", error);
-  }
-}
+  };
+
+  const deleteList = async (id) => {
+    try {
+      await api.delete(`/Lists/${id}`);
+      
+      // Filtramos localmente para que sea más rápido
+      const updatedLists = UserLists.filter((list) => list.id !== id);
+      setUserLists(updatedLists);
+    } catch (error) {
+      console.error("Error al eliminar la lista:", error);
+    }
+  };
+
   return (
     <ListsContext.Provider
       value={{

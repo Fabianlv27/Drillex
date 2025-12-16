@@ -45,6 +45,11 @@
   display: flex;
   gap: 2rem; /* aumentado para mayor separación */
 }
+/* 5. Asegurar que las columnas principales tengan un ancho base estable */
+.MiniCreator .a {
+  /* IMPORTANTE: min-width evita que se colapse, max-width evita que empuje */
+  min-width: 0; 
+}
 
 .MiniCreator .a,
 .MiniCreator .b {
@@ -122,9 +127,7 @@
       background-color: #0a2a4a;
     padding: 20px;
 }
-.AutoExamples button{
-  
-}
+
 .input-border {
   position: absolute;
   bottom: 0;
@@ -139,12 +142,16 @@
   width: 100%;
 }
 
-/* Imagen */
+/* 1. Restringimos el ancho del contenedor de la imagen */
 .imageMenuContainer {
   margin-top: 1rem;
   border: 1px dashed #00c3ff;
   border-radius: 0.5rem;
   padding: 0.75rem;
+  /* IMPORTANTE: Evita que crezca más allá del ancho de su padre */
+  width: 100%; 
+  box-sizing: border-box; /* Para que el padding no sume al ancho */
+  overflow: hidden; /* Corta lo que sobresalga si es necesario */
 }
 
 .ImageAndButton {
@@ -165,23 +172,34 @@
   cursor: pointer;
 }
 
+/* 2. Controlamos la sección de opciones (donde sale el buscador) */
 .imageOptions {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  width: 100%; /* Asegura que ocupe el 100% del contenedor padre, no más */
 }
 
+
+/* 3. Evitamos que el select o inputs dentro de imageOptions rompan el layout */
 .imageOptions select,
 .imageOptions input[type="text"]:not(.input__search) {
-  width:auto ;
-  max-width: 180px;
+  max-width: 100%; /* No pasar del 100% */
+  box-sizing: border-box;
   padding: 0.5rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
   color: #fff;
   margin-bottom: 0rem;
+}
+
+/* 4. Si ImageSearch tiene una clase interna (ej. input__search), asegúrate de limitarla también */
+/* Añade esto al final de tu CSS por si acaso el componente ImageSearch tiene estilos propios fuertes */
+.imageOptions div {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .imageOptions img {

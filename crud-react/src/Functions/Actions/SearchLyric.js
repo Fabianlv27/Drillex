@@ -1,11 +1,14 @@
-import {host} from "../../../api/api";
+import api from "../../../api/axiosClient";
 
 export const SearchLyric = async (Artist, Name) => {
   try {
-    const response = await fetch(`${host}/SearchLyric/${Name}/${Artist}`);
-    const data = await response.json();
-    console.log(response)
+    const response = await api.get(`/SearchLyric/${Name}/${Artist}`);
+    const data = response.data;
+    
+    console.log(data);
+    
     if (data.syncedLyrics) {
+      // Tu lógica de limpieza original se mantiene igual
       const splitter = data.syncedLyrics.replace(/\[.*?\]/g, '').split('\n');
       return splitter;
     } else {
@@ -13,7 +16,6 @@ export const SearchLyric = async (Artist, Name) => {
     }
   } catch (error) {
     console.error('Error fetching lyrics:', error);
-    alert(error.message);
-    return [];
+    return []; // Retorna array vacío para que la UI no rompa
   }
-}
+};

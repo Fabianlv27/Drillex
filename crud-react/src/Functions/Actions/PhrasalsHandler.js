@@ -1,38 +1,33 @@
-import {host} from "../../../api/api";
+import api from "../../../api/axiosClient"; // Asegúrate de que la ruta sea correcta
 
-export const  RandomPhrasal = async (AmountOfPhrs) => {
-     try {
-      const response = await fetch(`${host}/RandomPhrasals/${AmountOfPhrs}`);
-      const data = await response.json();
-      console.log(data);
-        return data;
+export const RandomPhrasal = async (AmountOfPhrs) => {
+    try {
+        const response = await api.get(`/RandomPhrasals/${AmountOfPhrs}`);
+        // Axios ya devuelve el JSON en response.data
+        console.log(response.data);
+        return response.data;
     } catch (error) {
-      console.error(error);
-      alert(error)
-      return [];
+        console.error("Error RandomPhrasal:", error);
+        return [];
     }
-}
-export const LetterPhrasals = async (letter,AmountOfPhrs) => {
-       try {
-      const response = await fetch(
-        `${host}/PhrByLetter/${letter}/${AmountOfPhrs}`
-      );
-      const data = await response.json();
-      return data;
+};
+
+export const LetterPhrasals = async (letter, AmountOfPhrs) => {
+    try {
+        const response = await api.get(`/PhrByLetter/${letter}/${AmountOfPhrs}`);
+        return response.data;
     } catch (error) {
-        alert(error)
-      return [];
+        console.error("Error LetterPhrasals:", error);
+        return [];
     }
-}
+};
 
 export const SearchPhrasals = async (Phr) => {
     try {
-      const data = await fetch(`${host}/SearchPhr/${Phr}`);
-      const PhrInfo = await data.json();
-      return PhrInfo;
+        const response = await api.get(`/SearchPhr/${Phr}`);
+        return response.data;
     } catch (error) {
-      console.error(error);
-      alert(error)
-      return [];
+        console.error("Error SearchPhrasals:", error);
+        return [];
     }
-}
+};

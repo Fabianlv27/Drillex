@@ -1,5 +1,3 @@
-import {useState,useEffect,useContext} from 'react'
-import { Context } from '../../../Contexts/Context';
 //import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import Paste from './songsSubMenus/Paste'
@@ -7,14 +5,10 @@ import SearchSong from './songsSubMenus/SearchSong'
 import "../../styles/Songs.css";
 import { FaYoutube } from "react-icons/fa";
 import { FaSpotify } from "react-icons/fa";
-import Transalte from '../../Transalte';
 
 //import SpotifyWebApi from 'spotify-web-api-js'
 function songs() {
     const history=useNavigate()
-    const [ShowTransMenu, setShowTransMenu] = useState(false)
-    const [selectedText, setSelectedText] = useState('');
-    const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
 const [ChoiseSong, setChoiseSong] = useState('Paste')
 
 
@@ -48,7 +42,6 @@ const HandleSong=(e)=>{
         <p>How do you want to see de Lyrics?</p>
         <select value={ChoiseSong} onChange={HandleSong}>
             <option value="Paste">Paste Lyrics</option>
-
             <option value="Search">Search Lyrics</option>
             <option value="Link">Streaming</option>
         </select>

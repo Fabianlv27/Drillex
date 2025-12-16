@@ -1,78 +1,82 @@
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useContext } from "react";
 import "./translate.css";
 import AddWordToList from "./Componets/AddWordToList.jsx";
 import { BsTranslate } from "react-icons/bs";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { CgArrowLongLeftE } from "react-icons/cg";
 import { CiPlay1 } from "react-icons/ci";
+import { GiArchiveResearch } from "react-icons/gi";
 import ElementCard from "./Functions/secondary menus/ElementCard.jsx";
+
+// Contextos
 import { Context } from "../Contexts/Context.jsx";
 import { DiccionaryContext } from "../Contexts/DiccionaryContext.jsx";
-import { getItalianDictionaryWord } from "./Functions/Actions/Dictionary.js";
 import { ListsContext } from "../Contexts/ListsContext.jsx";
-import { GiArchiveResearch } from "react-icons/gi";
-function Transalte({ top, left, TTT, setCloseMenu, CloseMenu }) {
-  const { Ahost, SelectedObjects, setSelectedObjects } = useContext(Context);
+
+// Funciones
+import { getItalianDictionaryWord } from "./Functions/Actions/Dictionary.js";
+import api from "../api/axiosClient"; // Cliente Axios seguro
+
+function Translate({ top, left, TTT, setCloseMenu, CloseMenu }) {
+  // Contextos globales
+  const { SelectedObjects, setSelectedObjects, Language } = useContext(Context);
   const { searchWord } = useContext(DiccionaryContext);
   const { GetList, UserLists } = useContext(ListsContext);
+
+  // Estados locales
   const [translatedText, setTranslatedText] = useState("");
   const [IsTrans, setIsTrans] = useState(false);
   const [Error, setError] = useState(false);
-  const audioRef = useRef(null);
-  const [Language, setlanguage] = useState("");
-  const [CookieUser, setCookieUser] = useState("");
   const [Add, setAdd] = useState(false);
+  
+  const audioRef = useRef(null);
 
-  useEffect(() => {
-    const cookies = document.cookie;
-    console.log(cookies);
-    const cookiesArray = cookies.split(";");
-
-    cookiesArray.forEach(async (cookie) => {
-      const [name, value] = cookie.trim().split("=");
-      if (name === "lang") {
-        setlanguage(value);
-      }
-      if (name === "e") {
-        setCookieUser(value);
-      }
-    });
-    console.log(CookieUser);
-  }, []);
+  // --- FUNCIONES ---
 
   const HandleVoice = async (word) => {
     try {
-      const response = await fetch(`${Ahost}/texto_a_voz/${word}/${Language}`);
-
-      const AudioBytes = await response.blob();
-
-      const audioUrl = URL.createObjectURL(AudioBytes);
-
-      return audioUrl;
+      // Usamos Axios para que viajen las cookies si es necesario
+      const response = await api.get(`/texto_a_voz/${word}/${Language}`, {
+          responseType: 'blob'
+      });
+      return URL.createObjectURL(response.data);
     } catch (error) {
-      console.error("Error al obtener el audio:", error);
+      console.error("Error obteniendo audio:", error);
     }
   };
 
   const translateText = async () => {
-    console.log(TTT);
+    if (!TTT) return;
     try {
-      const response = await fetch(`${Ahost}/Translate/${TTT}`);
-      const data = await response.json();
-      console.log(data);
+      const response = await api.get(`/Translate/${TTT}`);
+      const data = response.data;
+      
       setTranslatedText(data);
       setError(false);
       setIsTrans(true);
     } catch (error) {
       setError(true);
       setIsTrans(false);
-      console.error("Error al traducir:", error);
+      console.error("Error traduciendo:", error);
     }
   };
+
+  const playSound = (url) => {
+    if (url) {
+        if (audioRef.current) audioRef.current.pause();
+        audioRef.current = new Audio(url);
+        audioRef.current.play();
+    }
+  };
+
+  // Lógica para adaptar la respuesta del diccionario a tu modelo de datos
   const adaptWord = (MeaningWord) => {
+    if (!MeaningWord || !MeaningWord[0]) return null;
+    
+    const wordData = MeaningWord[0];
     const AdaptedElement = {
       mode: 1,
-      name: MeaningWord[0].word,
+      name: wordData.word,
       meaning: "",
       example: [],
       type: [],
@@ -84,216 +88,175 @@ function Transalte({ top, left, TTT, setCloseMenu, CloseMenu }) {
       gerund: "",
     };
 
-    MeaningWord[0].meanings.map((meaning) =>
-      meaning.definitions.map((def) =>
-        def.definition === undefined
-          ? null
-          : AdaptedElement.meaning != ""
-          ? (AdaptedElement.meaning += "\n" + def.definition)
-          : (AdaptedElement.meaning = def.definition)
-      )
-    );
+    // Procesar meanings de forma más segura
+    if (wordData.meanings) {
+        wordData.meanings.forEach((meaning) => {
+            // Part of Speech
+            if (meaning.partOfSpeech) {
+                AdaptedElement.type.push(meaning.partOfSpeech);
+            }
 
-    MeaningWord[0].meanings.map((meaning) =>
-      meaning.definitions.map((def) =>
-        def.example
-          ? (AdaptedElement.example = [...AdaptedElement.example, def.example])
-          : null
-      )
-    );
+            // Definitions & Examples
+            if (meaning.definitions) {
+                meaning.definitions.forEach((def) => {
+                    if (def.definition) {
+                        AdaptedElement.meaning += (AdaptedElement.meaning ? "\n" : "") + def.definition;
+                    }
+                    if (def.example) {
+                        AdaptedElement.example.push(def.example);
+                    }
+                    // Antonyms/Synonyms inside definitions
+                    if (def.antonyms && def.antonyms.length > 0) {
+                        AdaptedElement.antonyms += (AdaptedElement.antonyms ? ", " : "") + def.antonyms.join(", ");
+                    }
+                    if (def.synonyms && def.synonyms.length > 0) {
+                         AdaptedElement.synonyms += (AdaptedElement.synonyms ? ", " : "") + def.synonyms.join(", ");
+                    }
+                });
+            }
 
-    MeaningWord[0].meanings.map((meaning) =>
-      meaning.partOfSpeech
-        ? (AdaptedElement.type = [...AdaptedElement.type, meaning.partOfSpeech])
-        : null
-    );
+            // Global Antonyms/Synonyms per meaning
+            if (meaning.antonyms && meaning.antonyms.length > 0) {
+                AdaptedElement.antonyms += (AdaptedElement.antonyms ? ", " : "") + meaning.antonyms.join(", ");
+            }
+            if (meaning.synonyms && meaning.synonyms.length > 0) {
+                AdaptedElement.synonyms += (AdaptedElement.synonyms ? ", " : "") + meaning.synonyms.join(", ");
+            }
+        });
+    }
 
-    MeaningWord[0].meanings.map(
-      (meaning) => (
-        meaning.antonyms.length > 0
-          ? meaning.antonyms.map((ant) =>
-              AdaptedElement.synonyms != ""
-                ? (AdaptedElement.antonyms += ", " + ant)
-                : (AdaptedElement.antonyms = ant)
-            )
-          : null,
-        meaning.definitions.map((def) =>
-          def.antonyms.length > 0
-            ? def.antonyms.map((ant) =>
-                AdaptedElement.antonyms != ""
-                  ? (AdaptedElement.antonyms += ", " + ant)
-                  : (AdaptedElement.antonyms = ant)
-              )
-            : null
-        )
-      )
-    );
-
-    MeaningWord[0].meanings.map(
-      (meaning) => (
-        meaning.synonyms.length > 0
-          ? meaning.synonyms.map((syn) =>
-              AdaptedElement.synonyms != ""
-                ? (AdaptedElement.synonyms += ", " + syn)
-                : (AdaptedElement.synonyms = syn)
-            )
-          : null,
-        meaning.definitions.map((def) =>
-          def.synonyms.length > 0
-            ? def.synonyms.map((syn) =>
-                AdaptedElement.synonyms != ""
-                  ? (AdaptedElement.synonyms += ", " + syn)
-                  : (AdaptedElement.synonyms = syn)
-              )
-            : null
-        )
-      )
-    );
     return AdaptedElement;
   };
+
   const HandleMeaningCard = async (word) => {
     try {
       let MeaningWord;
       let AdaptedElement;
+
       if (Language === "it") {
         MeaningWord = await getItalianDictionaryWord(word);
-        MeaningWord.mode = 1;
-        AdaptedElement = MeaningWord;
+        if (MeaningWord) {
+            MeaningWord.mode = 1;
+            AdaptedElement = MeaningWord;
+        }
       } else {
         MeaningWord = await searchWord(word);
         AdaptedElement = adaptWord(MeaningWord);
       }
-      console.log(MeaningWord);
-      GetList();
-      console.log(UserLists);
-      console.log(SelectedObjects);
-      setCloseMenu(true);
-      setSelectedObjects([...SelectedObjects, AdaptedElement]);
-      console.log(SelectedObjects);
+
+      if (AdaptedElement) {
+          // Aseguramos que las listas estén cargadas
+          if (UserLists.length === 0) await GetList();
+          
+          setCloseMenu(true);
+          setSelectedObjects([...SelectedObjects, AdaptedElement]);
+      } else {
+          console.warn("No definition found");
+          // Aquí podrías mostrar un pequeño toast de error
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error handling meaning:", error);
     }
   };
-  const CreateRef = (a) => {
-    audioRef.current = new Audio(`${a}`);
-  };
-  const playSound = (a) => {
-    CreateRef(a);
-    // Reproduce el sonido al hacer clic en el botón
-    audioRef.current.play();
-  };
-  const PostData = async (ListsToPost) => {
-    const formData = {
-      word: TTT,
-      meaning: translatedText,
-      mode: 1,
-      lists: ListsToPost,
-    };
-    console.log(formData);
-  }
+
+  // --- RENDER ---
+
+  if (CloseMenu) return null;
+
   return (
     <>
-      {SelectedObjects.length > 0 ? (
-        <div style={{ position: "fixed", top: 0, left: 0 }}>
+      {SelectedObjects.length > 0 && (
+        <div style={{ position: "fixed", top: 0, left: 0, zIndex: 99999 }}>
           <ElementCard
             Lists={UserLists}
-            CookieUserData={CookieUser}
+            // CookieUserData={CookieUser} // YA NO ES NECESARIO, Axios maneja la sesión
             CurrentListId={"none"}
           />
         </div>
-      ) : null}
-      {!CloseMenu ? (
-        <div
-          className="MainTrans"
-          style={{
-            position: "absolute",
-            top: `${top - 30}px`,
-            left: `${left}px`,
-            zIndex: "1000000000",
+      )}
+
+      <div
+        className="MainTrans"
+        style={{
+          position: "absolute",
+          top: `${top - 30}px`,
+          left: `${left}px`,
+          zIndex: "1000000000",
+        }}
+      >
+        <button
+          className="closeTrs"
+          onClick={() => {
+            if (IsTrans) {
+              setIsTrans(false);
+            } else {
+              if (window.getSelection) {
+                  window.getSelection().removeAllRanges();
+              }
+              setIsTrans(false);
+              setCloseMenu(true);
+            }
           }}
         >
-          <button
-            className="closeTrs"
-            onClick={() => {
-              {
-                if (IsTrans) {
-                  setIsTrans(false);
-                } else {
-                  window.getSelection().removeAllRanges();
-                  setIsTrans(false);
-                  setCloseMenu(true);
-                }
-              }
-            }}
-          >
-            {
-              IsTrans ? (
-                <CgArrowLongLeftE />
-              ):"X"
-            }
-          </button>
+          {IsTrans ? <CgArrowLongLeftE /> : "X"}
+        </button>
 
-          {!IsTrans ? (
-            <div style={{ display: "flex" }}>
-              <button onClick={translateText} className="SimpleB">
-                <BsTranslate />
-              </button>
-              <button
-                className="SimpleB"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onClick={async () => {
-                  const audioUrl = await HandleVoice(TTT);
-                  playSound(audioUrl);
-                }}
-              >
-                <CiPlay1 />
-              </button>
-              <button
-                className="SimpleB"
-                onClick={() => HandleMeaningCard(TTT)}
-              >
-                <GiArchiveResearch />
-              </button>
-            </div>
-          ) : (
-            <div>
-              {!Error ? (
-                <div style={{ display: "flex",marginTop: "0.5rem" }}>
-                  {Add ? (
-                   <div>
-                    
-                      <AddWordToList data={{
-                        name: TTT,
-                        meaning: translatedText,
-                      }}  
-                      ExtraFunction={()=>setAdd(false)}
-
-                      />
-                   </div>
-                  ) : (
-                    <>
-                      <button className="ActionButtoms2" onClick={()=>{
-                        setAdd(true);
-                      }}>+</button>
-                      <p style={{ color: "black" }}>{translatedText}</p>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <p style={{ color: "red" }}>
-                  <MdOutlineErrorOutline /> Error
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-      ) : null}
+        {!IsTrans ? (
+          <div style={{ display: "flex" }}>
+            <button onClick={translateText} className="SimpleB" title="Translate">
+              <BsTranslate />
+            </button>
+            <button
+              className="SimpleB"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+              onClick={async () => {
+                const audioUrl = await HandleVoice(TTT);
+                playSound(audioUrl);
+              }}
+              title="Listen"
+            >
+              <CiPlay1 />
+            </button>
+            <button
+              className="SimpleB"
+              onClick={() => HandleMeaningCard(TTT)}
+              title="Definition"
+            >
+              <GiArchiveResearch />
+            </button>
+          </div>
+        ) : (
+          <div>
+            {!Error ? (
+              <div style={{ display: "flex", marginTop: "0.5rem", alignItems: 'center' }}>
+                {Add ? (
+                  <div>
+                    <AddWordToList 
+                        data={{ name: TTT, meaning: translatedText }}  
+                        ExtraFunction={() => setAdd(false)}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <button className="ActionButtoms2" onClick={() => setAdd(true)}>
+                        +
+                    </button>
+                    <p style={{ color: "black", marginLeft: "10px", margin: 0 }}>
+                        {translatedText}
+                    </p>
+                  </>
+                )}
+              </div>
+            ) : (
+              <p style={{ color: "red", display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <MdOutlineErrorOutline /> Error translating
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </>
   );
 }
 
-export default Transalte;
+export default Translate;

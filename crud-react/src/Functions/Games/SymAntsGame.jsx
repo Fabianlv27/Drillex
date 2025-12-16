@@ -171,7 +171,7 @@ function SymAntsGame() {
           </div>
         ) : (
           <div className="LoseMenu WoLMenu">
-            <h2>{isRight ? "You Won" : "You Lose"}</h2>
+            <h2>{isRight ? "You Win" : "You Lose"}</h2>
             <p>The Correct Word is : {ActualChoiceName}</p>
             <button className="ActionButtoms" onClick={Next}>
               <GrNext />

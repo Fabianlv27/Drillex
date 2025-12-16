@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../../Contexts/Context";
-import { WordsContext } from "../../../Contexts/WordsContext";
 import api from "../../../api/axiosClient.js";
 function Hero() {
   const history = useNavigate();
-  const { setLanguage, RHost, Ahost,Language } = useContext(Context);
-  const { GetWords, setUdpate } = useContext(WordsContext);
+  const { setLanguage, RHost,Language } = useContext(Context);
   const [userData, setuserData] = useState({});
   const cardsData = [
   {
@@ -103,12 +101,12 @@ function Hero() {
           }
         });
 
-        const response = await api.get(`/users/profile`); 
+        const response = await api.get(`/users/me`); 
         
         const data = response.data; // Axios devuelve los datos en .data directly
-        
+        console.log(data)
         setuserData({
-            username: data.username, // Ajusta según tu respuesta JSON
+            username: data[0][0], // Ajusta según tu respuesta JSON
             id: data.id
         });
 

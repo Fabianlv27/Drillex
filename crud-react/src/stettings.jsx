@@ -1,9 +1,9 @@
-import {useContext, useEffect,useState,useRef} from 'react'
-import {Context} from './Context'
+import {useState} from 'react'
 import {GetLocalHost} from '../api/api.jsx'
-const [showMenu, setshowMenu] = useState(false)
+
 
 function stettings() {
+ const [showMenu, setshowMenu] = useState(false) 
 const host=GetLocalHost()
   return (
     <div>

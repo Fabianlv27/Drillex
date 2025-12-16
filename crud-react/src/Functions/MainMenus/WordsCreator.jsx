@@ -21,7 +21,6 @@ function WordsCreator() {
     GetWords,
     dataForm,
     setDataForm,
-    setSearchBool,
     ChoiseImage,
     setChoiseImage,
     Auto,

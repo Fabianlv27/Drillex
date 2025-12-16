@@ -91,18 +91,14 @@ text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.448);
    margin-left: 3%
   }
   .MainModeMenu p{
-  font-size: 18px;
   margin: 2%;
   color: aliceblue;
   }
   .AllModes{
     height: auto;
     width: 100%;
-margin-bottom: 2rem;
   }
-  .AllModes h2{
-    margin-bottom: 5%;
-  }
+
   .PVCard{
     height: auto;
     width: 24rem;
@@ -126,11 +122,13 @@ text-align: center;
 justify-content: center;
 align-items: center;
   }
+  .MeaningBox p{
+    font-size: 15px;
+  }
   .Tenses{
     margin-top:0.5rem; 
     width: 100% ;
     font-family:roboto;
-    margin-bottom: 1rem;
   }
   thead,tbody,th,td{
 border: solid 1px #00c3ff00;
@@ -157,7 +155,9 @@ table{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+    max-height: 20vh;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 .examplesPVMenu span{
   font-size: 1.2rem;
@@ -177,7 +177,8 @@ table{
    scrollbar-width: none;
   }
   .singleExPv p{
-  margin-top: 5%;
+  margin-top: 10px;
+  font-size: 15px;
   }
   .AntCardPhr{
     border: solid 2px red;
@@ -207,13 +208,15 @@ background-color: rgb(7, 33, 56);
 .ButtomsMenuPV button{
   margin: 2%;
 }
+.ActionButtoms{    
+  height: 30px;
+    width: 30px;}
 .AddMenuPV{
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 10vh;
-  width: 60vw;
   margin-bottom: 2rem;
+  padding: 15px;
   background-color: rgb(7, 33, 56) ;
   border-radius: 20px;
   border: 4px double rgb(0, 195, 255);
@@ -270,4 +273,41 @@ transform: scale(1.1);
   width: 95%;
   color: #ffffff;
   font-size: 20px;
+}
+.AddMenuPV_Internal {
+  width: 100%;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(0, 195, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.AddControls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    justify-content: center;
+}
+
+.AddControls select {
+    margin: 0; /* Quitamos margen heredado */
+    width: 70%;
+    max-width: 200px;
+}
+
+.AddSuccess {
+    color: rgb(0, 255, 157);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

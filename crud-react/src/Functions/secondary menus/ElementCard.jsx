@@ -5,11 +5,9 @@ import AddWordToList from "../../Componets/AddWordToList.jsx";
 import { Context } from "../../../Contexts/Context";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import { WordsContext } from "../../../Contexts/WordsContext";
 import ImageSearch from './ImageSeach.jsx'
 //Hacer la funcion de agregar palabras a las listas que sea mediante arrays y no uno solo
 function ElementCard({ Lists, CurrentListId }) {
-  const { AddWord } = useContext(WordsContext);
   const { SelectedObjects, setSelectedObjects } = useContext(Context);
   const [AddWordB, setAddWordB] = useState(false);
 
