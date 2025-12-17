@@ -47,11 +47,9 @@ margin-top: 1rem;
 .ListsCreatorMenu {
     height: auto;
     width: auto;
-    background-color: rgb(7, 33, 56);
+    background-color: rgb(14 12 29);
     box-shadow: inset 0px 0px 5px #47c8ffbf;
     border-radius: 10px;
-    border:2px solid #47c8ffbf ;
-    outline: 3px solid #47c8ffbf ;
     outline-offset: 3px;
     animation: grow 1s forwards;
     margin-top: 2rem;
@@ -60,7 +58,7 @@ margin-top: 1rem;
 .ListsCreatorMenu button{
     margin-bottom: 5%;
     background-color: transparent;
-    color: aliceblue;
+    color: #279aff;
     font-weight: bolder;
     border: none;
     font-size: 25px;
@@ -93,9 +91,10 @@ margin-top: 1rem;
   padding: 0 1rem;
   color: #fff;
   font-size: 15px;
-  border: 1px solid #5e4dcd;
+  border:1px solid #0c82a7 ;
   border-radius: 6px 0 0 6px;
   background-color: transparent;
+  margin-left: 1rem;
 }
 
 .button--submit {
@@ -103,7 +102,7 @@ margin-top: 1rem;
   padding: .5em 1em;
   border: none;
   border-radius: 0 6px 6px 0;
-  background-color: #5e4dcd;
+  background-color: #0c82a7; 
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -112,7 +111,7 @@ margin-top: 1rem;
 }
 
 .button--submit:hover {
-  background-color: #5e5dcd;
+  background-color: #0fa8d6;
 }
 
 .inputCreateList:focus, .inputCreateList:focus-visible {

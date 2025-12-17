@@ -1,11 +1,66 @@
-from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
+import json
+from youtube_transcript_api import YouTubeTranscriptApi
 from fastapi import APIRouter, HTTPException
+from Data.Mysql_Connection import get_db_connection # Tu conexión existente
 
 Sub_Router = APIRouter()
 
+# --- FUNCIONES DE BASE DE DATOS (CACHÉ) ---
+
+def get_from_cache(video_id, lang):
+    """Busca si el subtítulo ya existe en nuestra base de datos"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        sql = "SELECT content FROM subtitles_cache WHERE video_id = %s AND lang = %s"
+        cursor.execute(sql, (video_id, lang))
+        result = cursor.fetchone()
+        
+        cursor.close()
+        conn.close()
+        
+        if result:
+            print(f"🚀 CACHE HIT: Recuperado desde BD para {video_id}")
+            # MySQL devuelve JSON como string o dict dependiendo de la configuración driver
+            # Aseguramos que sea un objeto Python (lista de dicts)
+            if isinstance(result['content'], str):
+                return json.loads(result['content'])
+            return result['content']
+            
+    except Exception as e:
+        print(f"⚠️ Error leyendo caché: {e}")
+        return None
+    return None
+
+def save_to_cache(video_id, lang, content):
+    """Guarda el subtítulo nuevo en la base de datos"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Convertimos la lista de objetos a String JSON para guardarlo
+        json_content = json.dumps(content)
+        
+        sql = """
+        INSERT INTO subtitles_cache (video_id, lang, content) 
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE created_at = NOW();
+        """
+        cursor.execute(sql, (video_id, lang, json_content))
+        conn.commit()
+        
+        cursor.close()
+        conn.close()
+        print(f"💾 CACHE SAVED: Guardado en BD para {video_id}")
+        
+    except Exception as e:
+        print(f"⚠️ Error guardando en caché: {e}")
+
+# --- FUNCIONES DE YOUTUBE (EXTERNO) ---
+
 def listar_idiomas(video_id):
     try:
-        # Intenta obtener la lista de transcripciones disponibles
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
         idiomas_disponibles = []
         for t in transcript_list:
@@ -16,36 +71,27 @@ def listar_idiomas(video_id):
             })
         return idiomas_disponibles
     except Exception as e:
-        print(f"Error listando idiomas: {e}") # Debug
+        print(f"Error listando idiomas: {e}")
         return []
 
-def Transcript(id, lang):
+def Transcript_Fetcher(id, lang):
+    """
+    Esta función SOLO se encarga de ir a buscar a YouTube si no hay caché.
+    Usa el método Legacy (Plan B) que es el más robusto.
+    """
     try:
-        transcript_list = YouTubeTranscriptApi.list_transcripts(id)
-        
-        # 1. Intentamos buscar manual o generado en el idioma pedido
-        try:
-            # Primero buscamos manual
-            transcript = transcript_list.find_manually_created_transcript([lang])
-        except:
-            try:
-                 # Si falla, buscamos generado
-                 transcript = transcript_list.find_generated_transcript([lang])
-            except:
-                 # Si falla, intentamos traducir cualquiera disponible al idioma pedido
-                 # Esto es muy útil: toma el inglés y lo traduce al español si es necesario
-                 transcript = transcript_list[0].translate(lang)
-
-        transcript_data = transcript.fetch()
+        print(f"📡 API CALL: Pidiendo a YouTube {id}...")
+        # Usamos el método directo
+        transcript_data = YouTubeTranscriptApi.get_transcript(id, languages=[lang])
         return {"status": 0, "content": transcript_data} 
 
     except Exception as e:
-        # AQUÍ ESTÁ LA CLAVE: Imprime el error real en tu consola de VSCode
-        print(f"CRITICAL TRANSCRIPT ERROR for ID {id}: {e}") 
+        print(f"❌ YOUTUBE ERROR ID {id}: {e}") 
         
+        # Si falla, miramos qué idiomas hay
         avaliable = listar_idiomas(id)
+        
         if not avaliable:
-             # Devolvemos el error real para verlo en el Frontend en lugar de un 404 genérico
              return {"status": 1, "error": str(e)}
         
         return {"status": 2, "content": avaliable}
@@ -55,20 +101,38 @@ def format_time(time_in_seconds):
     seconds = round(time_in_seconds % 60, 2)
     return f"{minutes}.{str(int(seconds)).zfill(2)}"
 
+# --- ENDPOINT PRINCIPAL ---
+
 @Sub_Router.get("/Sub/{lang}/{id}")
 async def GetTrans(lang: str, id: str):
-    print(f"Solicitando subtítulos: ID={id}, Lang={lang}") # Log de entrada
     
-    result = Transcript(id, lang)
+    # 1. INTENTO DE CACHÉ (Lo primero de todo)
+    cached_data = get_from_cache(id, lang)
+    
+    if cached_data:
+        # Si está en caché, formateamos tiempos y devolvemos INMEDIATAMENTE
+        # No tocamos YouTube, no gastamos cuota, no hay bloqueo.
+        for tr in cached_data:
+            tr['start'] = format_time(tr['start'])
+        return {"status": 0, "content": cached_data, "source": "cache"}
+
+    # 2. SI NO ESTÁ EN CACHÉ -> VAMOS A YOUTUBE
+    result = Transcript_Fetcher(id, lang)
     
     if result["status"] == 0:
+        # 3. ÉXITO -> GUARDAMOS EN CACHÉ PARA EL FUTURO
+        # Guardamos la data cruda (sin formatear tiempo) para mantener precisión
+        save_to_cache(id, lang, result["content"])
+        
+        # Formateamos para el frontend
         for tr in result["content"]:
             tr['start'] = format_time(tr['start'])
+            
+        result["source"] = "youtube" # Debug info
         return result
     
     elif result["status"] == 2:
         return result
     
     else:
-        # En lugar de 404, devolvemos 400 con el mensaje de error real para entender qué pasa
         raise HTTPException(status_code=400, detail=f"Error getting subtitles: {result.get('error')}")

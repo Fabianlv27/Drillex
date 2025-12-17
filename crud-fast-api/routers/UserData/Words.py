@@ -95,88 +95,105 @@ def PostWord(wordData: Word):
 
 
 # --- ENDPOINTS REFACTORIZADOS ---
-
-@UserData_router.get("/words/{ListId}/{ListName}/{game}") # Quitamos {e}
+@UserData_router.get("/words/{ListId}/{ListName}/{game}")
 def GetListWords(ListId, ListName='default', game='default', user_id: str = Depends(get_current_user_id)):
     
-    # Verificación de propiedad de la lista
-    VerifyList = 'SELECT id_User, title FROM lists WHERE id = %s AND id_User = %s;'
     conexion = get_db_connection()
     cursor = conexion.cursor(dictionary=True)
 
     try:
+        # --- PASO 1: Validación de Propiedad (Consulta Ligera) ---
+        # Solo traemos el título, es mucho más rápido que hacer un UNION con toda la tabla words
+        VerifyList = 'SELECT title FROM lists WHERE id = %s AND id_User = %s;'
         cursor.execute(VerifyList, (ListId, user_id))
-        result = cursor.fetchone()
-        if not result:
+        list_data = cursor.fetchone()
+
+        if not list_data:
             return {"status": False, "detail": "Esta lista no existe o no te pertenece."}
-        if ListName != "default" and result["title"] != ListName:
-            return {"status": False, "detail": "Nombre de lista incorrecto."}
-    except Exception as ex:
-        print(ex)
-        return {"status": False, "detail": "Error verificando lista."}
+        
+        if ListName != "default" and list_data["title"] != ListName:
+            return {"status": False, "detail": "El nombre de la lista no coincide."}
 
-    # Lógica compleja de UNION mantenida, pero usando user_id
-    try:
-        modes = '''
-         LEFT JOIN Progress_mode pm ON pm.id_Word = w.id_Word
-         AND (
-            (pm.mode = "easy"      AND DATEDIFF(NOW(), pm.date) > 7) OR
-            (pm.mode = "normal"    AND DATEDIFF(NOW(), pm.date) > 3) OR
-            (pm.mode = "hard"      AND DATEDIFF(NOW(), pm.date) > 2) OR
-            (pm.mode = "ultrahard" AND DATEDIFF(NOW(), pm.date) >= 1)
-         )
-        '''
-        base_sql = '''
-        SELECT l.id_user, NULL AS id_Word, NULL as name, NULL as past, NULL as gerund, NULL as participle,
-        NULL as meaning, NULL AS example, NULL as image, NULL as synonyms, NULL as antonyms,
-        NULL AS type, NULL as Created_at
-        FROM lists l WHERE l.id = %s AND l.id_User = %s
-        UNION ALL
-        (SELECT NULL AS id_user, w.id_Word, w.name, w.past, w.gerund, w.participle,
-        w.meaning, w.example, w.image, w.synonyms, w.antonyms,
-        GROUP_CONCAT(tw.nameType) AS type, w.Created_at
-        FROM lists l
-        LEFT JOIN words w ON w.id_List = l.id
-        LEFT JOIN types_words tw ON w.id_Word = tw.id_Word
-        '''
+        # --- PASO 2: Construcción de la Query Principal ---
+        # Base de la consulta: Trae palabras uniendo con la lista y tipos
+        # Nota: Ya validamos que la lista es del usuario, pero mantenemos el JOIN con lists 
+        # por integridad referencial y seguridad adicional.
+        base_sql = """
+            SELECT 
+                w.id_Word, w.name, w.past, w.gerund, w.participle,
+                w.meaning, w.example, w.image, w.synonyms, w.antonyms,
+                GROUP_CONCAT(tw.nameType) AS type, w.Created_at
+            FROM words w
+            INNER JOIN lists l ON w.id_List = l.id
+            LEFT JOIN types_words tw ON w.id_Word = tw.id_Word
+        """
 
-        if game != 'default' and game != 'random':
-            union_tail = '''
-            LEFT JOIN progress_right rw ON rw.id_Word = w.id_Word AND rw.id_List = %s AND rw.game = %s
-            WHERE l.id = %s AND l.id_User = %s AND (rw.fecha IS NULL OR DATEDIFF(NOW(), rw.fecha) > 2)
-            GROUP BY w.id_Word ) ORDER BY Created_at DESC;
-            '''
-            params = (ListId, user_id, ListId, game, ListId, user_id)
+        # Lógica de filtros dinámica
+        where_clause = " WHERE l.id = %s AND l.id_User = %s "
+        group_order = " GROUP BY w.id_Word ORDER BY w.Created_at DESC "
+        
+        # Parámetros base
+        params = [ListId, user_id]
 
-        elif game == "random":
-            union_tail = modes + ''' WHERE l.id = %s AND l.id_User = %s GROUP BY w.id_Word ) ORDER BY Created_at DESC; '''
-            params = (ListId, user_id, ListId, user_id)
+        # --- Lógica de Juegos (Game Logic) ---
+        join_clause = ""
+        
+        if game == 'random':
+            # Lógica para "Random" (Modos de repaso inteligente)
+            join_clause = """
+                LEFT JOIN Progress_mode pm ON pm.id_Word = w.id_Word
+            """
+            # Añadimos filtro al WHERE existente
+            where_clause += """
+                AND (
+                    (pm.mode = "easy"      AND DATEDIFF(NOW(), pm.date) > 7) OR
+                    (pm.mode = "normal"    AND DATEDIFF(NOW(), pm.date) > 3) OR
+                    (pm.mode = "hard"      AND DATEDIFF(NOW(), pm.date) > 2) OR
+                    (pm.mode = "ultrahard" AND DATEDIFF(NOW(), pm.date) >= 1)
+                )
+            """
+        elif game != 'default':
+            # Lógica para otros juegos específicos
+            join_clause = """
+                LEFT JOIN progress_right rw 
+                ON rw.id_Word = w.id_Word AND rw.id_List = %s AND rw.game = %s
+            """
+            # Inyectamos los parámetros del juego ANTES de los del WHERE
+            # Nota: En python mysql connector, el orden de params debe coincidir con los %s en orden de aparición
+            # Como el JOIN va antes del WHERE, necesitamos ajustar un poco la estrategia de params o usar una lista.
+            
+            # Re-estructuramos params para este caso específico:
+            # 1. Params del JOIN (ListId, game)
+            # 2. Params del WHERE (ListId, user_id)
+            params = [ListId, game, ListId, user_id] 
+            
+            where_clause += """
+                AND (rw.fecha IS NULL OR DATEDIFF(NOW(), rw.fecha) > 2)
+            """
 
-        else: 
-            union_tail = ''' WHERE l.id = %s AND l.id_User = %s GROUP BY w.id_Word ) ORDER BY Created_at DESC; '''
-            params = (ListId, user_id, ListId, user_id)
+        # Ensamblaje final
+        final_sql = base_sql + join_clause + where_clause + group_order
 
-        cursor.execute(base_sql + union_tail, params)
+        # Ejecución
+        cursor.execute(final_sql, tuple(params))
         result = cursor.fetchall()
-        
-        # Procesamiento de resultados
-        if not result: return {"status": True, "content": []}
-        
-        # Limpieza del primer elemento NULL del UNION
-        clean_result = result[1:] 
 
-        for wrd in clean_result:
+        # Procesamiento (Split de strings a arrays)
+        for wrd in result:
             wrd["type"] = wrd["type"].split(",") if wrd["type"] else []
             wrd["example"] = wrd["example"].split(";") if wrd["example"] else []
 
-        return {"status": True, "content": clean_result}
+        return {"status": True, "content": result}
 
     except mysql.connector.Error as err:
-        print(err)
-        return {"status": False, "content": [], "detail": str(err)}
+        print(f"Database Error: {err}")
+        return {"status": False, "content": [], "detail": "Error de base de datos."}
+    except Exception as ex:
+        print(f"Internal Error: {ex}")
+        return {"status": False, "content": [], "detail": "Error inesperado."}
     finally:
         cursor.close()
-        conexion.close()  
+        conexion.close()
 
 @UserData_router.get("/words_List") # Quitamos /{e}
 def GetWords_Lists(user_id: str = Depends(get_current_user_id)):

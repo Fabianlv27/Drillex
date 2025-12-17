@@ -7,11 +7,12 @@
         margin-left: 1vw;
     }
     .cardContainer div{
-        height: 18rem;
+        height: 10rem;
         width: 25vw;
+        margin-bottom: 50px;
     }
     .cardContainer div p{
-        font-size: 25px;
+        font-size: 15px;
     }
     .cardContainer div h3{
         font-size: 25px;

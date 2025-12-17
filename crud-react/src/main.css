@@ -56,7 +56,7 @@ color:  white;
    color: rgb(0, 195, 255);
 }
 h3{
-    color:rgb(230, 230, 230) ;
+    color:rgb(135 206 235) ;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 h2{
@@ -82,7 +82,7 @@ nav{
     width: 100vw;
     display: flex;
     flex-direction: column;
-    background-color: rgba(7, 33, 56, 0.733);
+    background-color: rgb(7, 33, 56);
    position: fixed;
    margin-bottom: 20px;
    z-index: 2;
@@ -162,8 +162,8 @@ align-items: center;
     border: solid 1.6px rgb(22, 171, 188);
     border-radius: 30px;
   box-shadow:  0px 0px 20px rgba(0, 0, 0, 0.87);
-    color:  rgb(18, 184, 202); 
-    background: rgba(7, 33, 56, 0.467) ;
+    color:  #00c3ff; 
+    background: rgb(9 27 49 / 64%) ;
   align-items: center;
 }
 
@@ -200,9 +200,7 @@ font-weight: bolder;
    flex-wrap: wrap;
    align-items: center;
    justify-content: center;
- background-color: rgba(90, 155, 203, 1);
-
-  
+ background-color:  rgb(17 42 73);;
 }
 
 
@@ -210,15 +208,15 @@ font-weight: bolder;
   fill: #0e0c1d;
 }
 .cardContainer div{
-    border: solid rgb(0, 195, 255);
-       background: rgb(7, 33, 56) ;
+     border: solid rgb(10 21 41);
+    background: rgb(14 12 29);
        box-shadow: 0px 0px 20px rgba(1, 17, 21, 0.453) ;
        
     border-radius: 20px;
     height: 14rem;
     width: 45vw;
     margin: 8px;
-    font-size: 16px;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -227,22 +225,28 @@ font-weight: bolder;
     transition: 0.8s;
 }
 .cardContainer div p{
-color:rgb(0, 195, 255) ;
+color:rgb(135 206 235) ;
 width: 90%;
 }
 .cardContainer div h3{
   width: 90%;
 }
 .cardContainer div:hover{
-background-color: rgba(11, 54, 91, 0.759);
-box-shadow: 0px 0px 10px rgba(52, 185, 226, 0.363) ;
-
+background-color: rgba(25, 21, 51, 0.768);
+box-shadow: 0px 0px 10px rgba(25, 22, 50, 0.784) ;
+border: none;
 transform: rotate3d(1,1,0,15deg)
 
 
 }
 .content{
     margin-top: 140px;
+}
+
+.oneCard img{
+  height: 170px;
+  position: absolute;
+  margin-top: 50px;
 }
 
 .input {

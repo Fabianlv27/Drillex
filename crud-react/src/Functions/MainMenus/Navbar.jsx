@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import api from "../../../api/axiosClient"; // Ajusta la ruta según tu estructura
 import "../../main.css";
 import "../../styles/Navbar.css";
 import "../../MainResp.css";
@@ -75,24 +75,34 @@ function Navbar() {
     cursor: "pointer",
   };
 
-  const LogoutHandler = () => {
-    try {
-      fetch(`https://${Ahost}/logout`, {
-        method: "POST",
-        credentials: "include", // importante para enviar la cookie!
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data.message);
-          document.cookie =
-            "e=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" +
-            window.location.hostname;
-          window.location.href = `${Rhost}/Hero`;
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const LogoutHandler = async () => {
+  try {
+    // 1. Petición al Backend (La parte importante)
+    // Al usar 'api', se envían automáticamente las cookies HttpOnly (access_token, refresh_token).
+    // El backend responderá con instrucciones 'Set-Cookie' para expirarlas (borrarlas).
+    await api.post("/logout");
+
+    // 2. Limpieza Legacy (Opcional)
+    // Si tu frontend antiguo todavía revisa la cookie "e" para algo visual, la borramos.
+    // Si ya no la usas, puedes borrar esta línea sin problemas.
+    //document.cookie = "e=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+
+    // 3. Limpieza de estado local (Si guardas datos de usuario en localStorage)
+    //localStorage.removeItem("user_data"); 
+   // localStorage.removeItem("videosYT"); // Opcional: si quieres limpiar caché de videos al salir
+
+    // 4. Redirección
+    // Usamos window.location.href para forzar una recarga y limpiar estados de memoria de React
+    console.log("Sesión cerrada correctamente");
+    window.location.href = `${Rhost}/Hero`; 
+
+  } catch (error) {
+    console.error("Error al intentar cerrar sesión:", error);
+    // Fallback: Si el backend falla, redirigimos al usuario al inicio de todas formas
+    // para que no se sienta "atrapado" en la pantalla de perfil.
+    window.location.href = `${Rhost}/Hero`;
+  }
+};
   const SelectMenu = (ubication) => {
     if (SearchSubMenuProps.ubication == ubication) {
       setSearchSubMenuProps({ ubication: -1, status: false });
@@ -148,11 +158,11 @@ function Navbar() {
           )}
         </div>
         <img
-          src="https://i.postimg.cc/mgsYw6VK/1718612800858.png"
+          src="https://i.postimg.cc/NGDPGmJS/drillex.png"
           onClick={() => (window.location.href = "https://dibylocal.com:5173")}
           alt="Logo"
         />
-        <p className="logo">O.I.R</p>
+        <p className="logo">Drillex</p>
         <div className="NavMenusCont">
           <div className="SingleSubMenu">
             <p onClick={() => history("/Hero")}>

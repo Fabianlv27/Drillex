@@ -16,7 +16,7 @@ function AllLists() {
 
   return (
     <div className="MainBackground MyLists">
-      <h1>Your Saved Lists</h1>
+      <h1>Your Lists</h1>
       <button className="ActionButtoms" onClick={() => setShowCreateList(true)}>
         <MdOutlineCreateNewFolder />
       </button>

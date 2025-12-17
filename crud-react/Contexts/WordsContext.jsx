@@ -37,7 +37,7 @@ const WordsContextProvider = ({ children }) => {
       // Axios usa baseURL, así que solo ponemos la ruta relativa
       const response = await api.get(`/words/${listId}/${ListName}/${game}`);
       const wordsJson = response.data;
-      
+     // wordsJson.content.
       console.log(wordsJson);
       if (wordsJson.status) {
         setAllwordsData(wordsJson.content);

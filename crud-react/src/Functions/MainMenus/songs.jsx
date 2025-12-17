@@ -5,10 +5,10 @@ import SearchSong from './songsSubMenus/SearchSong'
 import "../../styles/Songs.css";
 import { FaYoutube } from "react-icons/fa";
 import { FaSpotify } from "react-icons/fa";
-
+import {useState} from 'react'
 //import SpotifyWebApi from 'spotify-web-api-js'
 function songs() {
-    const history=useNavigate()
+ const history=useNavigate()
 const [ChoiseSong, setChoiseSong] = useState('Paste')
 
 
