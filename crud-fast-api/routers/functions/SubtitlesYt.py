@@ -1,8 +1,8 @@
 import json
 from youtube_transcript_api import YouTubeTranscriptApi
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from Data.Mysql_Connection import get_db_connection # Tu conexión existente
-
+from routers.LimiterConfig import limiter
 Sub_Router = APIRouter()
 
 # --- FUNCIONES DE BASE DE DATOS (CACHÉ) ---
@@ -102,33 +102,28 @@ def format_time(time_in_seconds):
     return f"{minutes}.{str(int(seconds)).zfill(2)}"
 
 # --- ENDPOINT PRINCIPAL ---
-
 @Sub_Router.get("/Sub/{lang}/{id}")
-async def GetTrans(lang: str, id: str):
+@limiter.limit("20/minute") # <--- LÍMITE: 20 videos por minuto por IP
+async def GetTrans(request: Request, lang: str, id: str): # <--- Añadir request: Request
     
-    # 1. INTENTO DE CACHÉ (Lo primero de todo)
+    # 1. INTENTO DE CACHÉ
     cached_data = get_from_cache(id, lang)
     
     if cached_data:
-        # Si está en caché, formateamos tiempos y devolvemos INMEDIATAMENTE
-        # No tocamos YouTube, no gastamos cuota, no hay bloqueo.
         for tr in cached_data:
             tr['start'] = format_time(tr['start'])
         return {"status": 0, "content": cached_data, "source": "cache"}
 
-    # 2. SI NO ESTÁ EN CACHÉ -> VAMOS A YOUTUBE
+    # 2. SI NO ESTÁ EN CACHÉ -> VAMOS A YOUTUBE (Aquí está el riesgo)
     result = Transcript_Fetcher(id, lang)
     
     if result["status"] == 0:
-        # 3. ÉXITO -> GUARDAMOS EN CACHÉ PARA EL FUTURO
-        # Guardamos la data cruda (sin formatear tiempo) para mantener precisión
         save_to_cache(id, lang, result["content"])
         
-        # Formateamos para el frontend
         for tr in result["content"]:
             tr['start'] = format_time(tr['start'])
             
-        result["source"] = "youtube" # Debug info
+        result["source"] = "youtube"
         return result
     
     elif result["status"] == 2:

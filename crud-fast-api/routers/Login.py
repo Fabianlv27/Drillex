@@ -1,5 +1,5 @@
 import mysql.connector
-from fastapi import Form, HTTPException, Cookie, APIRouter, Depends, Body,responses,Response
+from fastapi import BackgroundTasks, Form, HTTPException, Cookie, APIRouter, Depends, Body,responses,Response
 from typing import Annotated
 from datetime import datetime, timedelta
 from fastapi.templating import Jinja2Templates
@@ -142,7 +142,8 @@ async def google_login(id_token: str = Body(...)):
     return response
 
 @log_router.post("/logout")
-async def logout(response: Response, access_token: str = Cookie(None)):
+async def logout(response: Response,background_tasks: BackgroundTasks ,access_token: str = Cookie(None)):
+    background_tasks.add_task(cleanup_expired_tokens)
     # 1. (Opcional pero recomendado) Blacklist en Redis
     if access_token:
         try:
@@ -169,52 +170,86 @@ async def refresh_token_endpoint(refresh_token: str = Cookie(None)):
         raise HTTPException(status_code=401, detail="Refresh token missing")
 
     try:
-        # 1. Decodificar el Refresh Token
+        # 1. Decodificar el Refresh Token actual
         payload = jwt.decode(refresh_token, KEYSECRET, algorithms=["HS256"])
-        if payload.get("type") != "refresh":
-             raise HTTPException(status_code=401, detail="Invalid token type")
-             
         user_id = payload.get("sub")
-        jti = payload.get("jti")
+        old_jti = payload.get("jti") #
 
-        # 2. Verificar en Base de Datos (Seguridad estricta)
         conexion = get_db_connection()
         cursor = conexion.cursor()
         
-        # Verificamos si el token existe y no ha expirado
-        sql = "SELECT id FROM user_refresh_tokens WHERE token_jti = %s AND user_id = %s"
-        cursor.execute(sql, (jti, user_id))
-        stored_token = cursor.fetchone()
+        # 2. VERIFICACIÓN Y ELIMINACIÓN (Rotación)
+        # Buscamos el token y lo borramos en un solo paso para asegurar que sea de un solo uso
+        sql_delete = "DELETE FROM user_refresh_tokens WHERE token_jti = %s AND user_id = %s"
+        cursor.execute(sql_delete, (old_jti, user_id))
         
-        # Recuperamos datos del usuario para el nuevo Access Token
+        # Si no se borró ninguna fila, significa que el token ya no existía (posible ataque)
+        if cursor.rowcount == 0:
+            conexion.close()
+            raise HTTPException(status_code=401, detail="Token already used or invalid")
+
+        # 3. GENERAR NUEVOS TOKENS
+        # Obtenemos datos del usuario para el nuevo Access Token
         cursor.execute("SELECT name_User, email FROM users WHERE id_User = %s", (user_id,))
-        user_data = cursor.fetchone() # user_data[0]=name, user_data[1]=email
+        user_data = cursor.fetchone()
         
-        cursor.close()
-        conexion.close()
-
-        if not stored_token or not user_data:
-            raise HTTPException(status_code=401, detail="Refresh token revoked or invalid")
-
-        # 3. CREAR NUEVO ACCESS TOKEN
+        # Generamos nuevo Access Token
         new_access_token = create_access_token({
             "email": user_data[1], 
             "id": user_id, 
             "username": user_data[0]
-        })
+        }) #
 
-        # 4. Respuesta con la nueva cookie
-        response = JSONResponse(content={"message": "Token refreshed"})
+        # GENERAMOS UN NUEVO REFRESH TOKEN (Rotación real)
+        new_refresh_token, new_jti, new_expire = create_refresh_token(user_id) #
+
+        # 4. GUARDAR EL NUEVO REFRESH TOKEN EN BD
+        sql_save = """
+            INSERT INTO user_refresh_tokens (user_id, token_jti, expires_at) 
+            VALUES (%s, %s, %s)
+        """
+        cursor.execute(sql_save, (user_id, new_jti, new_expire))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+
+        # 5. RESPUESTA CON AMBAS COOKIES ACTUALIZADAS
+        response = JSONResponse(content={"message": "Tokens rotated successfully"})
         
+        # Nueva cookie Access
         response.set_cookie(
             key="access_token",
             value=new_access_token,
             max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
-            httponly=True,
-            secure=True,
-            samesite="None"
+            httponly=True, secure=True, samesite="None"
+        )
+        
+        # Nueva cookie Refresh (El cliente ahora tiene un JTI distinto)
+        response.set_cookie(
+            key="refresh_token",
+            value=new_refresh_token,
+            max_age=REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+            httponly=True, secure=True, samesite="None",
+            path="/refresh"
         )
         return response
 
     except JOSEError:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
+    
+    
+def cleanup_expired_tokens():
+    """Borra tokens que ya pasaron su fecha de expiración en MySQL"""
+    try:
+        conexion = get_db_connection()
+        cursor = conexion.cursor()
+        sql = "DELETE FROM user_refresh_tokens WHERE expires_at < NOW()" #
+        cursor.execute(sql)
+        conexion.commit()
+        count = cursor.rowcount
+        cursor.close()
+        conexion.close()
+        if count > 0:
+            print(f"🧹 Limpieza: {count} tokens expirados eliminados.")
+    except Exception as e:
+        print(f"⚠️ Error en limpieza de tokens: {e}")

@@ -71,6 +71,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         token = request.headers.get("Authorization")
         if not token:
+            token = request.cookies.get("access_token")
+        if not token:
             raise HTTPException(status_code=401, detail="Token missing")
         try:
             # Decodificar el token JWT

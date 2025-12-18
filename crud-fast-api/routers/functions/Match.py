@@ -2,12 +2,13 @@ import json
 import re
 import os
 from pymongo import MongoClient
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Depends, HTTPException, Request
 from typing import List
-
+from routers.UserData.BasicUserData import get_current_user_id
 # Asumo que esta función existe en tu proyecto
 from Data.WordsMatch import Lyric_Handler_SelfWords 
-
+from routers.UserData.BasicUserData import get_current_user_id
+from routers.LimiterConfig import limiter
 Match = APIRouter()
 
 # Conexión a MongoDB
@@ -99,7 +100,6 @@ def Lyric_Handler(Lyric):
         if not verse.strip():
             final_result.append({"verso": verse, "match": []})
             continue
-
         # Limpieza básica para detectar si hay preposiciones
         limpio = re.sub(r'[^a-zA-Z0-9 ]', '', verse)      
         isPhrsal = False
@@ -118,12 +118,35 @@ def Lyric_Handler(Lyric):
     return final_result
 
 @Match.post("/PhrMatches")
-def GetPhrMatches(lyric: List[str] = Body(...)):
-    # Endpoint público o privado según prefieras.
-    # Si es para estudiar letras, puede ser público.
-    return Lyric_Handler(lyric)
-
+@limiter.limit("15/minute") # Límite razonable para usuarios logueados
+def GetPhrMatches(
+    request: Request,                   # Necesario para el Limiter
+    lyric: List[str] = Body(...),       # Los datos del body
+    user_id: str = Depends(get_current_user_id) # <--- SEGURIDAD AÑADIDA
+):
+    """
+    Analiza la letra en busca de Phrasal Verbs.
+    Solo accesible para usuarios autenticados.
+    """
+    try:
+        # Si llega aquí, el user_id ya es válido y seguro.
+        result = Lyric_Handler(lyric)
+        return {"status": True, "content": result}
+    except Exception as e:
+        print(f"Error en PhrMatches: {e}")
+        raise HTTPException(status_code=500, detail="Error processing matches")
+    
 @Match.post("/getMatches")
-def GetSelfMatches(data: dict = Body(...)):
-    # Asumo que Lyric_Handler_SelfWords maneja sus errores
-    return Lyric_Handler_SelfWords(data.get("Words", []), data.get("Liryc", []))
+@limiter.limit("20/minute")
+def GetSelfMatches(
+    request: Request, 
+    data: dict = Body(...), 
+    user_id: str = Depends(get_current_user_id) # Ya estaba protegido, lo mantenemos
+):
+    try:
+        from Data.WordsMatch import Lyric_Handler_SelfWords
+        result = Lyric_Handler_SelfWords(data.get("Words", []), data.get("Liryc", []))
+        return {"status": True, "content": result}
+    except Exception as e:
+        print(f"Error en GetMatches: {e}")
+        return {"status": False, "detail": str(e)}

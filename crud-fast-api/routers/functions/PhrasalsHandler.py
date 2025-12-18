@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pymongo import MongoClient
 import os
 import re
 
 # Importamos la seguridad centralizada
 from routers.UserData.BasicUserData import get_current_user_id
+from routers.LimiterConfig import limiter
 
 Phrsals_Handler = APIRouter()
 
@@ -14,33 +15,36 @@ client = MongoClient(MONGO_URI)
 db = client["phrases_db"] # Nota: En Phrasals.py usabas "DIBY", aquí "phrases_db". Asegúrate de que coincidan si deben.
 collection = db["phrasals"]
 
-@Phrsals_Handler.get('/function/obtain_phr/{text}') # Quitamos /{e}
-def HandlePhr(text: str, user_id: str = Depends(get_current_user_id)):
-    # Si llega aquí, el usuario está logueado.
+@Phrsals_Handler.get('/function/obtain_phr/{text}')
+@limiter.limit("30/minute")
+def HandlePhr(request: Request,text: str, user_id: str = Depends(get_current_user_id)):
     try:
         found_words = []
         wrdObj = []
-
-        # Normalizamos el texto y buscamos por letras iniciales
-        # Nota: text.split() ya separa por espacios.
-        letters = set(word[0].upper() for word in text.split() if word)
+        
+        # Corrección: split() puede dejar caracteres de puntuación pegados.
+        # Mejor extraemos solo letras para la búsqueda inicial
+        clean_text = re.sub(r'[^a-zA-Z\s]', '', text)
+        letters = set(word[0].upper() for word in clean_text.split() if word)
         
         for letter in letters:
             letter_data = collection.find_one({"Letter": letter})
             if letter_data and "Phr" in letter_data:
                 for phrase in letter_data["Phr"]:
-                    # Verificar coincidencias en diferentes formas
-                    for key in ["name", "gerund", "past"]:
+                    # Optimización: Set para búsqueda O(1)
+                    matched = False
+                    for key in ["name", "gerund", "past", "participle"]: 
                         if key in phrase and phrase[key]:
-                            # Usamos \b para palabra completa
+                            # Regex estricta para no confundir "run" con "runner"
                             if re.search(r'\b{}\b'.format(re.escape(phrase[key])), text, re.IGNORECASE):
+                                matched = True
                                 found_words.append(phrase[key])
-                                # Evitamos duplicados en la lista de objetos
-                                if phrase not in wrdObj:
-                                    wrdObj.append(phrase)
-                                break # Si encontramos una forma, no hace falta buscar las otras del mismo phrasal
+                                break 
+                    
+                    if matched and phrase not in wrdObj:
+                        wrdObj.append(phrase)
 
-        return {"found_words": found_words, "wrdObj": wrdObj}
+        return {"status": True, "found_words": found_words, "wrdObj": wrdObj}
     except Exception as e:
         print(f"Error en HandlePhr: {e}")
         raise HTTPException(status_code=500, detail="Error processing text")

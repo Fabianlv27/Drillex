@@ -1,6 +1,6 @@
 from ast import List
 from typing import Optional, TypedDict
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from jose import jwt, JOSEError
 import mysql
@@ -9,7 +9,8 @@ import os
 from routers.functions.ValidateToken import validate_Token
 from pydantic import BaseModel
 from Models.Models import Word, WordUdpate
-from services.auth import get_current_user_id
+from routers.UserData.BasicUserData import get_current_user_id
+from routers.LimiterConfig import limiter
 
 UserData_router = APIRouter()
 KEYSECRET = os.getenv("KEYSECRET")
@@ -24,6 +25,12 @@ def get_user(username: str):
     result = cursor.fetchall()
     return result
 
+# Función auxiliar de seguridad
+def verify_list_ownership(cursor, list_id, user_id):
+    cursor.execute("SELECT id FROM lists WHERE id = %s AND id_User = %s", (list_id, user_id))
+    if not cursor.fetchone():
+        raise HTTPException(status_code=403, detail="No tienes permiso sobre esta lista.")
+    
 def decode_token(e):
     try:
         return jwt.decode(e, key=KEYSECRET, algorithms=["HS256"])
@@ -43,8 +50,9 @@ class progressData(BaseModel):
     idList:str
     game:str
 
-@UserData_router.get("/users/me") # Quitamos /{e}
-def GetMe(user_id: str = Depends(get_current_user_id)) :
+@UserData_router.get("/users/me")
+@limiter.limit("60/minute")
+def GetMe(request: Request,user_id: str = Depends(get_current_user_id)) :
     # FastAPI ya validó el token. Aquí 'user_id' es    seguro.
     
     conexion = get_db_connection()
@@ -64,13 +72,15 @@ def GetMe(user_id: str = Depends(get_current_user_id)) :
         conexion.close()
     
 
-@UserData_router.post("/user/progress") # Quitamos /{e}
-async def postProgress(data: progressData, user_id: str = Depends(get_current_user_id)):
+@UserData_router.post("/user/progress")
+@limiter.limit("30/minute")
+async def postProgress(request: Request,data: progressData, user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
         # Usamos user_id si necesitas validar que la lista pertenece al usuario, 
         # aunque aquí solo insertas en progress
+        verify_list_ownership(cursor, data.idList, user_id)
         progress = "INSERT IGNORE INTO progress (id_List, game, cant_showed) VALUES (%s, %s, %s)"
         cursor.execute(progress, (data.idList, data.game, 0))       
         conexion.commit()
@@ -142,14 +152,13 @@ def getRight(cursor,idList,game):
         right=cursor.fetchall()
         return right
 
-@UserData_router.get("/user/progress/{e}/{idList}/{game}")
-async def getProgress(e:str,idList:str,game:str):
-    data_user = await validate_Token(e)
-    if not data_user:
-        return {"status":False,"message":"invalid Token"}
+@UserData_router.get("/user/progress/{idList}/{game}")
+@limiter.limit("60/minute")
+async def getProgress(request: Request,idList:str,game:str,user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
+        verify_list_ownership(cursor, idList, user_id)
         right=getRight(cursor,idList,game)
         getCant="select cant_showed from progress where id_List=%s and game=%s"
         cursor.execute(getCant,(idList,game))
@@ -164,13 +173,14 @@ async def getProgress(e:str,idList:str,game:str):
         cursor.close()
         conexion.close()
         
-@UserData_router.post("/user/progress/update") # Quitamos /{e}
-async def putProgress(data: ProgressUpdated, user_id: str = Depends(get_current_user_id)):
+@UserData_router.post("/user/progress/update")
+@limiter.limit("30/minute")
+async def putProgress(request: Request,data: ProgressUpdated, user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
-        updateCant(cursor, data)
-        
+        verify_list_ownership(cursor, data.idList, user_id)
+        updateCant(cursor, data)      
         if data.game != "random":
             # Usamos la versión optimizada
             updateRight(cursor, data, data.idList)
