@@ -1,10 +1,10 @@
 import math
 import random
 import os
-from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Request
 from pymongo import MongoClient
 from typing import Dict, List
-
+from routers.LimiterConfig import limiter
 # Importamos la seguridad para proteger la escritura
 from routers.UserData.BasicUserData import get_current_user_id
 
@@ -17,16 +17,12 @@ client = MongoClient(MONGO_URI)
 db = client["DIBY"]
 collection = db["phrasals"]
 
-@Phrasals.get("/get_data")
-async def get_data():
-    # Obtener todos los datos (Idealmente debería tener paginación si son muchos)
-    data = list(collection.find({}, {"_id": 0})) 
-    return {"Phrasals": data}
-
 # --- ENDPOINT PROTEGIDO ---
 # Solo usuarios logueados pueden añadir contenido al diccionario global
 @Phrasals.post("/add_phr")
+@limiter.limit("10/minute")
 async def add_phr(
+    request: Request,
     letter: str, 
     phr_data: Dict = Body(...), 
     user_id: str = Depends(get_current_user_id)
@@ -51,7 +47,8 @@ async def add_phr(
 # Si quieres restringir el juego a usuarios logueados, añade Depends(get_current_user_id) aquí también.
 
 @Phrasals.get("/RandomPhrasals/{n}")
-def RandomPhr(n: int):
+@limiter.limit("20/minute")
+def RandomPhr(request: Request,n: int, user_id: str = Depends(get_current_user_id)):
     # Obtener letras aleatorias
     letters = list(collection.find({}, {"Letter": 1, "_id": 0}))
     
@@ -79,7 +76,8 @@ def RandomPhr(n: int):
     return phr_random_list
 
 @Phrasals.get("/PhrByLetter/{Letter}/{n}")
-def ByLetter(Letter: str, n: int):
+@limiter.limit("20/minute")
+def ByLetter(request: Request,Letter: str, n: int, user_id: str = Depends(get_current_user_id)):
     # Obtener frases por letra
     item = collection.find_one({"Letter": Letter})
     if not item:
@@ -91,7 +89,8 @@ def ByLetter(Letter: str, n: int):
     return phr_list[:n]
 
 @Phrasals.get("/SearchPhr/{word}")
-def getPhr(word: str):
+@limiter.limit("20/minute")
+def getPhr(request: Request,word: str, user_id: str = Depends(get_current_user_id)):
     # Buscar frases que coincidan con la palabra
     capitalized_word = word.capitalize()
     
@@ -109,7 +108,8 @@ def getPhr(word: str):
     return {"bit": options[:5], "All": options}
 
 @Phrasals.get("/NoRepeatPhr/")
-def GetRepeat(words: str = Query(...)):
+@limiter.limit("20/minute")
+def GetRepeat(request: Request,words: str = Query(...), user_id: str = Depends(get_current_user_id)):
     listwrds = words.split(',')
     in_json, out_json = [], []
 

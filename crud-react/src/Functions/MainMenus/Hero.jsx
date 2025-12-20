@@ -148,9 +148,10 @@ function Hero() {
     className="oneCard"
     onClick={() => history(`/${card.onClick}`)}
   >
+    <img src={card.img} alt={card.title} />
     <h3>{card.title}</h3>
     <p>{card.description}</p>
-    <img src={card.img} alt={card.title} />
+    
   </div>
 ))}
 

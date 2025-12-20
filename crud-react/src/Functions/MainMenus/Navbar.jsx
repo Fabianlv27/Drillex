@@ -158,7 +158,7 @@ const LogoutHandler = async () => {
           )}
         </div>
         <img
-          src="https://i.postimg.cc/NGDPGmJS/drillex.png"
+          src="https://i.postimg.cc/xjNb8mG6/1766222649362.png"
           onClick={() => (window.location.href = "https://dibylocal.com:5173")}
           alt="Logo"
         />

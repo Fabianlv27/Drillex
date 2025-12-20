@@ -1,12 +1,13 @@
 import json
 import os
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from typing import List, Optional
 from pydantic import BaseModel, Field, validator
 from fastapi.encoders import jsonable_encoder
 from pymongo import MongoClient
 from bson import ObjectId
 from itertools import islice
+from routers.LimiterConfig import limiter
 
 # Importamos la dependencia de seguridad
 from routers.UserData.BasicUserData import get_current_user_id
@@ -93,11 +94,12 @@ def AddMongo(Letra, word):
 # --- ENDPOINTS ---
 
 @italian_Dict_router.get("/Dicts_creator/it/index")
-def get_index(user_id: str = Depends(get_current_user_id)):
+@limiter.limit("30/minute")
+def get_index(request: Request,user_id: str = Depends(get_current_user_id)):
     try:
         path = "Data/Dictionary/italian/index.txt"
         if not os.path.exists(path):
-            return {"index": 0} # Valor por defecto si no existe
+            return {"index": 0} 
             
         with open(path, 'r', encoding='utf-8') as f:
             content = f.read().strip()
@@ -105,9 +107,11 @@ def get_index(user_id: str = Depends(get_current_user_id)):
             return {"index": index}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading index: {str(e)}")
+    
 
 @italian_Dict_router.put("/Dicts_creator/it/index/{i}")
-def update_index(i: int, user_id: str = Depends(get_current_user_id)):
+@limiter.limit("30/minute")
+def update_index(request: Request,i: int, user_id: str = Depends(get_current_user_id)):
     try:
         os.makedirs("Data/Dictionary/italian", exist_ok=True) # Asegura que la carpeta exista
         with open("Data/Dictionary/italian/index.txt", 'w', encoding='utf-8') as f:
@@ -115,9 +119,11 @@ def update_index(i: int, user_id: str = Depends(get_current_user_id)):
         return {"status": True, "new_index": i}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error writing index: {str(e)}")
+    
 
 @italian_Dict_router.post("/Dicts_creator/it")
-def AddWords(words: List[VerbModel], user_id: str = Depends(get_current_user_id)):
+@limiter.limit("30/minute")
+def AddWords(request: Request,words: List[VerbModel], user_id: str = Depends(get_current_user_id)):
     # Convertimos los modelos a dicts limpios
     words_data = jsonable_encoder(words)
     results = []
@@ -134,7 +140,8 @@ def AddWords(words: List[VerbModel], user_id: str = Depends(get_current_user_id)
     return {"status": True, "details": results}
 
 @italian_Dict_router.get("/Dicts_creator/it/words/{index}")
-def getWords(index: int, user_id: str = Depends(get_current_user_id)):
+@limiter.limit("30/minute")
+def getWords(request: Request,index: int, user_id: str = Depends(get_current_user_id)):
     path = "Data/Dictionary/italian/italian.dic"
     if not os.path.exists(path):
         raise HTTPException(status_code=404, detail="Dictionary file not found")

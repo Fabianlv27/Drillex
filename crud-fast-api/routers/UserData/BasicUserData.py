@@ -1,6 +1,6 @@
 from ast import List
 from typing import Optional, TypedDict
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Header, Request
 from fastapi.responses import RedirectResponse
 from jose import jwt, JOSEError
 import mysql
@@ -9,12 +9,45 @@ import os
 from routers.functions.ValidateToken import validate_Token
 from pydantic import BaseModel
 from Models.Models import Word, WordUdpate
-from routers.UserData.BasicUserData import get_current_user_id
 from routers.LimiterConfig import limiter
 
 UserData_router = APIRouter()
 KEYSECRET = os.getenv("KEYSECRET")
 TOKEN_SCONDS_EXP = 31540000  # one year
+
+async def get_current_user_id(
+    access_token: str = Cookie(None), 
+    authorization: str = Header(None)
+):
+    """
+    Esta función extrae el ID del usuario desde la Cookie 'access_token'
+    o desde el Header 'Authorization'.
+    """
+    token = access_token
+    
+    # Si no hay cookie, buscamos en el Header (útil para móviles o pruebas)
+    if not token and authorization:
+        if authorization.startswith("Bearer "):
+            token = authorization.split(" ")[1]
+        else:
+            token = authorization
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    try:
+        # Decodificamos el token
+        payload = jwt.decode(token, KEYSECRET, algorithms=["HS256"])
+        user_id = payload.get("id") # Asegúrate que al crear el token uses "id"
+        
+        if user_id is None:
+             raise HTTPException(status_code=401, detail="Invalid token payload")
+             
+        return user_id
+        
+    except JOSEError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
 
 def get_user(username: str):
     sql = 'select name_User,id_User from project_1.users where name_User=%s'
