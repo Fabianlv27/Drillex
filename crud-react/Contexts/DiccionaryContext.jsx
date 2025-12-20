@@ -1,60 +1,48 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { GetLanguage } from "../src/Functions/Actions/language.js";
+import api from "../api/axiosClient"; // Tu cliente axios
+import { Context } from "../Contexts/Context"; // Para obtener el idioma global
+
 const DiccionaryContext = createContext();
 
 const DiccionaryContextProvider = ({ children }) => {
+  const { Language } = useContext(Context); // Obtenemos el idioma global aquí
+  
+  // Estados para uso interno (opcional si usas ElementCard directamente)
   const [Meaning, setMeaning] = useState([]);
-  const [CardAutoExamples, setCardAutoExamples] = useState([]);
-  const [CardDef, setCardDef] = useState([]);
-  const [mean, setmean] = useState(false);
-  const searchWord = async (word) => {
-    word = word.replace(/[.,!()]+$/, "");
-    
+  
+  // Refactor: La función ahora delega todo al backend
+  const searchWord = async (word, overrideLang = null) => {
+    const cleanWord = word.replace(/[.,!()]+$/, "").trim();
+    // Usamos el idioma que pasan o el global del contexto
+    const langToUse = overrideLang || Language; 
+
     try {
-      const response = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/${GetLanguage()}/${word}`
-      );
-      if (!response.ok) {
-        throw new Error(`The word "${word}" is not in the dictionary.`);
-      } else {
-        // setShowLyric(false)
-      }
-      const data = await response.json();
-      console.log(data);
+      // LLAMADA UNIFICADA AL BACKEND
+      // El backend decidirá si usa la API externa inglesa, el scraper italiano, o tu BD.
+      const response = await api.post(`/dictionary/search`, {
+          word: cleanWord,
+          language: langToUse
+      });
 
-      const examples = data.map((e) =>
-        e.meanings
-          .map((mean) => mean.definitions.map((def) => def.example))
-          .filter(Boolean)
-      );
-      const definitions = data.map((e) =>
-        e.meanings
-          .map((mean) => mean.definitions.map((def) => def.definition))
-          .filter(Boolean)
-      );
-
+      const data = response.data;
+      
       setMeaning(data);
-      setCardAutoExamples(examples);
-      setCardDef(definitions);
-      console.log(mean);
-      setmean(true);
-      return data;
+      return data; // Retornamos la data estandarizada desde el backend
+      
     } catch (error) {
-      console.error("Error searching word:", error.message);
-      return{"error":error.message};
+      console.error("Dictionary Error:", error);
+      // Retornar un objeto de error para que la UI lo maneje
+      return { error: true, message: "Word not found or connection error" };
     }
   };
+
   return (
-    <DiccionaryContext.Provider
-      value={{ searchWord, Meaning, CardAutoExamples, CardDef, mean }}
-    >
+    <DiccionaryContext.Provider value={{ searchWord, Meaning }}>
       {children}
     </DiccionaryContext.Provider>
   );
 };
-DiccionaryContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
+DiccionaryContextProvider.propTypes = { children: PropTypes.node.isRequired };
 export { DiccionaryContext, DiccionaryContextProvider };

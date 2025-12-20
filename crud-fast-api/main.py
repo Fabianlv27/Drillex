@@ -21,6 +21,8 @@ from routers.functions.Match import Match
 from routers.functions.SongLyrics import SongsLyric
 from Data.Dictionary.ItalianDictionary import ItalianDictRouter
 from routers.Dicts.italianDictRouter import italian_Dict_router
+from routers.functions.GeminiAI import Gemini_Router
+
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -48,6 +50,8 @@ app.include_router(Match, tags=["Match"])
 app.include_router(SongsLyric, tags=["SongLyrics"])
 app.include_router(ItalianDictRouter, tags=["ItalianDictionary"])
 app.include_router(italian_Dict_router,tags=["Dicts_creator"])
+app.include_router(Gemini_Router, tags=["AI Tools"])
+    
 @app.get("/")
 def root():
     return {"message": "Welcome to the API"}

@@ -1,54 +1,119 @@
-.MainTrans{
-    min-height: 4rem;
-    max-height: 15rem;
-    min-width: 15rem;
-    max-width: 30rem;
-    background-color: aliceblue;
+/* --- CONTENEDOR PRINCIPAL FLOTANTE --- */
+/* Esta clase maneja la posición del conjunto (botón + menú) */
+.floating-fab-container {
+    z-index: 100000;
     display: flex;
-    flex-wrap: wrap;
-   text-align: center;
-   border-radius: 10px;
-   box-shadow: 5px 5px 5px black;
-  font-size: 1rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
+    flex-direction: column;
+    align-items: flex-end; /* Alinea el menú con el botón */
 }
-.MainTrans p{
-padding: 0.5rem;
+
+/* --- BOTÓN FLOTANTE (EL CIRCULO) --- */
+.fab-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    /* Usamos tu color neon cyan de la app */
+    background-color: #00c3ff; 
+    border: none;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+    color: black;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab; /* Manito para arrastrar */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fab-button:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+/* --- EL MENÚ DESPLEGABLE (Adaptación de .MainTrans) --- */
+/* Conserva background: aliceblue, bordes y sombras del original */
+.fab-menu {
+    /* Propiedades heredadas de .MainTrans */
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+    min-width: 15rem;
+    max-width: 20rem;
+    padding: 1rem;
+    
+    /* Posicionamiento relativo al botón */
+    position: absolute;
+    bottom: 75px; /* Aparece encima del botón */
+    right: 0;
+    
+    /* Organización interna */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* --- INPUT DE TEXTO DENTRO DEL MENÚ --- */
+.fab-input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
     font-size: 1rem;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+    outline: none;
 }
-.SimpleB{
-    margin-left: 0.5rem;
+
+/* --- CONTENEDOR DE LOS BOTONES DE ACCIÓN --- */
+.fab-actions-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* --- BOTONES DE ACCIÓN (Adaptación exacta de .SimpleB) --- */
+.fab-action-btn {
+    /* Propiedades originales de .SimpleB */
     cursor: pointer;
-    height:3rem;
+    height: 3rem;
     width: 3rem;
     border: none;
-    font-size: x-large;
+    font-size: 1.5rem; /* Ajustado de x-large a rem */
     color: black;
     background-color: transparent;
-    box-shadow:inset 5px 0px 10px rgba(24, 24, 24, 0.153);
+    box-shadow: inset 5px 0px 10px rgba(24, 24, 24, 0.153);
     border-radius: 10px;
     transition: 0.5s;
+
+    /* Centrado de iconos */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.SimpleB:hover{
+
+/* Efecto Hover original de .SimpleB */
+.fab-action-btn:hover {
     box-shadow: 0px 2px 20px rgba(6, 190, 227, 0.618);
     color: rgb(9, 209, 209);
     background-color: rgb(21, 21, 21);
     transform: scale(1.1);
 }
-.MainTrans{
-    margin: 1rem;
-}
-.closeTrs{
-    height: 2rem;
-    width: 2rem;
 
- color: aquamarine;
- border-radius: 40%;
- margin: 0.3rem;
-    border: none;
-    background-color: black;
+/* --- RESULTADO DE LA TRADUCCIÓN --- */
+.fab-result {
+    margin-top: 5px;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    color: #333;
+    font-weight: bold;
+    font-size: 1rem;
+    border-left: 3px solid #00c3ff;
 }
-.sent{
-    margin-left: 0.5rem;
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

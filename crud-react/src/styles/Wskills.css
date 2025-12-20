@@ -1,0 +1,85 @@
+/* styles/WSkillsAI.css */
+
+.ai-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.btn-ai {
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s ease;
+}
+
+.btn-ai:hover {
+    background-color: #5649c0;
+}
+
+.btn-ai:disabled {
+    background-color: #a29bfe;
+    cursor: not-allowed;
+}
+
+/* Caja de respuesta de la IA */
+.ai-feedback-box {
+    margin-top: 1.5rem;
+    background: rgba(0, 0, 0, 0.3); /* Fondo oscuro semitransparente */
+    border: 1px solid rgba(108, 92, 231, 0.5);
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: #dfe6e9;
+    animation: fadeIn 0.5s ease-in;
+    text-align: left;
+}
+
+.ai-feedback-box h3 {
+    color: #a29bfe;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+
+.corrected-text {
+    background-color: rgba(45, 52, 54, 0.6);
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 4px solid #00cec9;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.explanation-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: pre-wrap; /* Para respetar los saltos de línea de la IA */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loader simple */
+.loader {
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top: 3px solid #fff;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

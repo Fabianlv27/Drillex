@@ -142,8 +142,12 @@ class ProgressUpdated(BaseModel):
     difficulty: Optional[DifficultyModel] = None
 
 def updateCant(cursor,data):
-        sql="Update progress set cant_showed=%s where id_List=%s and game=%s"
-        cursor.execute(sql,(data.cant,data.idList,data.game))
+    sql = """
+    INSERT INTO progress (id_List, game, cant_showed) 
+    VALUES (%s, %s, %s)
+    ON DUPLICATE KEY UPDATE cant_showed = VALUES(cant_showed)
+    """
+    cursor.execute(sql, (data.idList, data.game, data.cant))
      
 def InsertMode(cursor,data): 
     sql="INSERT INTO Progress_mode (id_Word,mode) VALUES "

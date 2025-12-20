@@ -313,7 +313,7 @@ transform: rotate3d(1,1,0,15deg)
 textarea{
  
  background-color:rgb(7, 33, 56) ;
- border: solid rgb(0, 195, 255);
+ border: solid rgb(18 69 115);
  box-shadow: inset 0px 0px 5px #47c8ffbf;
 margin-left: 2%;
  color: whitesmoke;
@@ -321,6 +321,7 @@ margin-left: 2%;
  font-size: 20px;
  height: max-content;
  width: 90%;
+ margin-bottom: 1rem;
 }
 textarea:focus {
   outline: none;
