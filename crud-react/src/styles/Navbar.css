@@ -1,69 +1,287 @@
-.mainHMenuNav{
-    color: skyblue;
-    margin-left: 5px;
-    border-bottom: solid 1px #a5c7ff4a;
-    cursor: pointer;
-    padding: 4px;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-.menuStyle{
-        min-height: 150px;
-    width: 150px;
-    margin-top: 200px;
-    background-color: #072138;
-    border-radius: 10px;
-    padding: 5px;
-}
-.logoutButton{
-    height: 40px;
-    width: 40px;
-    background-color: transparent;
-    border : solid 1px skyblue;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.5s;
-    box-shadow: 0px 0px 5px rgba(135, 207, 235, 0.612);
-    margin-top: 1rem;
-    color: skyblue;
-    font-size: 20px;
-}
-.NavMenusCont{
-    width: auto;
+/* --- 2. NAVBAR CORREGIDO --- */
+.navbar {
+    background: #0b1529;
+    height: 80px;
+    
+    /* AGREGA ESTAS LÍNEAS: */
+    width: 100%;             /* Fuerza a ocupar todo el ancho */
+    max-width: 100vw;        /* Evita que se salga de la pantalla */
+    left: 0;                 /* Asegura que empiece desde el borde */
+    /* ------------------- */
+
     display: flex;
-    margin-left: 1rem;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 195, 255, 0.2);
+    font-family: 'Segoe UI', sans-serif;
 }
-.NavMenusCont p{
-        border-right: solid 1px #87ceeb26;
-    color: #00c3ff;
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    max-width: 1500px;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* --- LOGO --- */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: rgb(0, 195, 255); /* Cian */
+    text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+}
+
+/* --- MENÚ PRINCIPAL (UL) --- */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    position: relative; /* Para posicionar el dropdown absoluto en desktop */
+}
+
+/* --- ENLACES PRINCIPALES (Iconos + Texto) --- */
+.nav-link-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: whitesmoke;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.nav-link-main:hover {
+    background-color: rgba(0, 195, 255, 0.1);
+    color: rgb(0, 195, 255);
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+}
+
+.nav-icon {
     font-size: 1.5rem;
+}
+
+/* Flecha animada */
+.arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+.arrow.up {
+    transform: rotate(180deg);
+}
+
+/* En Desktop, ocultamos el texto para que se vea limpio (solo iconos), 
+   o puedes dejarlo si prefieres. Aquí lo oculto para replicar tu diseño original de iconos */
+@media screen and (min-width: 961px) {
+    .nav-text {
+        display: none; 
+    }
+    .arrow {
+        display: none;
+    }
+    /* Settings item un poco separado */
+    .settings-item {
+        margin-left: 20px;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 20px;
+    }
+}
+
+/* --- DROPDOWNS (SUBMENÚS) --- */
+.dropdown-menu {
+    position: absolute;
+    top: 60px; /* Debajo del icono */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0b1529;
+    border-radius: 10px;
+    width: 200px;
     padding: 10px;
-}
-.NavMenusCont p:not(.SubMenuSearch p){
-    margin-left: 1.5rem;
-
-
-}
-.SingleSubMenu{
     display: flex;
     flex-direction: column;
-    cursor: pointer;
-    transition: 0.5s;
+    gap: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease;
+    z-index: 1000;
 }
-.SingleSubMenu:hover{
-    background-color: #87cfeb28;
-}
-.SubMenuSearch{
-    width: auto;
-    height: auto;
-    position: absolute;
-    margin-top: 2.5rem;
-    background-color: #072138;
 
+.dropdown-menu p {
+    color: skyblue;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.2s;
+    margin: 0;
+    font-size: 0.95rem;
 }
-.SubMenuSearch p{
-    font-size: 1rem;
-    transition: 0.5s;
+
+.dropdown-menu p:hover {
+    background-color: rgba(0, 195, 255, 0.2);
+    color: white;
+}
+
+/* Estilos específicos del menú de Settings */
+.settings-dropdown {
+    width: 180px;
+    right: 0;
+    left: auto;
+    transform: none;
+}
+
+.menu-label {
+    color: white !important;
+    font-weight: bold;
+    cursor: default !important;
+    background: none !important;
+}
+
+.lang-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: skyblue;
+    padding: 5px;
+}
+.lang-options span {
     cursor: pointer;
 }
-.SubMenuSearch p:hover{
-    background-color: #10385ccc;
+.lang-options span:hover {
+    color: white;
+    text-shadow: 0 0 5px cyan;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgba(0, 195, 255, 0.3);
+    margin: 5px 0;
+}
+
+.logout-btn-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid rgb(0, 195, 255);
+    color: rgb(0, 195, 255);
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 5px;
+}
+
+.logout-btn-nav:hover {
+    background: rgb(0, 195, 255);
+    color: #072138;
+}
+
+/* --- MOBILE ICON --- */
+.mobile-menu-icon {
+    display: none;
+    font-size: 1.8rem;
+    color: rgb(0, 195, 255);
+    cursor: pointer;
+}
+
+/* --- RESPONSIVE (MÓVIL / TABLET) --- */
+@media screen and (max-width: 960px) {
+    .nav-text {
+        display: block; /* En móvil sí mostramos el texto */
+    }
+    .arrow {
+        display: block;
+        margin-left: auto; /* Flecha a la derecha */
+    }
+
+    .mobile-menu-icon {
+        display: block;
+    }
+
+    .nav-menu {
+        width: 100%;
+        max-width: 100vw;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        position: absolute;
+        top: 80px;
+        left: -100%; /* Oculto a la izquierda */
+        background-color: #0e0c1d; /* Fondo oscuro de la app */
+        transition: all 0.5s ease;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 195, 255, 0.2);
+        align-items: stretch; /* Ocupar ancho completo */
+        gap: 0;
+    }
+
+    .nav-menu.active {
+        left: 0; /* Aparece */
+    }
+
+    .nav-item {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link-main {
+        padding: 20px;
+        font-size: 1.3rem;
+        border-radius: 0;
+    }
+
+    /* En móvil, el dropdown no flota, empuja el contenido (Acordeón) */
+    .dropdown-menu, .settings-dropdown {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-left: 3px solid rgb(0, 195, 255);
+    }
+
+    .settings-item {
+        margin-left: 0;
+        border-left: none;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px) translateX(-50%); }
+    to { opacity: 1; transform: translateY(0) translateX(-50%); }
 }

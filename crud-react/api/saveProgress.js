@@ -1,45 +1,43 @@
-import {GetLocalHost} from './api'
+import api from "./axiosClient"; // Asumo que está en la misma carpeta 'api'
 
-const {host,getTokenFromCookies}=GetLocalHost()
-const token=getTokenFromCookies()
+// 1. Crear registro inicial de progreso
+export const PostProgress = async (idList, game) => {
+  try {
+    const response = await api.post("/user/progress", {
+      idList: idList,
+      game: game
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error en PostProgress:", error);
+    // Opcional: throw error; si quieres manejarlo en el componente
+  }
+};
 
-export async function PostProgress(game,idList) {
-    try {
-           await fetch(`${host}/user/progress/${token}`,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({idList:idList,game:game})
-    })
-     
-    } catch (error) {
-        alert(error)
-    }
-}
+// 2. Actualizar progreso (Aciertos, cantidad mostrada, etc.)
+export const UpdateProgress = async (data) => {
+  try {
+    await api.post("/user/progress/update", data);
+    
+    console.log("Progreso sincronizado exitosamente");
+    localStorage.removeItem("pendingProgress"); // Limpiamos caché local si salió bien
+    
+    return true;
+  } catch (error) {
+    console.error("Error enviando progreso:", error);
+    return false;
+  }
+};
 
-export async function UpdateProgress(data) {
-       fetch(`${host}/user/progress/update/${token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      console.log("Progreso enviado");
-      localStorage.removeItem("pendingProgress"); // limpiar si ya se mandó
-    })
-    .catch(err => console.error("Error enviando progreso:", err));
-  
-}
-
-export async function GetData(idList,game) {
-    console.log(idList)
-        try {
-         const Data=  await fetch(`${host}/user/progress/${token}/${idList}/${game}`)
-    const Progress=Data.json()
-    return Progress
-     
-    } catch (error) {
-        alert(error)
-    }
-}
+// 3. Obtener progreso actual
+export const GetData = async (idList, game) => {
+  try {
+    // La URL limpia coincide con tu backend: @UserData_router.get("/user/progress/{idList}/{game}")
+    const response = await api.get(`/user/progress/${idList}/${game}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error obteniendo datos:", error);
+    // Retornamos un objeto seguro para que el frontend no rompa al intentar leer "cant"
+    return { cant: null, right: [] }; 
+  }
+};

@@ -1,24 +1,28 @@
-import { useState, useContext, useEffect,useCallback } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ListsContext } from "../../../Contexts/ListsContext";
 import { WordsContext } from "../../../Contexts/WordsContext";
+import { useParams, useNavigate } from "react-router-dom"; // <--- IMPORTANTE
 import "../SingleSp.css";
 import "../../styles/HangedGame.css";
 import { MdNotStarted } from "react-icons/md";
 import { GrLinkNext } from "react-icons/gr";
 import { Shuffler } from "../../Functions/Actions/Shuffler.js";
+import { FaArrowLeft } from "react-icons/fa";
 import {
   GetData,
   UpdateProgress,
-  PostProgress,
 } from "../../../api/saveProgress.js";
-  import { useLocation } from "react-router-dom";
-
 
 function HangedGame() {
-  const location = useLocation();
-  const { GetList, CurrentListId, setCurrentList, UserLists } =
-    useContext(ListsContext);
+  // 1. Hooks de Router
+  const { listId } = useParams(); // Leemos el ID de la URL
+  const navigate = useNavigate(); // Para cambiar la URL
+
+  // 2. Contextos
+  const { GetList, UserLists } = useContext(ListsContext);
   const { GetWords } = useContext(WordsContext);
+
+  // 3. Estados del Juego
   const [ShuffletArrayToUse, setShuffletArrayToUse] = useState([]);
   const [ShowGame, setShowGame] = useState(false);
   const [index, setindex] = useState(0);
@@ -28,192 +32,179 @@ function HangedGame() {
   const [leghtMain, setleghtMain] = useState(0);
   const [Right, setRight] = useState([]);
   const [isProgress, setisProgress] = useState(false);
-  const [Alphabet, setAlphabet] = useState([
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ]);
   const [FoundLetters, setFoundLetters] = useState([]);
-
   
-  const HandlerLists = async () => {
-    setCurrentList(await GetList());
-  };
+  // Alfabeto inicial
+  const initialAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const [Alphabet, setAlphabet] = useState(initialAlphabet);
 
- 
+  // --- EFECTO DE INICIALIZACIÓN ---
+  // Este efecto maneja la carga inicial y la detección de la URL
+  useEffect(() => {
+    const initGame = async () => {
+      // A. Aseguramos que las listas estén cargadas
+      let availableLists = UserLists;
+      if (availableLists.length === 0) {
+        availableLists = await GetList();
+      }
 
-  const ProgressVerifier = async () => {
-    const data = await GetData(CurrentListId.id, "hanged");
-    if (data.cant == null) {
-      console.log("no hay")
-      setisProgress(false);
-    } else {
-      console.log("si hay")
-      setisProgress(true);
+      // B. Si hay un ID en la URL, intentamos iniciar el juego
+      if (listId) {
+        // Validamos que el ID exista en las listas del usuario (Seguridad Frontend)
+        const targetList = availableLists.find(l => l.id.toString() === listId);
+        
+        if (targetList) {
+          // Si no hemos iniciado ya el juego para esta lista, lo hacemos
+          if (!ShowGame || ShuffletArrayToUse.length === 0) {
+            prepareGame(targetList.id);
+          }
+        } else {
+          // Si el ID de la URL es inválido o ajeno, volvemos al menú
+          console.warn("Lista no encontrada o sin permisos");
+          navigate('/Hand'); 
+        }
+      } else {
+        // Si no hay ID en URL, mostramos el menú de selección
+        setShowGame(false);
+        setShuffletArrayToUse([]);
+      }
+    };
+
+    initGame();
+  }, [listId, UserLists]); // Se ejecuta si cambia la URL o se cargan listas
+
+  // --- LÓGICA DE PROGRESO ---
+  const ProgressVerifier = async (id) => {
+    try {
+      const data = await GetData(id, "hanged");
+      setisProgress(data.cant != null);
+      return data;
+    } catch (e) {
+      console.error(e);
     }
-    return data;
   };
 
-  const handlerProgress= async()=>{
-  const pending = localStorage.getItem("pendingProgress");
-  if (pending) {
-    const data = JSON.parse(pending);
-    await UpdateProgress(data);
-    localStorage.removeItem("pendingProgress");
-    setRight([])
-  }
-}
+  const handlerProgress = async () => {
+    const pending = localStorage.getItem("pendingProgress");
+    if (pending) {
+      const data = JSON.parse(pending);
+      // Validamos que el progreso pendiente sea de la lista actual
+      if(data.idList === listId){
+          await UpdateProgress(data);
+          localStorage.removeItem("pendingProgress");
+          setRight([]);
+      }
+    }
+  };
 
-  useEffect(() => {
-    HandlerLists();
-    handlerProgress()
-  }, []);
+  // --- PREPARACIÓN DEL JUEGO ---
+  const prepareGame = async (targetId) => {
+    const words = await GetWords(targetId, 'hanged');
+    
+    if (!words || words.length === 0) {
+        alert("This list has no words!");
+        navigate('/Hand');
+        return;
+    }
 
-  
-
-
-  useEffect(() => {
-    // Cada vez que cambias de ruta, guarda progreso
-    // También puedes loguear
-    console.log("Ruta cambió:", location.pathname);
-
-  }, [location]); // se ejecuta cada vez que cambie la ruta
-
-
-  const startGame = async () => {
-    const words = await GetWords(CurrentListId.id,'hanged');
-    console.log(words);
     const temp = Shuffler(words);
-    ProgressVerifier();
+    
+    // Verificamos progreso en backend
+    ProgressVerifier(targetId);
+    
+    // Configuración inicial
     setShuffletArrayToUse(temp);
     setMainWord(temp[0].name);
+    setindex(0);
+    setToyIndex(0);
+    setFoundLetters([]);
+    setAlphabet(initialAlphabet);
     setShowGame(true);
   };
 
-  const establecedorIndex = () => {
-    setMainWord(ShuffletArrayToUse[index].name);
-  };
+  // Actualizar MainWord cuando cambia el índice
   useEffect(() => {
-    if (ShuffletArrayToUse.length > 0) {
-      establecedorIndex();
+    if (ShuffletArrayToUse.length > 0 && ShuffletArrayToUse[index]) {
+      setMainWord(ShuffletArrayToUse[index].name);
     }
-     localStorage.setItem("pendingProgress", JSON.stringify({
-  idList: CurrentListId.id,
-  game: "hanged",
-  cant: index + 1,
-  right: Right,
-}))
-  }, [index]);
+    
+    // Guardado local de emergencia
+    if (listId) {
+      localStorage.setItem("pendingProgress", JSON.stringify({
+        idList: listId,
+        game: "hanged",
+        cant: index + 1,
+        right: Right,
+      }));
+    }
+  }, [index, ShuffletArrayToUse]);
 
+  // Separar palabra en letras
   const Spliter = (w) => {
-    w=quitarTildes(w)
-    console.log(w.replace(/ /g, "|"));
-    const first = w.replace(/ /g, "|").toUpperCase().split("");
-    console.log(first);
-    setSeparedWord(first);
+    if(!w) return;
+    const cleanWord = quitarTildes(w);
+    const splitWord = cleanWord.replace(/ /g, "|").toUpperCase().split("");
+    setSeparedWord(splitWord);
 
-    let ActualLenght = first.length;
-    for (let index = 0; index < first.length; index++) {
-      if (first[index] == "|") {
-        ActualLenght = ActualLenght - 1;
-      }
-    }
-    setleghtMain(ActualLenght);
+    // Calculamos longitud real (sin espacios)
+    let count = 0;
+    splitWord.forEach(char => {
+        if(char !== "|") count++;
+    });
+    setleghtMain(count);
   };
+
   useEffect(() => {
     if (MainWord) {
       Spliter(MainWord);
     }
   }, [MainWord]);
 
+  // --- LÓGICA DEL JUEGO (Chequear letra) ---
   const Check = (letra) => {
-    console.log(SeparedWord);
-    var count = 0;
-    // var letters=[]
+    let count = 0;
+    
     if (SeparedWord.includes(letra)) {
-      SeparedWord.map((w) => {
-        if (w == letra) {
-          count++;
-        }
+      // Contar cuántas veces aparece la letra para restar al total pendiente
+      SeparedWord.forEach((w) => {
+        if (w === letra) count++;
       });
 
-      setleghtMain(leghtMain - (count - 1));
+      setleghtMain(leghtMain - count);
       setFoundLetters([...FoundLetters, letra]);
-      console.log(FoundLetters);
-      count = 0;
     } else {
+      // Fallo
       setToyIndex(ToyIndex + 1);
-      console.log(FoundLetters);
     }
+    
+    // Quitar letra del teclado
     const newArray = Alphabet.filter((item) => item !== letra);
     setAlphabet(newArray);
   };
-function quitarTildes(texto) {
-  return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+
+  function quitarTildes(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  // Componente interno para ocultar palabras en ejemplos
   const HideWord = ({ SingleExample, Part, past, gerund, idx }) => {
-    console.log(SeparedWord);
-    var CriptoExampleBeta = SingleExample;
-    console.log(
-      MainWord.charAt(0).toUpperCase() + MainWord.slice(1).toLowerCase()
-    );
-    if (Part) {
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        Part,
-        "______ (Participle)"
-      );
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        Part.toLowerCase(),
-        "______ (Participle)"
-      );
-    }
-    if (past) {
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        past.toLowerCase(),
-        "______ (Past Tense)"
-      );
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        past,
-        "_______(Past Tense)"
-      );
-    }
-    if (gerund) {
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        gerund.toLowerCase(),
-        "______ (ing)"
-      );
-      CriptoExampleBeta = CriptoExampleBeta.replace(gerund, "______ ing");
-    }
-    if (MainWord) {
-      CriptoExampleBeta = CriptoExampleBeta.replace(MainWord, "______");
-      CriptoExampleBeta = CriptoExampleBeta.replace(
-        MainWord.charAt(0).toUpperCase() + MainWord.slice(1).toLowerCase(),
-        "______"
-      );
-    }
+    let CriptoExampleBeta = SingleExample;
+    
+    // Reemplazos de variantes gramaticales
+    const replacements = [
+        { word: Part, label: "(Participle)" },
+        { word: past, label: "(Past Tense)" },
+        { word: gerund, label: "(ing)" },
+        { word: MainWord, label: "" } // Palabra principal
+    ];
+
+    replacements.forEach(item => {
+        if (item.word) {
+            // Regex insensible a mayúsculas/minúsculas global
+            const regex = new RegExp(item.word, "gi");
+            CriptoExampleBeta = CriptoExampleBeta.replace(regex, `______ ${item.label}`);
+        }
+    });
 
     return (
       <>
@@ -223,61 +214,74 @@ function quitarTildes(texto) {
       </>
     );
   };
+
+  // --- CONTINUAR AL SIGUIENTE NIVEL ---
   const Continue = () => {
-    if (ToyIndex !== 6 && Alphabet.length < 26 && leghtMain === FoundLetters.length) {
-      console.log(ShuffletArrayToUse[index].id_Word)
-      setRight([...Right, ShuffletArrayToUse[index].id_Word]);
-      if (index%5==0) {
-        handlerProgress()
+    // Si ganó (no murió y completó letras)
+    if (ToyIndex !== 6 && leghtMain === 0) {
+      if(ShuffletArrayToUse[index]){
+          setRight([...Right, ShuffletArrayToUse[index].id_Word]);
+      }
+      // Guardar progreso cada 5 palabras
+      if (index > 0 && index % 5 === 0) {
+        handlerProgress();
       }
     }
+
     if (ShuffletArrayToUse[index + 1]) {
+      // Resetear para siguiente palabra
       setFoundLetters([]);
-      setAlphabet([
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-      ]);
-      setindex(index + 1);
+      setAlphabet(initialAlphabet);
       setToyIndex(0);
+      setindex(index + 1);
     } else {
+      // Fin del juego
+      handlerProgress(); // Guardar lo último
       setShowGame(false);
+      navigate('/Hand'); // Volver al menú
+      alert("Game Finished!");
     }
   };
+
+  // --- RENDER ---
   return (
     <div className="HangedMainContainer MainBackground">
-      <h1>Hanged Game</h1>
+     <div className="HangedMainContainer MainBackground">
+  
+  {/* ENCABEZADO RESPONSIVE */}
+  <div style={{
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center", 
+      width: "100%", 
+      position: "relative",
+      padding: "0 20px"
+  }}>
+     {ShowGame && (
+        <button 
+            className="ActionButtoms" 
+            onClick={() => { setShowGame(false); navigate('/Hand'); }} // Asegura que vuelva al menú
+        >
+            <FaArrowLeft />
+        </button>
+      )}
+      <h1 style={{ margin: 0 }}>Hanged Game</h1>
+  </div>
+     
+      
       <div>
         {!ShowGame ? (
           <div className="littleMainBackground hangedMenu">
             <div className="labelAndOption">
               {UserLists.length > 0 ? (
-                <select onChange={(e) => setCurrentList(e.target.value)}>
-                  {UserLists.map((list, index) => (
-                    <option key={index} value={list.id}>
+                <select 
+                    // CAMBIO CLAVE: Usamos navigate en lugar de state local
+                    onChange={(e) => navigate(`/Hand/${e.target.value}`)}
+                    value={listId || ""}
+                >
+                  <option value="" disabled>Select a list</option>
+                  {UserLists.map((list) => (
+                    <option key={list.id} value={list.id}>
                       {list.title}
                     </option>
                   ))}
@@ -286,72 +290,78 @@ function quitarTildes(texto) {
                 <p>You dont have lists yet</p>
               )}
             </div>
+            {/* Botón opcional, ya que el select navega solo */}
             <button
-              disabled={UserLists.length == 0}
+              disabled={!listId}
               className="ActionButtoms s"
-              onClick={() => startGame()}
+              onClick={() => listId && prepareGame(listId)}
             >
               <MdNotStarted />
             </button>
           </div>
         ) : null}
       </div>
-      {ShowGame ? (
+
+      {ShowGame && ShuffletArrayToUse[index] ? (
         <div className="GameHandMenu">
           {SeparedWord.length > 0 ? (
             <div className="ghm">
               <img
-                src={`Toy/${ToyIndex}.png`}
+                src={`/Toy/${ToyIndex}.png`} // Ajusté la ruta a absoluta por si acaso
+                alt="Hanged Man"
                 style={{ backgroundColor: "powderblue" }}
               />
-              <div className={`${ToyIndex === 6 ? "blocked" : ""}`}>
-                <h2>Meaning</h2>
+              <h2>Meaning</h2>
+              <div className={`${ToyIndex === 6 ? "blocked" : ""} MeaningMenuToy`}>
+                
                 <p>{ShuffletArrayToUse[index].meaning}</p>
                 <ul>
                   {ShuffletArrayToUse[index].example.map((e, i) => (
-                    <>
-                      <HideWord
+                    <HideWord
+                        key={i}
                         SingleExample={e}
                         Part={ShuffletArrayToUse[index].participle}
                         past={ShuffletArrayToUse[index].past}
                         gerund={ShuffletArrayToUse[index].gerund}
                         idx={i}
-                      />
-                    </>
+                    />
                   ))}
                 </ul>
               </div>
+
               <div className="inputsAndText hand">
                 {SeparedWord.map((e, i) =>
-                  FoundLetters.includes(e) || e == "|" ? (
+                  FoundLetters.includes(e) || e === "|" ? (
                     <div
-                      className={`${e == "|" ? "Space" : "SingleLetterToFind"}`}
+                      key={i}
+                      className={`${e === "|" ? "Space" : "SingleLetterToFind"}`}
                     >
                       {e}
                     </div>
                   ) : (
-                    <>
-                      <div key={i} className="SingleLetterToFind"></div>
-                    </>
+                    <div key={i} className="SingleLetterToFind"></div>
                   )
                 )}
               </div>
             </div>
           ) : null}
+
           <div className="Alphabet">
             {Alphabet.map((e, i) => (
               <button
                 onClick={() => Check(e)}
-                disabled={leghtMain === FoundLetters.length || ToyIndex === 6}
+                disabled={leghtMain === 0 || ToyIndex === 6}
                 key={i}
               >
                 {e}
               </button>
             ))}
           </div>
-          {ToyIndex === 6 ? (
+
+          {/* MENÚ DE DERROTA */}
+          {ToyIndex === 6 && (
             <div className="LoseMenu">
-              <h2>You Lose </h2>
+              <h2>You Lose</h2>
               <p>
                 The word is <span>{MainWord}</span>
               </p>
@@ -359,26 +369,24 @@ function quitarTildes(texto) {
                 <GrLinkNext />
               </button>
             </div>
-          ) : null}
-          {leghtMain === FoundLetters.length ? (
+          )}
+
+          {/* MENÚ DE VICTORIA */}
+          {leghtMain === 0 && ToyIndex !== 6 && (
             <div className="LoseMenu">
               <p>
-                {" "}
-                <span>You Found The word</span>
+                <span>You Found The word!</span>
               </p>
-              <button
-                className="ActionButtoms"
-                onClick={() => {
-                  Continue();
-                }}
-              >
+              <button className="ActionButtoms" onClick={Continue}>
                 <GrLinkNext />
               </button>
             </div>
-          ) : null}
+          )}
         </div>
       ) : null}
     </div>
+    </div>
+
   );
 }
 

@@ -82,7 +82,6 @@ nav{
     width: 100vw;
     display: flex;
     flex-direction: column;
-    background-color: rgb(7, 33, 56);
    position: fixed;
    margin-bottom: 20px;
    z-index: 2;
@@ -115,7 +114,7 @@ nav input{
 .MainBackground{
   padding: 0;
     min-height: 0;
-    width: 99vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -240,7 +239,7 @@ transform: rotate3d(1,1,0,15deg)
 
 }
 .content{
-    margin-top: 140px;
+    margin-top: 80px;
 }
 
 .oneCard img{
@@ -535,8 +534,37 @@ font-weight: bolder;
 
 }
 @media( max-width: 1000px){
-  
+  .oneCard img{
+    width: 90px;
+  }
 }
 .listMove:hover{
   background-color: rgb(9, 55, 71);
+}
+
+/* --- SCROLLBAR PERSONALIZADO --- */
+
+/* 1. Ancho y Alto de la barra */
+::-webkit-scrollbar {
+    width: 8px;  /* Grosor vertical */
+    height: 8px; /* Grosor horizontal */
+}
+
+/* 2. El "carril" (Fondo de la barra) */
+::-webkit-scrollbar-track {
+    background: rgba(14, 12, 29, 0.5); /* Color de fondo de tu app con transparencia */
+    border-radius: 10px;
+}
+
+/* 3. El "pulgar" (La parte que se mueve) */
+::-webkit-scrollbar-thumb {
+    background-color: #007ea7; /* Un azul un poco más oscuro para el estado normal */
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3); /* Borde sutil para separar */
+}
+
+/* 4. Efecto Hover (Cuando pasas el mouse por encima) */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #00c3ff; /* Tu color NEÓN principal al tocarlo */
+    box-shadow: 0 0 10px #00c3ff; /* Efecto de resplandor (Glow) */
 }

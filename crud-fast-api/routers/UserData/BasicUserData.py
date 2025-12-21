@@ -191,21 +191,43 @@ def getRight(cursor,idList,game):
 
 @UserData_router.get("/user/progress/{idList}/{game}")
 @limiter.limit("60/minute")
-async def getProgress(request: Request,idList:str,game:str,user_id: str = Depends(get_current_user_id)):
+async def getProgress(request: Request, idList: str, game: str, user_id: str = Depends(get_current_user_id)):
     conexion = get_db_connection()
     cursor = conexion.cursor()
     try:
+        # 1. Verificar seguridad
         verify_list_ownership(cursor, idList, user_id)
-        right=getRight(cursor,idList,game)
-        getCant="select cant_showed from progress where id_List=%s and game=%s"
-        cursor.execute(getCant,(idList,game))
-        print(cursor.statement)
-        cant=cursor.fetchone()[0]
-        return{"right":right,"cant":cant}
+        
+        # 2. Intentar obtener 'cant_showed'
+        getCant = "select cant_showed from progress where id_List=%s and game=%s"
+        cursor.execute(getCant, (idList, game))
+        row = cursor.fetchone() # Guardamos el resultado en una variable
+        
+        cant = 0
+        
+        if row is None:
+            # --- CORRECCIÓN: Si no existe, CREAR la fila inicial ---
+            print(f"Progreso no encontrado para lista {idList}. Creando...")
+            insert_sql = "INSERT INTO progress (id_List, game, cant_showed) VALUES (%s, %s, %s)"
+            cursor.execute(insert_sql, (idList, game, 0))
+            conexion.commit() # Importante guardar el cambio
+            cant = 0
+        else:
+            cant = row[0] # Ahora es seguro acceder al índice 0
+            
+        # 3. Obtener aciertos (tabla hija)
+        right = getRight(cursor, idList, game)
+        
+        # 4. Retornar estructura segura
+        # Convertimos 'right' (que es una lista de tuplas [(id,), (id,)]) a una lista simple [id, id]
+        # Esto facilita el trabajo al Frontend.
+        right_clean = [item[0] for item in right] 
+        
+        return {"right": right_clean, "cant": cant}
     
     except mysql.connector.Error as err:
-        print(err)
-        return{"message":"error getting progress","status":False}
+        print(f"Database Error: {err}")
+        return {"message": "Error getting progress", "status": False}
     finally:
         cursor.close()
         conexion.close()
