@@ -108,16 +108,16 @@ def PostWord(wordData: Word, user_id: str):
 # --- ENDPOINTS REFACTORIZADOS ---
 #################################GET###########################################################
 
+# En Words.py
 @UserData_router.get("/words/{ListId}/{ListName}/{game}")
 @limiter.limit("100/minute")
-def GetListWords(request: Request,ListId, ListName='default', game='default', user_id: str = Depends(get_current_user_id)):
+def GetListWords(request: Request, ListId, ListName='default', game='default', user_id: str = Depends(get_current_user_id)):
     
     conexion = get_db_connection()
     cursor = conexion.cursor(dictionary=True)
 
     try:
-        # --- PASO 1: Validación de Propiedad (Consulta Ligera) ---
-        # Solo traemos el título, es mucho más rápido que hacer un UNION con toda la tabla words
+        # --- PASO 1: Validación (Igual que antes) ---
         VerifyList = 'SELECT title FROM lists WHERE id = %s AND id_User = %s;'
         cursor.execute(VerifyList, (ListId, user_id))
         list_data = cursor.fetchone()
@@ -128,10 +128,7 @@ def GetListWords(request: Request,ListId, ListName='default', game='default', us
         if ListName != "default" and list_data["title"] != ListName:
             return {"status": False, "detail": "El nombre de la lista no coincide."}
 
-        # --- PASO 2: Construcción de la Query Principal ---
-        # Base de la consulta: Trae palabras uniendo con la lista y tipos
-        # Nota: Ya validamos que la lista es del usuario, pero mantenemos el JOIN con lists 
-        # por integridad referencial y seguridad adicional.
+        # --- PASO 2: Query Principal ---
         base_sql = """
             SELECT 
                 w.id_Word, w.name, w.past, w.gerund, w.participle,
@@ -142,45 +139,50 @@ def GetListWords(request: Request,ListId, ListName='default', game='default', us
             LEFT JOIN types_words tw ON w.id_Word = tw.id_Word
         """
 
-        # Lógica de filtros dinámica
         where_clause = " WHERE l.id = %s AND l.id_User = %s "
+        
+        # Por defecto ordenamos por fecha de creación
         group_order = " GROUP BY w.id_Word ORDER BY w.Created_at DESC "
         
-        # Parámetros base
         params = [ListId, user_id]
-
-        # --- Lógica de Juegos (Game Logic) ---
         join_clause = ""
         
+        # --- CAMBIO IMPORTANTE AQUÍ ---
         if game == 'random':
-            # Lógica para "Random" (Modos de repaso inteligente)
             join_clause = """
                 LEFT JOIN Progress_mode pm ON pm.id_Word = w.id_Word
             """
-            # Añadimos filtro al WHERE existente
-            where_clause += """
-                AND (
-                    (pm.mode = "easy"      AND DATEDIFF(NOW(), pm.date) > 7) OR
-                    (pm.mode = "normal"    AND DATEDIFF(NOW(), pm.date) > 3) OR
-                    (pm.mode = "hard"      AND DATEDIFF(NOW(), pm.date) > 2) OR
-                    (pm.mode = "ultrahard" AND DATEDIFF(NOW(), pm.date) >= 1)
-                )
+            
+            # NO agregamos nada al WHERE para no ocultar palabras.
+            # En su lugar, modificamos el ORDER BY para priorizar y el LIMIT para cortar.
+            group_order = """
+            GROUP BY w.id_Word
+            ORDER BY
+                CASE
+                    -- Prioridad 1: Palabras que cumplen el tiempo de repaso
+                    WHEN (pm.mode = "easy"      AND DATEDIFF(NOW(), pm.date) > 7) THEN 1
+                    WHEN (pm.mode = "normal"    AND DATEDIFF(NOW(), pm.date) > 3) THEN 1
+                    WHEN (pm.mode = "hard"      AND DATEDIFF(NOW(), pm.date) > 2) THEN 1
+                    WHEN (pm.mode = "ultrahard" AND DATEDIFF(NOW(), pm.date) >= 1) THEN 1
+                    -- Opcional: Dar prioridad también a palabras nuevas (nunca jugadas)
+                    WHEN pm.mode IS NULL THEN 1 
+                    -- Prioridad 0: El resto de palabras (Relleno)
+                    ELSE 0
+                END DESC,
+                RAND() -- Mezclar aleatoriamente dentro de los grupos
+            LIMIT 15
             """
+
         elif game != 'default':
-            # Lógica para otros juegos específicos
             join_clause = """
                 LEFT JOIN progress_right rw 
                 ON rw.id_Word = w.id_Word AND rw.id_List = %s AND rw.game = %s
             """
-            # Inyectamos los parámetros del juego ANTES de los del WHERE
-            # Nota: En python mysql connector, el orden de params debe coincidir con los %s en orden de aparición
-            # Como el JOIN va antes del WHERE, necesitamos ajustar un poco la estrategia de params o usar una lista.
-            
-            # Re-estructuramos params para este caso específico:
-            # 1. Params del JOIN (ListId, game)
-            # 2. Params del WHERE (ListId, user_id)
+            # Ajuste de parámetros para coincidir con el orden del JOIN + WHERE
             params = [ListId, game, ListId, user_id] 
             
+            # Aquí mantenemos el filtro estricto si es otro juego específico, 
+            # o puedes aplicar la misma lógica de "Relleno" si lo deseas.
             where_clause += """
                 AND (rw.fecha IS NULL OR DATEDIFF(NOW(), rw.fecha) > 2)
             """
@@ -188,11 +190,10 @@ def GetListWords(request: Request,ListId, ListName='default', game='default', us
         # Ensamblaje final
         final_sql = base_sql + join_clause + where_clause + group_order
 
-        # Ejecución
         cursor.execute(final_sql, tuple(params))
         result = cursor.fetchall()
 
-        # Procesamiento (Split de strings a arrays)
+        # Procesamiento
         for wrd in result:
             wrd["type"] = wrd["type"].split(",") if wrd["type"] else []
             wrd["example"] = wrd["example"].split(";") if wrd["example"] else []

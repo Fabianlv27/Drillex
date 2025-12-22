@@ -1,18 +1,31 @@
-from fastapi import APIRouter, Response, Request # <--- Importar Request
+from fastapi import APIRouter, Response, Request
 from gtts import gTTS
 from io import BytesIO
-from routers.LimiterConfig import limiter # <--- Importar limiter
+from routers.LimiterConfig import limiter
 
 TextVoice = APIRouter()
 
-@TextVoice.get("/texto_a_voz/{word}/{lan}")
-@limiter.limit("30/minute") # <--- LÍMITE: 1 audio cada 2 segundos promedio
-def texto_a_voz(request: Request, word: str, lan: str): # <--- Añadir request
-    try:
-        # Crear un objeto gTTS
-        tts = gTTS(text=word, lang=lan)
+# Límite de seguridad (caracteres)
+MAX_TEXT_LENGTH = 500 
 
-        # Crear un objeto de BytesIO
+@TextVoice.get("/texto_a_voz/{word}/{lan}")
+@limiter.limit("30/minute") 
+def texto_a_voz(request: Request, word: str, lan: str):
+    try:
+        # --- NUEVA VALIDACIÓN ---
+        # Si el texto es demasiado largo, lo recortamos para no saturar
+        text_to_speak = word
+        if len(text_to_speak) > MAX_TEXT_LENGTH:
+            print(f"⚠️ Texto recortado: {len(text_to_speak)} caracteres")
+            text_to_speak = text_to_speak[:MAX_TEXT_LENGTH]
+        
+        # Validar que no llegue vacío después de recortes
+        if not text_to_speak.strip():
+             return Response(status_code=400, content="Text is empty")
+
+        # Usamos la variable recortada 'text_to_speak'
+        tts = gTTS(text=text_to_speak, lang=lan)
+
         audio_bytes_io = BytesIO()
         tts.write_to_fp(audio_bytes_io)
         audio_bytes_io.seek(0)

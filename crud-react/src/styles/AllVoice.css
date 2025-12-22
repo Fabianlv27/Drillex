@@ -61,9 +61,6 @@ outline: none;
     height: auto;
     display: flex; 
     flex-wrap: wrap; 
-    border: solid 2px rgb(0, 195, 255) ;
-    background-color: rgba(1, 15, 27, 0.766) ;
-    box-shadow: 0px 0px 10px rgba(0, 195, 255, 0.359);
     border-radius: 10px;
     font-size: 20px;
     

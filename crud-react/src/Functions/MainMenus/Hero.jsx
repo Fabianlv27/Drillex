@@ -32,7 +32,7 @@ function Hero() {
     onClick: "Songs",
   },
   {
-    title: "Handled Game",
+    title: "Hangman",
     description: "Gess the hidden word",
     img: "../../../public/icons/hanged.png",
     onClick: "Hand",

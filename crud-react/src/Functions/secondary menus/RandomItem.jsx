@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import PropTypes from "prop-types"; // 👈 Importante
+import PropTypes from "prop-types";
 import "../../styles/Random.css";
 import { MdOutlineFlipCameraAndroid } from "react-icons/md";
 import { FaGrinSquint, FaLaugh, FaMeh, FaDizzy } from "react-icons/fa";
@@ -7,15 +7,7 @@ import { Context } from "../../../Contexts/Context";
 import Audio from "../../Componets/audio/Audio";
 import Loader2 from "../Actions/Loader2";
 
-function RandomItem({
-  ShuffledArray,
-  ShowElement,
-  Index,
-  Next,
-  Face,
-  setFace,
-  lap,
-}) {
+function RandomItem({ ShuffledArray, ShowElement, Index, Next, Face, setFace, lap }) {
   const { Language, Ahost } = useContext(Context);
   const audioRef = useRef(null);
   const [AudioToSpeak, setAudioToSpeak] = useState("");
@@ -24,21 +16,25 @@ function RandomItem({
   const HandleVoice = async () => {
     setAudioState(1);
     let text = ShuffledArray[Index].name;
-    if (ShuffledArray[Index].example.length > 0) {
-      ShuffledArray[Index].example.forEach((element, i) => {
-        text =
-          text + "." + `Example ${i + 1}:` + `${element.replace("?", "")}:`;
+    
+    if (ShuffledArray[Index].example && ShuffledArray[Index].example.length > 0) {
+      const examplesToRead = ShuffledArray[Index].example.slice(0, 3);
+      examplesToRead.forEach((ex, i) => {
+          const cleanEx = ex.replace(/[?¿!¡]/g, "").trim();
+          text = `${text}. Example ${i + 1}: ${cleanEx}`;
       });
     }
 
     try {
-      const response = await fetch(`${Ahost}/texto_a_voz/${text}/${Language}`);
+      const safeText = encodeURIComponent(text);
+      const response = await fetch(`${Ahost}/texto_a_voz/${safeText}/${Language}`);
       const AudioBytes = await response.blob();
       const audioUrl = URL.createObjectURL(AudioBytes);
       setAudioToSpeak(audioUrl);
       setAudioState(2);
     } catch (error) {
       console.error("Error al obtener el audio:", error);
+      setAudioState(0);
     }
   };
 
@@ -49,9 +45,11 @@ function RandomItem({
   return (
     <>
       {ShowElement && (
-        <>
-          {Face === 1 && (
-            <>
+        <div className="flip-card">
+          <div className={`flip-card-inner ${Face === 2 ? "flipped" : ""}`}>
+            
+            {/* --- CARA DELANTERA (FACE 1) --- */}
+            <div className="flip-card-front">
               <div className="RandomCard">
                 <h2>{ShuffledArray[Index].name}</h2>
                 <p>{ShuffledArray[Index].type.map((e) => e).join(", ")}</p>
@@ -64,15 +62,11 @@ function RandomItem({
                 </div>
 
                 {ShuffledArray[Index].past && (
-                  <p>
-                    <span>Past-Tense:</span> {ShuffledArray[Index].past}
-                  </p>
+                  <p><span>Past-Tense:</span> {ShuffledArray[Index].past}</p>
                 )}
 
                 <div className="ex">
-                  <p>
-                    <span>Examples:</span>
-                  </p>
+                  <p><span>Examples:</span></p>
                   <ul>
                     {ShuffledArray[Index].example.map((ex, index) => (
                       <li key={index}>{ex}</li>
@@ -86,17 +80,20 @@ function RandomItem({
                 style={{
                   transform: "translate(0px, -15px)",
                   zIndex: "1",
+                  marginTop: "10px"
                 }}
                 onClick={() => setFace(2)}
               >
                 <MdOutlineFlipCameraAndroid />
               </button>
-            </>
-          )}
+            </div>
 
-          {Face === 2 && (
-            <>
-              <div className="RandomCard">
+            {/* --- CARA TRASERA (FACE 2) --- */}
+            <div className="flip-card-back">
+              
+             
+              {/* LA CARTA DE DATOS */}
+              <div className="RandomCard" style={{marginTop: "0"}}> 
                 <h2>{ShuffledArray[Index].name}</h2>
                 {ShuffledArray[Index].type && (
                   <p className="type-random">
@@ -112,29 +109,19 @@ function RandomItem({
 
                 <div className="syanpa">
                   {ShuffledArray[Index].past && (
-                    <p>
-                      <span>Past-Tense:</span> {ShuffledArray[Index].past}
-                    </p>
+                    <p><span>Past-Tense:</span> {ShuffledArray[Index].past}</p>
                   )}
-
                   {ShuffledArray[Index].synonyms.length > 0 && (
-                    <p className="SyA">
-                      <span>Synonyms:</span> {ShuffledArray[Index].synonyms}
-                    </p>
+                    <p className="SyA"><span>Synonyms:</span> {ShuffledArray[Index].synonyms}</p>
                   )}
-
                   {ShuffledArray[Index].antonyms.length > 0 && (
-                    <p className="SyA">
-                      <span>Antonyms:</span> {ShuffledArray[Index].antonyms}
-                    </p>
+                    <p className="SyA"><span>Antonyms:</span> {ShuffledArray[Index].antonyms}</p>
                   )}
                 </div>
 
                 {ShuffledArray[Index].example.length > 0 && (
                   <div className="ex">
-                    <p>
-                      <span>Examples:</span>
-                    </p>
+                    <p><span>Examples:</span></p>
                     <ul>
                       {ShuffledArray[Index].example.map((ex, index) => (
                         <li key={index}>{ex}</li>
@@ -148,72 +135,48 @@ function RandomItem({
                     <span>Meaning:</span> {ShuffledArray[Index].meaning}
                   </p>
                 </div>
-
-                {ShuffledArray[Index].image && (
-                  <img src={ShuffledArray[Index].image} alt="Word visual" />
-                )}
               </div>
-
+               {/* --- BOTONES DE DIFICULTAD (AHORA ARRIBA) --- */}
+              {/* Los muevo fuera de RandomCard, pero antes, para que estén arriba */}
               <div
                 style={{
-                  height: "auto",
-                  width: "auto",
-                  transform: "translateY(1px)",
-                  marginBottom: "3rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "10px",
+                  marginBottom: "15px", // Espacio entre botones y carta
+                  width: "100%",
                 }}
               >
-                <button
-                  className="OptionsButtoms option1"
-                  onClick={() => Next("easy", ShuffledArray[Index], Index, lap)}
-                >
+                {/* Nota: Quité position: absolute para que fluyan normal arriba de la carta, 
+                    o puedes usar absolute con top: -50px si prefieres que floten fuera */}
+                <button className="OptionsButtoms" style={{position: "relative", bottom: "auto", background: "rgb(255, 248, 47)"}} onClick={() => Next("easy", ShuffledArray[Index], Index, lap)}>
                   <FaGrinSquint />
                 </button>
-                <button
-                  className="OptionsButtoms option2"
-                  onClick={() =>
-                    Next("normal", ShuffledArray[Index], Index, lap)
-                  }
-                >
+                <button className="OptionsButtoms" style={{position: "relative", bottom: "auto", background: "rgb(255, 161, 47)"}} onClick={() => Next("normal", ShuffledArray[Index], Index, lap)}>
                   <FaLaugh />
                 </button>
-                <button
-                  className="OptionsButtoms option3"
-                  onClick={() => Next("hard", ShuffledArray[Index], Index, lap)}
-                >
+                <button className="OptionsButtoms" style={{position: "relative", bottom: "auto", background: "rgb(255, 85, 47)"}} onClick={() => Next("hard", ShuffledArray[Index], Index, lap)}>
                   <FaMeh />
                 </button>
-                <button
-                  className="OptionsButtoms option4"
-                  onClick={() =>
-                    Next("ultrahard", ShuffledArray[Index], Index, lap)
-                  }
-                >
+                <button className="OptionsButtoms" style={{position: "relative", bottom: "auto", background: "rgb(255, 0, 0)"}} onClick={() => Next("ultrahard", ShuffledArray[Index], Index, lap)}>
                   <FaDizzy />
                 </button>
               </div>
-            </>
-          )}
-        </>
+
+            </div>
+
+          </div>
+        </div>
       )}
     </>
   );
 }
 
 export default RandomItem;
+// ...PropTypes...
 
 RandomItem.propTypes = {
-  ShuffledArray: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.arrayOf(PropTypes.string).isRequired,
-      past: PropTypes.string,
-      example: PropTypes.arrayOf(PropTypes.string).isRequired,
-      synonyms: PropTypes.arrayOf(PropTypes.string),
-      antonyms: PropTypes.arrayOf(PropTypes.string),
-      meaning: PropTypes.string,
-      image: PropTypes.string,
-    })
-  ).isRequired,
+  ShuffledArray: PropTypes.array.isRequired,
   ShowElement: PropTypes.bool.isRequired,
   Index: PropTypes.number.isRequired,
   Next: PropTypes.func.isRequired,

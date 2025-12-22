@@ -33,7 +33,7 @@ function HangedGame() {
   const [Right, setRight] = useState([]);
   const [isProgress, setisProgress] = useState(false);
   const [FoundLetters, setFoundLetters] = useState([]);
-  
+  const [list, setlist] = useState("")
   // Alfabeto inicial
   const initialAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const [Alphabet, setAlphabet] = useState(initialAlphabet);
@@ -276,8 +276,8 @@ function HangedGame() {
               {UserLists.length > 0 ? (
                 <select 
                     // CAMBIO CLAVE: Usamos navigate en lugar de state local
-                    onChange={(e) => navigate(`/Hand/${e.target.value}`)}
-                    value={listId || ""}
+                    onChange={(e) => setlist(e.target.value)}
+                    value={list || ""}
                 >
                   <option value="" disabled>Select a list</option>
                   {UserLists.map((list) => (
@@ -290,11 +290,10 @@ function HangedGame() {
                 <p>You dont have lists yet</p>
               )}
             </div>
-            {/* Botón opcional, ya que el select navega solo */}
+            {/* Botón start */}
             <button
-              disabled={!listId}
               className="ActionButtoms s"
-              onClick={() => listId && prepareGame(listId)}
+              onClick={() => { navigate(`/Hand/${list}`)}}
             >
               <MdNotStarted />
             </button>
@@ -306,11 +305,28 @@ function HangedGame() {
         <div className="GameHandMenu">
           {SeparedWord.length > 0 ? (
             <div className="ghm">
-              <img
+              <div  className="img_hand">
+                 <img
                 src={`/Toy/${ToyIndex}.png`} // Ajusté la ruta a absoluta por si acaso
                 alt="Hanged Man"
                 style={{ backgroundColor: "powderblue" }}
               />
+                  <div className="inputsAndText hand">
+                {SeparedWord.map((e, i) =>
+                  FoundLetters.includes(e) || e === "|" ? (
+                    <div
+                      key={i}
+                      className={`${e === "|" ? "Space" : "SingleLetterToFind"}`}
+                    >
+                      {e}
+                    </div>
+                  ) : (
+                    <div key={i} className="SingleLetterToFind"></div>
+                  )
+                )}
+              </div>
+              </div>
+             
               <h2>Meaning</h2>
               <div className={`${ToyIndex === 6 ? "blocked" : ""} MeaningMenuToy`}>
                 
@@ -329,20 +345,7 @@ function HangedGame() {
                 </ul>
               </div>
 
-              <div className="inputsAndText hand">
-                {SeparedWord.map((e, i) =>
-                  FoundLetters.includes(e) || e === "|" ? (
-                    <div
-                      key={i}
-                      className={`${e === "|" ? "Space" : "SingleLetterToFind"}`}
-                    >
-                      {e}
-                    </div>
-                  ) : (
-                    <div key={i} className="SingleLetterToFind"></div>
-                  )
-                )}
-              </div>
+          
             </div>
           ) : null}
 

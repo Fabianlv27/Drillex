@@ -5,7 +5,6 @@
 /* Fondo principal */
 .MainBackground {
   background-color: #0e0c1d;
-  margin-top: 10vh;
   min-height: 100vh;
   display: flex;
   justify-content: center;

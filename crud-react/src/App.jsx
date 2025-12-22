@@ -79,7 +79,7 @@ function AppContent() {
                   }
                 />
                 <Route
-                  path="/Random"
+                  path="/Random/:listId?"
                   element={
                     <ProtectedRoute>
                       <Random />

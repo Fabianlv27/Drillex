@@ -1,6 +1,5 @@
 /* --- CONTENEDOR PRINCIPAL --- */
 .HangedMainContainer {
-    margin-top: 6rem; /* Espacio para el Navbar */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,13 +56,22 @@
         margin-bottom: 1rem;
 
 }
+.img_hand{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+}
 
 /* Imagen del Ahorcado */
 .GameHandMenu img {
     height: 10rem;
     width: 10rem;
     border-radius: 10px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.2rem;
+    margin-right: 1rem;
     margin-top: 0.4rem;
     border: 2px solid rgb(0, 195, 255);
     background-color: #031322; /* Fondo oscuro detrás de la imagen transparente */
@@ -72,15 +80,18 @@
 
 /* --- CAJA DE SIGNIFICADO Y EJEMPLOS --- */
 .MeaningMenuToy {
-    width: 90%;
-    max-height: 200px;
+     width: 90%;
+    max-height: 150px;
     overflow-y: auto;
     background-color: #031322;
     padding: 15px;
     border-radius: 10px;
-    margin-top: 10px;
+    margin-top: 5px;
     border: 1px solid rgba(0, 195, 255, 0.2);
-    text-align: center;
+    text-align: left;
+}
+.inputsAndText{
+    margin-top: 15px;
 }
 
 .MeaningMenuToy p {
@@ -110,8 +121,8 @@
 }
 
 .SingleLetterToFind {
-height: 2.5rem;
-    width: 2.5rem;
+height: 2rem;
+    width: 2rem;
     background-color: rgb(7, 44, 75);
     border: solid 1px rgb(0, 195, 255);
     display: flex
@@ -209,7 +220,7 @@ height: 2rem;
         width: 8rem;
     }
     .HangedMainContainer {
-        margin-top: 5rem;
+        margin-top: 1.5rem;
     }
 
     .hangedMenu {
