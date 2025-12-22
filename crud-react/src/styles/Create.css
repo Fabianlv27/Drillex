@@ -1,8 +1,4 @@
-/* Create.css */
 
-/* Reset básico */
-
-/* Fondo principal */
 .MainBackground {
   background-color: #0e0c1d;
   min-height: 100vh;
@@ -42,11 +38,10 @@
 /* Layout: dos columnas con más separación */
 .MiniCreator form {
   display: flex;
-  gap: 2rem; /* aumentado para mayor separación */
+  gap: 2rem;
 }
-/* 5. Asegurar que las columnas principales tengan un ancho base estable */
+
 .MiniCreator .a {
-  /* IMPORTANTE: min-width evita que se colapse, max-width evita que empuje */
   min-width: 0; 
 }
 
@@ -58,7 +53,7 @@
   gap: 1rem;
 }
 
-/* 1) Select de listas menos ancho */
+/* Select de listas */
 .labelAndOption select {
   width: auto;
   max-width: 180px;
@@ -69,29 +64,43 @@
   color: #fff;
 }
 
-/* 2) Checkboxes en estilo “tabla” */
+/* --- CORRECCIÓN AQUÍ: Tipos de palabra (Checkboxes) --- */
+/* Cambiamos de GRID a FLEX para que se adapte mejor y ocupe menos altura */
 .labels {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.5rem;
+  display: flex;          /* Usar Flexbox en lugar de Grid */
+  flex-wrap: wrap;        /* Permite que los elementos pasen a la siguiente línea si no caben */
+  gap: 0.5rem;            /* Espacio entre elementos */
   margin-top: 0.5rem;
   padding: 0.75rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
+  width: 100%;     
+      max-height: 120px;
+    overflow: auto;       /* Asegura que ocupe todo el ancho */
 }
 
 .labels label {
   display: flex;
   align-items: center;
+  justify-content: center; /* Centra el contenido */
   gap: 0.5rem;
   font-size: 0.9rem;
   color: #fff;
+  
+  /* Estilo tipo 'Etiqueta' para que se vea más ordenado */
+  background-color: rgba(0, 195, 255, 0.1); 
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 195, 255, 0.2);
+  cursor: pointer;
+  flex-grow: 1; /* Hace que se estiren para llenar espacios vacíos uniformemente */
 }
 
 .labels input[type="checkbox"] {
   accent-color: #00c3ff;
 }
+/* ------------------------------------------------------ */
 
 /* Inputs de texto */
 .form-control {
@@ -116,15 +125,15 @@
 
 .input-alt {
   font-style: italic;
-
 }
+
 .inp-SynAnt{
   margin-top: 1rem;
 }
 
 .AutoExamples{
-      background-color: #0a2a4a;
-    padding: 20px;
+  background-color: #0a2a4a;
+  padding: 20px;
 }
 
 .input-border {
@@ -141,16 +150,15 @@
   width: 100%;
 }
 
-/* 1. Restringimos el ancho del contenedor de la imagen */
+/* Imagen */
 .imageMenuContainer {
   margin-top: 1rem;
   border: 1px dashed #00c3ff;
   border-radius: 0.5rem;
   padding: 0.75rem;
-  /* IMPORTANTE: Evita que crezca más allá del ancho de su padre */
   width: 100%; 
-  box-sizing: border-box; /* Para que el padding no sume al ancho */
-  overflow: hidden; /* Corta lo que sobresalga si es necesario */
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .ImageAndButton {
@@ -171,20 +179,17 @@
   cursor: pointer;
 }
 
-/* 2. Controlamos la sección de opciones (donde sale el buscador) */
 .imageOptions {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  width: 100%; /* Asegura que ocupe el 100% del contenedor padre, no más */
+  width: 100%;
 }
 
-
-/* 3. Evitamos que el select o inputs dentro de imageOptions rompan el layout */
 .imageOptions select,
 .imageOptions input[type="text"]:not(.input__search) {
-  max-width: 100%; /* No pasar del 100% */
+  max-width: 100%;
   box-sizing: border-box;
   padding: 0.5rem;
   background: #0a2a4a;
@@ -194,8 +199,6 @@
   margin-bottom: 0rem;
 }
 
-/* 4. Si ImageSearch tiene una clase interna (ej. input__search), asegúrate de limitarla también */
-/* Añade esto al final de tu CSS por si acaso el componente ImageSearch tiene estilos propios fuertes */
 .imageOptions div {
     max-width: 100%;
     overflow-x: hidden;
@@ -283,7 +286,7 @@
   color: #fff;
 }
 
-/* 4) Synonyms/Antonyms en columna, inputs más anchos y menos altos */
+/* Synonyms/Antonyms */
 .autoSyn {
   display: flex;
   flex-direction: column;
@@ -329,6 +332,7 @@
 .send:not(:disabled):hover {
   background: #02a4df;
 }
+
 .ImagePreview{
   width: 100%;
   max-width: 300px;
@@ -339,7 +343,8 @@
   flex-direction: column;
   align-items: center;
 }
-/* 5) Responsive */
+
+/* Responsive */
 @media (max-width: 768px) {
   .MiniCreator form {
     flex-direction: column;
@@ -351,12 +356,15 @@
   .labelAndOption select {
     max-width: 100%;
   }
+  /* En móvil, ajustamos los labels para que no se vean muy pequeños */
   .labels {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    justify-content: space-between;
+  }
+  .labels label {
+    flex-basis: 45%; /* Aproximadamente 2 por fila */
   }
   .autoSyn > div {
     flex-direction: column;
     align-items: stretch;
   }
 }
-

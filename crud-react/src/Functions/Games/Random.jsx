@@ -216,7 +216,7 @@ function Random() {
       
       {!ShowRandom && (
         <div className="ListAndStartMenu">
-            <div className="labelAndOption">
+            <div className="labelAndOptionR">
             {loadingLists ? (
                <p style={{color:'white'}}>Loading lists...</p>
             ) : UserLists.length > 0 ? (

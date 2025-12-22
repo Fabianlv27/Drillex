@@ -1,17 +1,33 @@
-html, body {
-  height: 100%;
-  background-color: #0e0c1d;
+* {
+  box-sizing: border-box; /* Hace que el padding no aumente el ancho */
   margin: 0;
   padding: 0;
 }
+
+/* 2. CONFIGURACIÓN BASE DE PANTALLA COMPLETA */
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #0e0c1d;
+  overflow-x: hidden; /* Evita scroll horizontal accidental */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* 3. CONTENEDOR RAÍZ DE REACT (El que faltaba probablemente) */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 p:not(.logo),li{
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-h1{
-
-   font-size:3rem;
+h1 {
+   font-size: 3rem;
    color: rgb(0, 195, 255);
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   text-align: center; /* Asegura centrado en móvil */
 }
 .ActionButtoms2{
   
@@ -77,17 +93,6 @@ select{
   margin-top: 10px;
 }
 
-nav{
-    height: 4.5rem;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-   position: fixed;
-   margin-bottom: 20px;
-   z-index: 2;
-   top: 0;
-   backdrop-filter: blur(5px);
-}
 nav img{
   height: 60px;
   width: 60px;
@@ -111,14 +116,15 @@ nav input{
     left: 5rem;
 }
 
-.MainBackground{
-  padding: 0;
-    min-height: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #0e0c1d;
+/* 4. FONDO PRINCIPAL */
+.MainBackground {
+  width: 100%;           /* Ocupa todo el ancho disponible */
+  min-height: 100vh;     /* Ocupa al menos toda la altura de la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #0e0c1d;
+  position: relative;    /* Asegura contexto para hijos absolutos */
 }
 .content{
   height: 100%;
@@ -130,16 +136,19 @@ nav input{
   text-align: center;
 }
 
-.littleMainBackground{
-  height:100%;
-  width: 100vw;
+/* 5. FONDO SECUNDARIO (Corrección de vw a %) */
+.littleMainBackground {
+  width: 100%;          /* Usar % en lugar de vw evita scrollbar horizontal */
+  min-height: 100vh;    /* Altura completa */
   display: flex;
-  
+  flex-direction: column; /* Asegura flujo vertical */
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Centrado vertical si hay poco contenido */
   text-align: center;
   background-color: #0e0c1d;
+  padding-top: 6rem;    /* Espacio para el Navbar fijo */
 }
+
 .navContainer{
     height: 100%;
     width: 100%;
@@ -238,8 +247,15 @@ transform: rotate3d(1,1,0,15deg)
 
 
 }
-.content{
-    margin-top: 80px;
+/* Asegúrate de que .content también ocupe el ancho */
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 80px; /* Espacio navbar */
 }
 
 .oneCard img{

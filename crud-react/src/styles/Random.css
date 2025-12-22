@@ -147,3 +147,12 @@
   height: 30rem; /* Altura fija para que coincidan */
   margin-top: 0; /* Quitamos margen superior para manejarlo en el flip-card */
 }
+@media screen and (max-width: 600px) {
+    .labelAndOption {
+        flex-direction: column;
+        width: 30%; 
+    }
+    .RandomCard{
+      max-width: 20rem;
+    }
+}

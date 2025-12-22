@@ -218,6 +218,8 @@ function WordsCreator() {
                   <p>You do not have lists yet</p>
                 ) : null}
 
+              </div>
+              
                 <div className="labels">
                   {AllTypes.map((t) => (
                     <label key={t}>
@@ -230,7 +232,6 @@ function WordsCreator() {
                     </label>
                   ))}
                 </div>
-              </div>
               {/* text inputs */}
               <div>
                 {["name", "past", "participle", "gerund"].map((field) => (

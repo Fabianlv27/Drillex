@@ -1,39 +1,43 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-/* --- 2. NAVBAR CORREGIDO --- */
-.navbar {
-    background: #0b1529;
-    height: 80px;
-    
-    /* AGREGA ESTAS LÍNEAS: */
-    width: 100%;             /* Fuerza a ocupar todo el ancho */
-    max-width: 100vw;        /* Evita que se salga de la pantalla */
-    left: 0;                 /* Asegura que empiece desde el borde */
-    /* ------------------- */
+/* Navbar.css */
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 195, 255, 0.2);
-    font-family: 'Segoe UI', sans-serif;
+/* 1. Aseguramos el Box Sizing global para que el padding no rompa el ancho */
+* {
+  box-sizing: border-box;
 }
+
+.navbar {
+  /* Fondo y Efectos */
+  background: rgba(7, 33, 56, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 195, 255, 0.2);
+
+  /* Posicionamiento y Tamaño (LA SOLUCIÓN) */
+  position: fixed; /* O sticky, según prefieras */
+  top: 0;
+  left: 0;         /* OBLIGATORIO: Pega la barra al borde izquierdo */
+  width: 100%;     /* OBLIGATORIO: Fuerza el ancho total */
+  height: 80px;
+  
+  /* Flexbox para centrar el contenido interno */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  
+  /* Reset de margenes */
+  margin: 0;
+  padding: 0;
+}
+
 .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    max-width: 1500px;
-    padding: 0 20px;
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 1500px; /* Esto limita el contenido, pero el fondo sigue al 100% */
+  padding: 0 20px;
 }
 
 /* --- LOGO --- */
