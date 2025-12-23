@@ -1,370 +1,324 @@
-
+/* --- RESET Y ESTRUCTURA PRINCIPAL --- */
 .MainBackground {
   background-color: #0e0c1d;
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  align-items: flex-start; /* Importante: flex-start para permitir scroll si el form es alto */
+  padding: 1rem;
+  padding-top: 7rem; /* Espacio para el Navbar */
 }
 
-/* Contenedor del formulario */
 .CreateMenu {
-  background: #0a2a4a;
-  border: 2px solid #00c3ff;
   border-radius: 1rem;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   padding: 1.5rem;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  margin-top: 3rem;
+  margin-bottom: 2rem;
 }
 
 .CreateMenu h1 {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 2rem;
   color: #00c3ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-/* Card interior semicircular */
 .MiniCreator {
   background: #072138;
-  border-radius: 0 0 1rem 1rem;
-  padding: 1rem;
+  border-radius: 1rem;
+  padding: 1.5rem;
 }
 
-/* Layout: dos columnas con más separación */
+/* --- LAYOUT DEL FORMULARIO (FLEXBOX) --- */
 .MiniCreator form {
   display: flex;
+  flex-direction: row;
   gap: 2rem;
 }
 
-.MiniCreator .a {
-  min-width: 0; 
-}
-
+/* Las dos columnas principales */
 .MiniCreator .a,
 .MiniCreator .b {
-  flex: 1;
+  flex: 1; /* Ocupan 50% cada una en escritorio */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
+  min-width: 0; /* Evita desbordamientos en flex items */
 }
 
+/* --- COLUMNA A (IZQUIERDA) --- */
+
 /* Select de listas */
+.labelAndOption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 .labelAndOption select {
-  width: auto;
-  max-width: 180px;
-  padding: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.8rem;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
   background: #0a2a4a;
   color: #fff;
+  height: auto;
+  margin: 0;
 }
 
-/* --- CORRECCIÓN AQUÍ: Tipos de palabra (Checkboxes) --- */
-/* Cambiamos de GRID a FLEX para que se adapte mejor y ocupe menos altura */
+/* Checkboxes (Tipos) */
 .labels {
-  display: flex;          /* Usar Flexbox en lugar de Grid */
-  flex-wrap: wrap;        /* Permite que los elementos pasen a la siguiente línea si no caben */
-  gap: 0.5rem;            /* Espacio entre elementos */
-  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   padding: 0.75rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
-  width: 100%;     
-      max-height: 120px;
-    overflow: auto;       /* Asegura que ocupe todo el ancho */
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .labels label {
   display: flex;
   align-items: center;
-  justify-content: center; /* Centra el contenido */
   gap: 0.5rem;
   font-size: 0.9rem;
   color: #fff;
-  
-  /* Estilo tipo 'Etiqueta' para que se vea más ordenado */
-  background-color: rgba(0, 195, 255, 0.1); 
-  padding: 5px 10px;
+  background-color: rgba(0, 195, 255, 0.1);
+  padding: 6px 10px;
   border-radius: 5px;
   border: 1px solid rgba(0, 195, 255, 0.2);
   cursor: pointer;
-  flex-grow: 1; /* Hace que se estiren para llenar espacios vacíos uniformemente */
+  flex-grow: 1;
+  justify-content: center;
 }
 
-.labels input[type="checkbox"] {
-  accent-color: #00c3ff;
-}
-/* ------------------------------------------------------ */
-
-/* Inputs de texto */
-.form-control {
-  position: relative;
-  margin: 0.5rem 0;
+/* INPUTS DE TEXTO */
+/* Importante: Sobrescribimos estilos conflictivos de main.css */
+.MiniCreator .form-control {
+  width: 100% !important; 
+  margin: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-.input :not(.input__search) {
+.input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.8rem 1rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
   color: #fff;
-  transition: border-color 0.2s;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .input:focus {
   outline: none;
+  box-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
   border-color: #fff;
 }
 
-.input-alt {
-  font-style: italic;
-}
-
-.inp-SynAnt{
-  margin-top: 1rem;
-}
-
-.AutoExamples{
-  background-color: #0a2a4a;
-  padding: 20px;
-}
-
-.input-border {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #00c3ff;
-  transition: width 0.3s;
-}
-
-.input:focus + .input-border {
-  width: 100%;
-}
-
-/* Imagen */
+/* IMAGEN */
 .imageMenuContainer {
-  margin-top: 1rem;
   border: 1px dashed #00c3ff;
   border-radius: 0.5rem;
-  padding: 0.75rem;
-  width: 100%; 
-  box-sizing: border-box;
-  overflow: hidden;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .ImageAndButton {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.ImageAndButton h3 {
-  color: #00c3ff;
+  margin-bottom: 1rem;
 }
 
 .ImageAndButton button {
   background: transparent;
   border: none;
-  font-size: 1.5rem;
   color: #00c3ff;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
 .imageOptions {
-  margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
+}
+.imageOptions select, .imageOptions input {
   width: 100%;
+  margin: 0;
 }
-
-.imageOptions select,
-.imageOptions input[type="text"]:not(.input__search) {
-  max-width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  background: #0a2a4a;
+.ImagePreview img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
   border: 1px solid #00c3ff;
-  border-radius: 0.5rem;
-  color: #fff;
-  margin-bottom: 0rem;
+  margin-top: 10px;
 }
 
-.imageOptions div {
-    max-width: 100%;
-    overflow-x: hidden;
+/* --- COLUMNA B (DERECHA) --- */
+
+/* Meaning y Examples */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
 }
 
-.imageOptions img {
+.section-label {
+    color: #00c3ff;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.ButtonAuto {
+  background: transparent;
   border: 1px solid #00c3ff;
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
-  width: 10rem;
-}
-
-/* Significado */
-.meaning {
-  position: relative;
-}
-
-.meaning button {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  color: #00c3ff;
+  border-radius: 5px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
   cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: black;
+  transition: 0.3s;
 }
 
-.meaning textarea {
+.ButtonAuto.on {
+  background: #00c3ff;
+  color: #000;
+  box-shadow: 0 0 10px #00c3ff;
+}
+.ButtonAuto.off {
+  color: #aaa;
+  border-color: #555;
+}
+
+textarea {
   width: 100%;
-  min-height: 6rem;
-  padding: 0.75rem;
+  margin: 0;
+  padding: 1rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
-  border-radius: 0.5rem;
   color: #fff;
+  border-radius: 0.5rem;
+  font-size: 1rem;
   resize: vertical;
+  min-height: 120px;
 }
 
-/* Ejemplos */
-.examples {
+/* Listado de Ejemplos */
+.example-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.examples > div {
-  display: flex;
+  align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.ButtonAuto {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: color 0.2s;
-  background-color: black;
-}
-
-.ButtonAuto.off {
-  color: #575f6b;
-}
-
-.ButtonAuto.on {
-  color: #00c3ff;
-}
-
 .buttomClearExamples {
-  background: none;
+  background: transparent;
   border: none;
-  font-size: 1.25rem;
-  color: #00c3ff;
+  color: #ff4757; /* Rojo para borrar */
+  font-size: 1.5rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.buttomAdd {
+    color: #00c3ff;
+    font-size: 1.8rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 .Input1 {
-  width: 100%;
-  padding: 0.5rem;
+  flex: 1;
+  padding: 0.8rem;
   background: #0a2a4a;
   border: 1px solid #00c3ff;
   border-radius: 0.5rem;
   color: #fff;
+  width: 100%;
 }
 
-/* Synonyms/Antonyms */
-.autoSyn {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.autoSyn > div {
+/* Sinónimos y Antónimos */
+.autoSyn-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+.autoSyn-row .form-control {
+    flex: 1;
 }
 
-.autoSyn .form-control {
-  width: 100%;
-  margin: 0;
-}
-
-.autoSyn .input {
-  padding: 0.4rem 0.6rem;
-}
-
-/* Botón de enviar */
+/* Botón Enviar */
 .send {
-  margin-top: 1rem;
-  padding: 0.75rem;
   width: 100%;
-  background: #00c3ff;
-  color: #072138;
+  padding: 1rem;
+  background: linear-gradient(90deg, #00c3ff, #009ecc);
+  color: #fff;
   border: none;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s;
+  margin-top: 1rem;
+  transition: transform 0.2s;
 }
-
+.send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 195, 255, 0.4);
+}
 .send:disabled {
-  background: #575f6b;
+  background: #444;
   cursor: not-allowed;
 }
 
-.send:not(:disabled):hover {
-  background: #02a4df;
-}
+/* --- MEDIA QUERY: RESPONSIVE --- */
+@media (max-width: 900px) {
+  .MainBackground {
+    padding: 10px;
+    padding-top: 6rem;
+  }
+  
+  .CreateMenu {
+      padding: 1rem;
+  }
+  
+  .MiniCreator {
+      padding: 1rem;
+  }
 
-.ImagePreview{
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
+  /* Cambiar layout a columna única */
   .MiniCreator form {
     flex-direction: column;
+    gap: 1.5rem;
   }
-  .MiniCreator .a,
-  .MiniCreator .b {
+
+  .MiniCreator .a, .MiniCreator .b {
     width: 100%;
   }
-  .labelAndOption select {
-    max-width: 100%;
+  
+  /* Ajustes de fuente para evitar zoom en iOS */
+  .input, textarea, select {
+      font-size: 16px; 
   }
-  /* En móvil, ajustamos los labels para que no se vean muy pequeños */
+  
   .labels {
-    justify-content: space-between;
-  }
-  .labels label {
-    flex-basis: 45%; /* Aproximadamente 2 por fila */
-  }
-  .autoSyn > div {
-    flex-direction: column;
-    align-items: stretch;
+      max-height: none; /* Dejar crecer si es necesario */
   }
 }
