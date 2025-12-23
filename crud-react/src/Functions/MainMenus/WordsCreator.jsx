@@ -11,6 +11,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { PiEmptyBold } from "react-icons/pi";
 import { DeleteLocalStorage } from "../Actions/DeleteLocalStorage";
 import { getDictionaryWord } from "../Actions/Dictionary";
+import { FiTrash } from "react-icons/fi";
 
 function WordsCreator() {
   const { GetList, UserLists, CurrentListId, setCurrentList } = useContext(ListsContext);
@@ -186,7 +187,7 @@ function WordsCreator() {
                 {["name", "past", "participle", "gerund"].map((field) => (
                   <div className="form-control" key={field}>
                     <input
-                      className="input input-alt"
+                      className="input-alt"
                       type="text"
                       name={field}
                       placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
@@ -295,7 +296,7 @@ function WordsCreator() {
                         })
                       }}
                     >
-                      <PiEmptyBold />
+                     <FiTrash />
                     </button>
                     <input
                       className="Input1"
@@ -330,7 +331,7 @@ function WordsCreator() {
                     </button>
                     <div className="form-control">
                         <input
-                            className="input input-alt"
+                            className="input-alt"
                             type="text"
                             name="synonyms"
                             placeholder="Synonyms"
@@ -354,7 +355,7 @@ function WordsCreator() {
                     </button>
                     <div className="form-control">
                         <input
-                            className="input input-alt"
+                            className="input-alt"
                             type="text"
                             name="antonyms"
                             placeholder="Antonyms"

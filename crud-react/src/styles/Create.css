@@ -76,8 +76,8 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.75rem;
-  background: #0a2a4a;
-  border: 1px solid #00c3ff;
+  background: #0e0c1d;
+  border: 1px solid #00c3ff73;
   border-radius: 0.5rem;
   width: 100%;
   max-height: 150px;
@@ -107,22 +107,23 @@
   transform: none !important;
   box-shadow: none !important;
 }
-
-.input {
+.input-alt{
+  height: 30px;
   width: 100%;
   padding: 0.8rem 1rem;
-  background: #0a2a4a;
-  border: 1px solid #00c3ff;
+  background: #0e0c1d;
+  border: none;
   border-radius: 0.5rem;
   color: #fff;
   font-size: 1rem;
   transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
 
-.input:focus {
+.input-alt:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
-  border-color: #fff;
+  border-color: #095050;
 }
 
 /* IMAGEN */
@@ -314,11 +315,8 @@ textarea {
   }
   
   /* Ajustes de fuente para evitar zoom en iOS */
-  .input, textarea, select {
-      font-size: 16px; 
+  .input-alt, textarea, select {
+      font-size: 10px; 
   }
   
-  .labels {
-      max-height: none; /* Dejar crecer si es necesario */
-  }
 }
