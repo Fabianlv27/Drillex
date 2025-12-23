@@ -1,42 +1,40 @@
 /* --- CONTENEDOR PRINCIPAL --- */
-.HangedMainContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    min-height: 80vh;
-    padding-bottom: 2rem;
-}
-
-/* Header (Título + Botón atrás) */
-.HangedMainContainer h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: rgb(0, 195, 255);
-}
-
-/* --- MENÚ DE SELECCIÓN DE LISTA --- */
 .hangedMenu {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centra el contenido interno (Select+Btn) */
     align-items: center;
-    margin-top: 2rem;
-    flex-wrap: wrap; /* Permite que baje en pantallas pequeñas */
+    margin-top: 1rem;
     background-color: rgba(7, 33, 56, 0.8);
-    padding: 20px;
+    padding: 15px 25px;
     border-radius: 15px;
+    width: auto;      /* Se ajusta al contenido */
+    max-width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Contenedor interno para asegurar fila */
 .labelAndOption {
     display: flex;
+    flex-direction: row; /* Fila horizontal */
     align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espacio exacto entre select y botón */
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-/* Botón Start (MdNotStarted) */
+/* Select */
+.hangedMenu select {
+    margin: 0; /* Importante: quitar márgenes externos */
+    width: 200px; /* Ancho fijo para estabilidad visual */
+    max-width: 60vw;
+}
+
+/* Botón de Play */
 .s {
-    margin-left: 2rem;
-    font-size: 2rem; /* Icono más grande */
+    margin: 0; /* Importante: quitar márgenes externos */
+    flex-shrink: 0; /* Evita que se aplaste */
 }
 
 /* --- TARJETA DEL JUEGO (GAME BOARD) --- */
@@ -137,7 +135,12 @@ height: 2rem;
     margin: 5px;
     box-shadow: 0 0 5px rgba(0, 195, 255, 0.3);
 }
-
+.MainBackgroundH{
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+}
 .Space {
     height: 2.5rem;
     width: 1.5rem; /* Espacio más angosto */
@@ -212,39 +215,32 @@ height: 2rem;
     pointer-events: none;
     filter: blur(2px);
 }
-
+@media (max-width: 900px) {
+    .MainBackground {
+        padding: 10px;
+        padding-top: none; 
+    }
+}
 /* --- MEDIA QUERIES (CELULAR) --- */
 @media screen and (max-width: 600px) {
-    .GameHandMenu img{
-        height: 8rem;
-        width: 8rem;
-    }
-    .HangedMainContainer {
-        margin-top: 1.5rem;
-    }
-
-    .hangedMenu {
-        flex-direction: column; /* Menú vertical */
-        width: 90%;
+.hangedMenu {
+        width: 95%;
+        padding: 15px;
+        flex-direction: column; /* Opcional: si prefieres apilar en móvil muy pequeño */
     }
     
+    /* Si quieres mantenerlos en línea en móvil, usa esto: */
     .labelAndOption {
-        flex-direction: column;
-        width: 30%;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
     }
-
+    
     .hangedMenu select {
         width: 100%;
-        margin-left: 0;
-        margin-top: 10px;
+        flex-grow: 1;
     }
 
-    .s {
-        margin-left: 0;
-        margin-top: 1.5rem; /* Separar el botón play en móvil */
-        width: 60px;
-        height: 60px; /* Botón más grande para tocar */
-    }
 
     /* Reducir tamaño de letras para que quepan palabras largas */
     .SingleLetterToFind {

@@ -1,85 +1,93 @@
-/* styles/WSkillsAI.css */
+/* Wskills.css */
+.WSkillsContainer {
+    margin-top: 7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.WSkillsContainer h1 {
+    color: rgb(0, 195, 255);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Reutilizamos el estilo de Menú */
+.WSkillsMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(7, 33, 56, 0.8);
+    padding: 15px 25px;
+    border-radius: 15px;
+    width: auto;
+    max-width: 90%;
+    margin-bottom: 2rem;
+}
+
+.GameArea {
+    width: 95%;
+    max-width: 600px;
+    background-color: #072138;
+    border: 1px solid #00c3ff;
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 100%;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #051624;
+    border: 1px solid #00c3ff;
+    color: white;
+    border-radius: 10px;
+    resize: vertical;
+    font-size: 1rem;
+}
 
 .ai-actions {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
-    justify-content: flex-end;
 }
 
+/* Botón IA Personalizado */
 .btn-ai {
-    background-color: #6c5ce7;
+    background: linear-gradient(90deg, #6c5ce7, #8e44ad);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(108, 92, 231, 0.4);
+    transition: transform 0.2s;
 }
 
 .btn-ai:hover {
-    background-color: #5649c0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(108, 92, 231, 0.6);
 }
 
 .btn-ai:disabled {
-    background-color: #a29bfe;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
-/* Caja de respuesta de la IA */
 .ai-feedback-box {
     margin-top: 1.5rem;
-    background: rgba(0, 0, 0, 0.3); /* Fondo oscuro semitransparente */
-    border: 1px solid rgba(108, 92, 231, 0.5);
-    border-radius: 12px;
-    padding: 1.5rem;
-    color: #dfe6e9;
-    animation: fadeIn 0.5s ease-in;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 4px solid #00c3ff;
+    padding: 1rem;
+    border-radius: 5px;
     text-align: left;
-}
-
-.ai-feedback-box h3 {
-    color: #a29bfe;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 5px;
-}
-
-.corrected-text {
-    background-color: rgba(45, 52, 54, 0.6);
-    padding: 10px;
-    border-radius: 6px;
-    border-left: 4px solid #00cec9;
-    font-style: italic;
-    margin-bottom: 1rem;
-}
-
-.explanation-text {
-    font-size: 0.95rem;
-    line-height: 1.5;
-    white-space: pre-wrap; /* Para respetar los saltos de línea de la IA */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Loader simple */
-.loader {
-    border: 3px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    border-top: 3px solid #fff;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }

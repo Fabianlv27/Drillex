@@ -2,37 +2,33 @@ import { useState, useContext, useEffect } from "react";
 import { WordsContext } from "../../../Contexts/WordsContext";
 import { ListsContext } from "../../../Contexts/ListsContext";
 import { MdNotStarted } from "react-icons/md";
-import { FaLocationArrow, FaRobot } from "react-icons/fa"; // Importamos FaRobot
+import { FaLocationArrow, FaRobot } from "react-icons/fa";
 import { Shuffler } from "../../Functions/Actions/Shuffler.js";
 import api from "../../../api/axiosClient"; 
-import { useGemini } from "../../hooks/useGemini"; // <--- IMPORTAMOS EL HOOK
+import { useGemini } from "../../hooks/useGemini"; 
 import '../../styles/Wskills.css';
-
 
 function WSkills() {
   const { GetWords } = useContext(WordsContext);
   const { CurrentListId, setCurrentList, GetList, UserLists } = useContext(ListsContext);
-  
-  // Hook de Gemini
   const { loadingAi, aiResponse, aiError, analyzeText, clearAiState } = useGemini();
-
   const [ShuffledArray, setShuffledArray] = useState([]);
   const [Status, setStatus] = useState(-1);
   const [Index, setIndex] = useState(0);
   const [Text, setText] = useState("");
 
   useEffect(() => {
-    const HandlerList = async () => {
-      setCurrentList(await GetList());
-    };
-    HandlerList();
+    const init = async () => setCurrentList(await GetList());
+    init();
   }, []);
 
   const startGame = async () => {
     setStatus(0);
-    if (CurrentListId?.id) {
-        const Words = await GetWords(CurrentListId.id, "wskills");
+    if (CurrentListId?.id) { // Asumiendo que CurrentListId tiene la estructura {id: ...} o es el ID directo. Ajusta según tu contexto real.
+        const idToUse = CurrentListId.id || CurrentListId;
+        const Words = await GetWords(idToUse, "wskills");
         const shuffledWords = Shuffler(Words);
+        
         if (shuffledWords.length > 21) {
           setShuffledArray(shuffledWords.slice(0, 21));
         } else {
@@ -42,22 +38,17 @@ function WSkills() {
     }
   };
 
-  // --- FUNCIÓN PARA LLAMAR A GEMINI ---
   const handleAICheck = () => {
     if (!Text.trim()) return alert("Write something first!");
     
-    // Obtenemos las palabras objetivo actuales
     const currentWords = [
         ShuffledArray[Index]?.name,
         ShuffledArray[Index + 1]?.name,
         ShuffledArray[Index + 2]?.name
-    ].filter(Boolean); // Filtramos undefined por si es el final
+    ].filter(Boolean);
 
     analyzeText(Text, currentWords);
   };
-  // ------------------------------------
-
-  
 
   const saveProgress = async (wordsBatch) => {
     try {
@@ -65,7 +56,7 @@ function WSkills() {
       if (rightIds.length === 0) return;
 
       const payload = {
-        idList: CurrentListId.id,
+        idList: CurrentListId.id || CurrentListId,
         game: "wskills",
         cant: rightIds.length, 
         right: rightIds, 
@@ -81,38 +72,41 @@ function WSkills() {
   };
 
   const Continue = () => {
-    if (Verificador()) {
-      const currentWordsBatch = ShuffledArray.slice(Index, Index + 3);
-      saveProgress(currentWordsBatch); 
+      // Verificador simple: que haya escrito algo
+      if(Text.length > 5) {
+        const currentWordsBatch = ShuffledArray.slice(Index, Index + 3);
+        saveProgress(currentWordsBatch); 
 
-      setText("");
-      clearAiState(); // <--- LIMPIAMOS EL FEEDBACK DE IA AL PASAR DE RONDA
+        setText("");
+        clearAiState();
 
-      if (ShuffledArray[Index + 3]) {
-        setIndex(Index + 3);
+        if (ShuffledArray[Index + 3]) {
+            setIndex(Index + 3);
+        } else {
+            setStatus(2); 
+        }
       } else {
-        setStatus(2); 
+          alert("Please write a longer sentence.");
       }
-    } else {
-      alert("You missed some words, try again!");
-    }
   };
 
   return (
-    <div className="littleMainBackground rand">
-      <h1 className="m">Writing</h1>
+    <div className="MainBackground WSkillsContainer">
+      <h1>Writing Practice</h1>
       
-      {/* SECCIÓN DE SELECCIÓN DE LISTA */}
-      <div className="ListAndStartMenu ">
+      {/* MENÚ ESTÁNDAR */}
+      <div className="WSkillsMenu">
         <div className="labelAndOption">
           {UserLists.length > 0 ? (
             <select
               onChange={(e) => {
-                const newId = e.target.value;
-                const selected = UserLists.find((l) => l.id === newId);
-                setCurrentList(selected);
+                  // Si tu contexto requiere el objeto completo, búscalo. Si requiere solo ID, pasa e.target.value
+                  const selectedId = e.target.value;
+                  const selectedObj = UserLists.find(l => l.id == selectedId);
+                  setCurrentList(selectedObj || selectedId);
               }}
-              value={CurrentListId?.id || ""}
+              // Ajusta esto según si CurrentListId es objeto o string en tu contexto
+              value={CurrentListId?.id || CurrentListId || ""}
             >
               {UserLists.map((list, index) => (
                 <option key={index} value={list.id}>
@@ -121,65 +115,54 @@ function WSkills() {
               ))}
             </select>
           ) : (
-            <p>You dont have lists yet</p>
+            <p>No lists</p>
           )}
+          <button
+            className="ActionButtoms"
+            disabled={UserLists.length === 0}
+            onClick={startGame}
+          >
+            <MdNotStarted />
+          </button>
         </div>
-        <button
-          className="ActionButtoms"
-          disabled={UserLists.length === 0}
-          onClick={() => {
-            if (UserLists.length > 0) {
-              startGame();
-            }
-          }}
-        >
-          <MdNotStarted />
-        </button>
       </div>
 
       {/* ÁREA DE JUEGO */}
-      <div>
-        {Status === 0 ? <h2>Loading...</h2> : null}
-        
-        {Status === 1 && (
-          <div style={{ marginTop: "2rem", backgroundColor: "#00ffff0d", borderRadius: "10px", padding: "1rem","display":"flex","flexDirection":"column" }}>
+      {Status === 1 && (
+          <div className="GameArea">
+            <h2 style={{color: 'white', marginBottom:'1rem', textAlign:'center'}}>Write using these words:</h2>
             
-            <h2 style={{ margin: "1rem" }}>Write something about</h2>
-            <p style={{ fontSize: "20px", fontWeight: "bold", color: "whitesmoke", marginBottom: "1rem" }}>
-              {ShuffledArray[Index]?.name} 
-              {ShuffledArray[Index + 1] ? `, ${ShuffledArray[Index + 1].name}` : ""} 
-              {ShuffledArray[Index + 2] ? `, ${ShuffledArray[Index + 2].name}` : ""}
-            </p>
+            <div className="word-chips">
+                {[0,1,2].map(i => ShuffledArray[Index+i] && (
+                    <span key={i} className="word-chip">
+                        {ShuffledArray[Index+i].name}
+                    </span>
+                ))}
+            </div>
             
             <textarea
               name="write"
-              cols="30"
               rows="6" 
               value={Text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Write sentences using the words above..."
             ></textarea>
 
-            {/* BARRA DE ACCIONES (IA + CONTINUAR) */}
             <div className="ai-actions">
-                {/* Botón de IA */}
                 <button 
                     className="btn-ai" 
                     onClick={handleAICheck} 
                     disabled={loadingAi || !Text}
-                    title="Check grammar with AI"
                 >
                     {loadingAi ? <div className="loader"></div> : <><FaRobot /> Check Grammar</>}
                 </button>
 
-                {/* Botón de Continuar (Original) */}
-                <button className="ActionButtoms" onClick={Continue} title="Next Words">
+                <button className="ActionButtoms" onClick={Continue} title="Next">
                   <FaLocationArrow />
                 </button>
             </div>
 
-            {/* SECCIÓN DE FEEDBACK DE LA IA */}
-            {aiError && <p style={{color: '#ff7675', marginTop: '10px'}}>{aiError}</p>}
+            {aiError && <p style={{color: '#ff7675', marginTop: '15px'}}>{aiError}</p>}
             
             {aiResponse && (
                 <div className="ai-feedback-box">
@@ -191,10 +174,10 @@ function WSkills() {
             )}
 
           </div>
-        )}
-        
-        {Status === 2 ? <h2>Game Over</h2> : null}
-      </div>
+      )}
+      
+      {Status === 0 && <h2 style={{color:'white'}}>Loading...</h2>}
+      {Status === 2 && <h2 style={{color:'#00ffaa'}}>Session Finished!</h2>}
     </div>
   );
 }

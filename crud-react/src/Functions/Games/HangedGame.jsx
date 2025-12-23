@@ -245,37 +245,40 @@ function HangedGame() {
 
   // --- RENDER ---
   return (
-    <div className="HangedMainContainer MainBackground">
-     <div className="HangedMainContainer MainBackground">
+     <div className="HangedMainContainer MainBackgroundH">
   
-  {/* ENCABEZADO RESPONSIVE */}
-  <div style={{
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      width: "100%", 
-      position: "relative",
-      padding: "0 20px"
-  }}>
-     {ShowGame && (
-        <button 
-            className="ActionButtoms" 
-            onClick={() => { setShowGame(false); navigate('/Hand'); }} // Asegura que vuelva al menú
-        >
-            <FaArrowLeft />
-        </button>
-      )}
-      <h1 style={{ margin: 0 }}>Hanged Game</h1>
-  </div>
+ {/* 1. HEADER CENTRADO */}
+      <div style={{
+          display: "flex", 
+          alignItems: "center", 
+          justifyContent: "center", 
+          width: "100%", 
+          position: "relative",
+          padding: "0 20px",
+          marginTop:"12rem"
+      }}>
+         {ShowGame && (
+            <button 
+                className="ActionButtoms" 
+                onClick={() => { setShowGame(false); navigate('/Hand'); }}
+                style={{ marginRight:"1rem"}} // Botón atrás a la izquierda absoluta
+            >
+                <FaArrowLeft />
+            </button>
+          )}
+          {/* El título queda perfectamente centrado porque el padre es Flex Center */}
+          <h1 style={{ margin: 0 }}>Hanged Game</h1>
+      </div>
      
       
-      <div>
+     {/* 2. MENÚ (SELECT + BOTÓN) */}
+      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         {!ShowGame ? (
-          <div className="littleMainBackground hangedMenu">
+          // CORRECCIÓN: Quitamos "littleMainBackground" para evitar espacios extraños
+          <div className="hangedMenu"> 
             <div className="labelAndOption">
               {UserLists.length > 0 ? (
                 <select 
-                    // CAMBIO CLAVE: Usamos navigate en lugar de state local
                     onChange={(e) => setlist(e.target.value)}
                     value={list || ""}
                 >
@@ -289,14 +292,16 @@ function HangedGame() {
               ) : (
                 <p>You dont have lists yet</p>
               )}
+              
+              {/* Botón justo al lado */}
+              <button
+                className="ActionButtoms s"
+                onClick={() => { if(list) navigate(`/Hand/${list}`) }}
+                disabled={!list} // Deshabilitar si no hay lista
+              >
+                <MdNotStarted />
+              </button>
             </div>
-            {/* Botón start */}
-            <button
-              className="ActionButtoms s"
-              onClick={() => { navigate(`/Hand/${list}`)}}
-            >
-              <MdNotStarted />
-            </button>
           </div>
         ) : null}
       </div>
@@ -388,7 +393,7 @@ function HangedGame() {
         </div>
       ) : null}
     </div>
-    </div>
+    
 
   );
 }

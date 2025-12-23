@@ -3,10 +3,65 @@
   background-color: #0e0c1d;
   min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: flex-start; /* Importante: flex-start para permitir scroll si el form es alto */
   padding: 1rem;
   padding-top: 7rem; /* Espacio para el Navbar */
+}
+/* --- SELECCIÓN DE TIPOS (ESTILO CHIPS/TAGS) --- */
+.type-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  padding: 1rem;
+background: #061a2d;
+    border: 1px solid #124573;
+  border-radius: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.type-tag {
+  padding: 0.5rem 1rem;
+  border: 1px solid #00c3ff;
+  border-radius: 50px; /* Bordes redondos tipo pastilla */
+  color: #00c3ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none; /* Evita que se seleccione el texto al hacer click rápido */
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.type-tag:hover {
+  background: rgba(0, 195, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Estado Activo (Seleccionado) */
+.type-tag.active {
+  background: #00c3ff;
+  color: #072138; /* Texto oscuro sobre fondo neón */
+  box-shadow: 0 0 10px #00c3ff; /* Resplandor */
+  border-color: #00c3ff;
+}
+
+/* Ajuste móvil para que sean fáciles de tocar */
+@media (max-width: 768px) {
+  .type-tag {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    flex-grow: 1; /* Ocupan espacio disponible para facilitar el toque */
+    text-align: center;
+    height: 30px;
+  }
+  .type-container{
+    max-height: 100px;
+    overflow: auto;
+  }
 }
 
 .CreateMenu {

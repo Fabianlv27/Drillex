@@ -1,42 +1,83 @@
-.FindBImage{
-    margin-top: 6rem;
+/* ImageGame.css */
+.FindBImage {
+    margin-top: 5rem; /* Margen Navbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
-.GameImage{
-    height: auto;
-    width: 90%;
+
+.FindBImage h1 {
+    text-align: center;
+    color: rgb(0, 195, 255);
+    margin-bottom: 1rem;
+}
+
+/* Reutilizamos estilo de menú si quieres, o definimos uno local */
+.StandardMenuImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(7, 33, 56, 0.8);
+    padding: 15px 25px;
+    border-radius: 15px;
+    width: auto;
+    max-width: 90%;
+    margin-bottom: 1rem;
+}
+
+.GameImage {
+    width: 95%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    background-color: #072138;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid #00c3ff;
 }
-.GameImage img{
-    height: 17rem;
-    width: 17rem;
-    margin-bottom: 5%;
-   
+
+.GameImage img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 10px;
+    border: 2px solid #00c3ff;
+    margin-bottom: 1.5rem;
+    object-fit: contain;
 }
-.GameImage button:not(.ActionButtoms){
+
+.OptionsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+.GameImage button:not(.ActionButtoms) {
     border: solid 2px #47c9ff;
-    margin: 1%;
-    height: 4rem;
-  min-width: 5rem;
-margin: 0.5rem;
-  background-color:rgb(7, 33, 56) ;
-color: #47c9ff;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bolder;
-  box-shadow: inset 0px 0px 10px #47c8ff80;
-  transition: 0.5s;
-  cursor: pointer;
+    padding: 10px 15px;
+    min-width: 100px;
+    background-color: rgb(7, 33, 56);
+    color: #47c9ff;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    flex-grow: 1; /* Para que ocupen espacio parejo */
 }
-.GameImage button:hover{
-    background-color: transparent;
-    transform: scale(1.1);
-    font-size: 18px;
+
+.GameImage button:hover:not(.ActionButtoms) {
+    background-color: #47c9ff;
+    color: #072138;
 }
-.WoLMenu p{
-color: aliceblue;
+
+.blocked {
+    pointer-events: none;
+    opacity: 0.6;
 }

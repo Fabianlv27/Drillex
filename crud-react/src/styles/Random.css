@@ -1,158 +1,169 @@
-.ListAndStartMenu{
-    height: auto;
+/* Random.css */
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.RandomContainer {
+    margin-top: 7rem; /* Ajuste para Navbar */
     width: 100%;
     display: flex;
-    
+    flex-direction: column;
     align-items: center;
+    min-height: 80vh;
+}
+
+.RandomContainer h1 {
+    color: rgb(0, 195, 255);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
+
+/* --- MENÚ DE SELECCIÓN ESTÁNDAR --- */
+.StandardMenuRandom {
+    display: flex;
     justify-content: center;
-    margin-top: 1vh;
+    align-items: center;
+    background-color: rgba(7, 33, 56, 0.8); /* Fondo oscuro semitransparente */
+    padding: 15px 25px;
+    border-radius: 15px;
+    width: auto;
+    max-width: 90%;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-.rand{
-  flex-direction: column;
+
+.labelAndOptionR {
+    display: flex;
+    flex-direction: row; /* Alineación horizontal Select + Botón */
+    align-items: center;
+    gap: 15px;
+    width: 100%;
 }
-.type-random{
-  color: #63d0ff;
+
+.StandardMenuRandom select {
+    width: 200px;
+    max-width: 60vw;
+    margin: 0; /* Quitamos márgenes antiguos */
 }
-.syanpa{
-  width: 90%;
-  text-align: left;
-  scrollbar-width: none;
-  max-height: 10rem;
-  text-align: left;
+
+.StandardMenuRandom button {
+    margin: 0; /* Quitamos márgenes antiguos */
 }
-.ListAndStartMenu button{
-    margin-top:1rem;
-    margin-left: 2rem
+
+
+/* --- ESTILOS DE LA CARTA (MANTENIDOS) --- */
+.type-random {
+    color: #63d0ff;
 }
-.RandomCard button:not(.OptionsButtoms):not(.audiob){
-  position: absolute;
- 
- bottom: -15px;
+
+.syanpa {
+    width: 90%;
+    text-align: left;
+    scrollbar-width: none;
+    max-height: 10rem;
 }
-.ex{
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  max-height: 6rem;
-  overflow: auto;
-  scrollbar-width: none;
-      border: solid 1px #0f0e0e3b;
+
+.ex {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    max-height: 6rem;
+    overflow: auto;
+    scrollbar-width: none;
+    border: solid 1px #0f0e0e3b;
     box-shadow: inset 0px 0px 10px #00000094;
     border-radius: 10px;
     padding: 5px;
     margin-top: 1rem;
     background-color: #0000003d;
 }
-.OptionsButtoms{
+
+/* Botones de Opciones (Caritas) */
+.OptionsButtoms {
     height: 40px;
     width: 40px;
     border-radius: 50%;
     position: relative;
-   font-size: 20px;
-   bottom: auto;
-   cursor: pointer;
-   transition: 0.7s;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.option1{
-    position: absolute;
-  transform: translateX(-8rem);
-  background-color: rgb(255, 248, 47);
- 
-}
-.option1:hover{
-    transform: scale(1.1) translateX(-7rem);
-    box-shadow: 0px 0px 5px rgb(255, 248, 47);
-}
-.option2{
-    transform: translateX(-4rem);
-    background-color: rgb(255, 161, 47);
-  }
-  .option2:hover{
-    transform: scale(1.1) translateX(-3rem);
-    box-shadow: 0px 0px 5px rgb(255,161, 47);
-}
-  .option3{
-    transform: translateX(0rem);
-    background-color: rgb(255, 85, 47);
-
-  }
-  .option3:hover{
-    transform: scale(1.1) translateX(0.5rem);
-    box-shadow: 0px 0px 5px rgb(255, 85, 47);
-}
-  
-  .option4{
-    transform: translateX(4rem);
-    background-color: rgb(255, 0, 0);
-
-  }
-  .option4:hover{
-    transform: scale(1.1) translateX(4.2rem);
-    box-shadow: 0px 0px 5px rgb(255, 0, 0);
+.OptionsButtoms:hover {
+    transform: scale(1.1);
+    z-index: 10;
 }
 
 /* --- EFECTO FLIP CARD 3D --- */
-
-/* 1. El contenedor principal (define el espacio 3D) */
 .flip-card {
-  background-color: transparent;
-  width: 100%;
-  max-width: 28rem; /* Mismo ancho que tu RandomCard */
-  height: 35rem;    /* Altura suficiente para el contenido + botones */
-  perspective: 1000px; /* Profundidad 3D */
-  margin-top: 2rem;
-  position: relative;
+    background-color: transparent;
+    width: 100%;
+    max-width: 28rem;
+    height: 35rem;
+    perspective: 1000px;
+    position: relative;
 }
 
-/* 2. El contenedor interno (es el que gira) */
 .flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s; /* Duración de la animación */
-  transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
 }
 
-/* Clase que se agrega cuando Face === 2 */
 .flip-card-inner.flipped {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
-/* 3. Las caras (Frente y Dorso) */
 .flip-card-front, .flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden; /* Oculta la cara trasera al girar */
-  
-  /* Aseguramos que los elementos hijos se posicionen bien */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Estilo específico del Dorso */
 .flip-card-back {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
-/* Ajuste para que tu RandomCard ocupe el espacio dentro de las caras */
 .RandomCard {
-  width: 100%;
-  height: 30rem; /* Altura fija para que coincidan */
-  margin-top: 0; /* Quitamos margen superior para manejarlo en el flip-card */
+    width: 100%;
+    height: 30rem;
+    margin-top: 0;
+    background-color: rgb(9, 27, 49);
+    border: solid 2px rgb(15 58 64);
+    border-radius: 10px;
+    box-shadow: 0px 0px 40px #08ceff4a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
+
+/* RESPONSIVE */
 @media screen and (max-width: 600px) {
-    .labelAndOption {
-        flex-direction: column;
-        width: 30%; 
+    .StandardMenuRandom .labelAndOptionR {
+        flex-direction: row; /* Mantener horizontal en móvil si cabe */
     }
-    .RandomCard{
-      max-width: 20rem;
+    
+    .StandardMenuRandom select {
+        width: 100%;
+        flex-grow: 1;
+    }
+
+    .RandomCard {
+        max-width: 20rem;
     }
 }

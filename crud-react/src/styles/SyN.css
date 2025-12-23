@@ -1,53 +1,111 @@
-.SyAMenu{
-    margin-top: 6rem;
+/* SyN.css */
+.SyAMenu {
+    margin-top: 7rem; /* Ajuste para el Navbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
 }
-.SyAGameMenu{
-    margin-top: 3rem;
-    height: 30rem;
-    width: 26rem;
-    border: solid 2px rgb(0, 195, 255);
-  background-color:rgb(7, 33, 56) ;
 
+.SyAMenu h1 {
+    text-align: center;
+    color: rgb(0, 195, 255);
+    margin-bottom: 1rem;
+}
+
+/* --- MENÚ DE SELECCIÓN ESTÁNDAR --- */
+.StandardMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(7, 33, 56, 0.8);
+    padding: 15px 25px;
+    border-radius: 15px;
+    width: auto;
+    max-width: 90%;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.labelAndOption {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.labelAndOption select {
+    margin: 0;
+    width: 200px;
+    max-width: 60vw;
+}
+
+/* --- TABLERO DEL JUEGO --- */
+.SyAGameMenu {
+    margin-top: 1rem;
+    width: 95%;
+    max-width: 500px; /* Ancho máximo para PC */
+    min-height: 20rem;
+    border: solid 2px rgb(0, 195, 255);
+    background-color: rgb(7, 33, 56);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.2);
 }
-.SyAGameMenu button{
-    border: solid 2px #47c9ff;
-    margin: 1%;
-    height: 4rem;
-  width: 7rem;
- display: flex;
- text-align: center;
- align-items: center;
- justify-content: center;
 
-  background-color:rgb(7, 33, 56) ;
-color: #47c9ff;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bolder;
-  box-shadow: inset 0px 0px 5px #47c8ff80;
-  transition: 0.5s;
-  cursor: pointer;
-  overflow: hidden;
-}
-.SyAGameMenu button:hover{
-    background-color: transparent;
-    transform: scale(1.1);
-    font-size: 18px;
-}
-.SyAGameMenu h2{
+.SyAGameMenu h2 {
     color: aliceblue;
-    font-size: 1.7rem
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
 }
-.options{
+
+.SyAGameMenu h2 span {
+    color: rgb(0, 195, 255);
+}
+
+.options {
     width: 100%;
     display: flex;
-    align-items:center ;
+    flex-wrap: wrap; /* Para que bajen en móvil si no caben */
+    align-items: center;
     justify-content: center;
-    margin-top: 10%;
+    gap: 1rem;
+}
+
+.SyAGameMenu button {
+    border: solid 2px #47c9ff;
+    padding: 10px 20px;
+    min-width: 120px;
+    background-color: rgb(9, 23, 36);
+    color: #47c9ff;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bolder;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.SyAGameMenu button:hover {
+    background-color: #47c9ff;
+    color: #072138;
+    box-shadow: 0 0 15px #47c9ff;
+    transform: scale(1.05);
+}
+
+/* MENÚ DE PERDER/GANAR */
+.WoLMenu {
+    width: 95%;
+    max-width: 500px;
+    text-align: center;
+    background-color: rgb(7, 33, 56);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #47c9ff;
 }

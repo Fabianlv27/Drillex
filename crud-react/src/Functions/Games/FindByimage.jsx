@@ -5,10 +5,10 @@ import "../SingleSp.css";
 import "../../styles/ImageGame.css";
 import { MdNotStarted } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
-import {Shuffler} from "../../Functions/Actions/Shuffler.js";
+import { Shuffler } from "../../Functions/Actions/Shuffler.js";
+
 function FindByimage() {
-  const { GetList, CurrentListId, setCurrentList, UserLists } =
-    useContext(ListsContext);
+  const { GetList, CurrentListId, setCurrentList, UserLists } = useContext(ListsContext);
   const { GetWords } = useContext(WordsContext);
   const [ShowGame, setShowGame] = useState(false);
   const [Choises, setChoises] = useState([]);
@@ -16,47 +16,33 @@ function FindByimage() {
   const [Random, setRandom] = useState([]);
   const [IsCorrect, setIsCorrect] = useState(0);
   const [NoWords, setNoWords] = useState(false);
-  //30005
-  const HandlerLists = async () => {
-    setCurrentList(await GetList());
-  };
 
   useEffect(() => {
-    HandlerLists();
+    const init = async () => setCurrentList(await GetList());
+    init();
   }, []);
 
   const HandlerChoises = (TempRandom, i) => {
     let NumbersChoise = [];
-    console.log(TempRandom);
-
     while (NumbersChoise.length < 3) {
-      let RandomNum = Math.floor(Math.random() * (TempRandom.length - 1 + 1));
-
+      let RandomNum = Math.floor(Math.random() * (TempRandom.length));
       if (!NumbersChoise.includes(RandomNum) && RandomNum !== i) {
-        NumbersChoise = [...NumbersChoise, RandomNum];
+        NumbersChoise.push(RandomNum);
       }
     }
-
-    NumbersChoise[Math.floor(Math.random() * (2 + 1))] = i;
-
-    console.log(NumbersChoise);
+    NumbersChoise[Math.floor(Math.random() * 3)] = i; // Insert correct answer randomly
     setChoises(NumbersChoise);
-    NumbersChoise = [];
   };
+
   const DeleteNoImage = (lista) => {
-    let TempList = [];
-    lista.forEach((element) => {
-      if (element.image !== "") {
-        TempList = [...TempList, element];
-      }
-    });
-    return TempList;
+    return lista.filter(element => element.image && element.image !== "");
   };
+
   const startGame = async () => {
-    const words = await GetWords(CurrentListId.id);
+    const words = await GetWords(CurrentListId); // O CurrentListId.id según tu contexto
     const ListWithImage = DeleteNoImage(words);
-    console.log(ListWithImage);
-    if (ListWithImage.length > 0) {
+    
+    if (ListWithImage.length >= 4) { // Necesitas al menos 4 para tener opciones incorrectas
       const TempSh = Shuffler(ListWithImage);
       setRandom(TempSh);
       HandlerChoises(TempSh, 0);
@@ -66,6 +52,7 @@ function FindByimage() {
       setNoWords(true);
     }
   };
+
   const Check = (nameToTest) => {
     if (nameToTest == Random[Index].name) {
       setIsCorrect(2);
@@ -73,12 +60,11 @@ function FindByimage() {
       setIsCorrect(1);
     }
   };
+
   const Next = () => {
     if (Random[Index + 1]) {
       setChoises([]);
-
       setIsCorrect(0);
-
       HandlerChoises(Random, Index + 1);
       setIndex(Index + 1);
     } else {
@@ -90,9 +76,11 @@ function FindByimage() {
   return (
     <div className="FindBImage MainBackground">
       <h1>Image Game</h1>
-      <div className="LittleMainBackground">
-        {!ShowGame ? (
-          <div className="labelAndOption">
+      
+      {/* MENÚ ESTÁNDAR */}
+      {!ShowGame && (
+        <div className="StandardMenuImg">
+           <div className="labelAndOption" style={{display:'flex', gap:'15px', alignItems:'center'}}>
             {UserLists.length > 0 ? (
               <select onChange={(e) => setCurrentList(e.target.value)}>
                 {UserLists.map((list, index) => (
@@ -102,7 +90,7 @@ function FindByimage() {
                 ))}
               </select>
             ) : (
-              <p>You dont have lists yet</p>
+              <p>No lists</p>
             )}
             <button
               className="ActionButtoms s"
@@ -112,20 +100,18 @@ function FindByimage() {
               <MdNotStarted />
             </button>
           </div>
-        ) : null}
-      </div>
-      {NoWords ? (
-        <p style={{ color: "white", marginTop: "2rem" }}>
-          You dont have enough words in this Lists
-        </p>
-      ) : null}
-      <div className="GameImage">
-        {ShowGame && Random ? (
-          <>
-            <div className={`${IsCorrect !== 0 ? "blocked" : ""}`}>
+        </div>
+      )}
+
+      {NoWords && <p style={{ color: "white", marginTop: "2rem" }}>Not enough words with images (need 4+).</p>}
+
+      {/* JUEGO */}
+      {ShowGame && Random.length > 0 && (
+        <div className="GameImage">
+            <div className={`${IsCorrect !== 0 ? "blocked" : ""}`} style={{width:'100%'}}>
               <h2>What is it?</h2>
-              <img src={Random[Index].image} alt="" />
-              <div>
+              {Random[Index] && <img src={Random[Index].image} alt="Guess this" />}
+              <div className="OptionsContainer">
                 {Choises.map((c, i) => (
                   <button onClick={() => Check(Random[c].name)} key={i}>
                     {Random[c].name}
@@ -134,28 +120,19 @@ function FindByimage() {
               </div>
             </div>
 
-            {IsCorrect === 1 ? (
-              <div className="LoseMenu WoLMenu">
-                <h2>You Lose </h2>
-                <p>The Correct Answer is.. {Random[Index].name} </p>
+            {IsCorrect !== 0 && (
+              <div className="LoseMenu" style={{marginTop:'20px'}}>
+                <h2 style={{color: IsCorrect === 2 ? '#00ffaa' : '#ff4757'}}>
+                    {IsCorrect === 2 ? "Correct!" : "Wrong!"}
+                </h2>
+                <p style={{color:'white'}}>Answer: {Random[Index].name}</p>
                 <button className="ActionButtoms" onClick={Next}>
                   <GrNext />
                 </button>
               </div>
-            ) : null}
-
-            {IsCorrect === 2 ? (
-              <div className="LoseMenu WoLMenu">
-                <h2>You Won ! </h2>
-                <p>The Correct Answer is.. {Random[Index].name} </p>
-                <button className="ActionButtoms" onClick={Next}>
-                  <GrNext />
-                </button>
-              </div>
-            ) : null}
-          </>
-        ) : null}
-      </div>
+            )}
+        </div>
+      )}
     </div>
   );
 }

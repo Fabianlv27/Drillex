@@ -6,6 +6,7 @@ import RandomItem from "../secondary menus/RandomItem";
 import { MdNotStarted } from "react-icons/md";
 import { Shuffler } from "../../Functions/Actions/Shuffler.js";
 import { UpdateProgress } from "../../../api/saveProgress.js";
+import "../../styles/Random.css"; // Asegúrate de importar el CSS actualizado
 
 function Random() {
   const { listId } = useParams(); 
@@ -19,7 +20,7 @@ function Random() {
   const [ShowRandom, setShowRandom] = useState(false);
   const [Difficulty, setDifficulty] = useState({ easy: [], normal: [], hard: [], ultrahard: [] });
   
-  // Estado local para el SELECT (separado de la URL)
+  // Estado local para el SELECT
   const [selectedList, setSelectedList] = useState("");
   const [loadingLists, setLoadingLists] = useState(true);
 
@@ -28,7 +29,7 @@ function Random() {
   const [Face, setFace] = useState(1);
   const [ShowElement, setShowElement] = useState(true);
 
-  // --- 1. CARGA INICIAL Y SINCRONIZACIÓN ---
+  // --- 1. CARGA INICIAL ---
   useEffect(() => {
     const initGame = async () => {
       let availableLists = UserLists;
@@ -41,23 +42,16 @@ function Random() {
         setLoadingLists(false);
       }
 
-      // Si hay un ID en la URL (al refrescar o navegar), actualizamos el Select y el Juego
       if (listId) {
         const targetList = availableLists.find((l) => l.id.toString() === listId);
-
         if (targetList) {
-          // Sincronizamos el select visualmente
           setSelectedList(targetList.id);
-          
-          // Iniciamos el juego si no está activo o si cambió la lista
-          // (Verificamos ShuffledArray para no reiniciar si React remonta el componente)
           prepareGame(targetList.id);
         } else {
           console.warn("Lista de URL no encontrada");
           navigate("/Random"); 
         }
       } else {
-        // Si no hay ID en la URL, limpiamos
         setShowRandom(false);
         setShuffledArray([]);
         setSelectedList("");
@@ -67,7 +61,7 @@ function Random() {
     initGame();
   }, [listId, UserLists]); 
 
-  // --- 2. PREPARAR JUEGO (Carga Bloque) ---
+  // --- 2. PREPARAR JUEGO ---
   const prepareGame = async (targetId) => {
     const Words = await GetWords(targetId, 'random');
     
@@ -149,16 +143,13 @@ function Random() {
     if (Index > 0 && Index % 5 === 0) handlerProgress();
     setFace(1);
     
-    // Lógica simplificada de vueltas
     let nextIndex = i + 1;
     let nextLap = l;
     
-    // Verificar fin de array
     if (!ShuffledArray[nextIndex]) {
         nextIndex = 0;
         nextLap = l + 1;
         
-        // Lógica de cambio de vuelta
         if (nextLap === 3) { setShowElement(false); Discriminator(ShuffledArray[0], 3); return; }
         if (nextLap === 4) { setShowElement(false); Discriminator(ShuffledArray[0], 4); return; }
         if (nextLap === 5) { setShowElement(false); Discriminator(ShuffledArray[0], 5); return; }
@@ -172,7 +163,6 @@ function Random() {
         }
     }
 
-    // Verificar si mostramos elemento en vueltas avanzadas
     if (nextLap >= 3) {
         setShowElement(false);
         const nextItem = ShuffledArray[nextIndex];
@@ -186,13 +176,11 @@ function Random() {
             setLap(nextLap);
             setShowElement(true);
         } else {
-            // Recursión si la palabra ya se sabe
             Next("", nextItem, nextIndex, nextLap);
-            if(TypeLevel) RemoveAndAdd(TypeLevel, elemento); // Guardar estado actual antes de recursión
+            if(TypeLevel) RemoveAndAdd(TypeLevel, elemento); 
             return; 
         }
     } else {
-        // Vueltas 1 y 2
         setIndex(nextIndex);
         setLap(nextLap);
     }
@@ -211,17 +199,16 @@ function Random() {
 
   // --- RENDER ---
   return (
-    <div className="littleMainBackground rand">
-      <h1 className="m">Random Repetition</h1>
+    <div className="MainBackground RandomContainer">
+      <h1>Random Repetition</h1>
       
       {!ShowRandom && (
-        <div className="ListAndStartMenu">
+        <div className="StandardMenuRandom">
             <div className="labelAndOptionR">
             {loadingLists ? (
                <p style={{color:'white'}}>Loading lists...</p>
             ) : UserLists.length > 0 ? (
                 <select
-                // A. SOLO ACTUALIZA EL ESTADO LOCAL (No navega)
                 onChange={(e) => setSelectedList(e.target.value)}
                 value={selectedList || ""}
                 >
@@ -235,14 +222,11 @@ function Random() {
             ) : (
                 <p>You don't have lists yet</p>
             )}
-            </div>
             
-            {/* B. EL BOTÓN EJECUTA LA NAVEGACIÓN */}
             <button
             className="ActionButtoms"
             disabled={!selectedList}
             onClick={() => {
-                // Solo navegamos si hay algo seleccionado
                 if(selectedList) {
                     navigate(`/Random/${selectedList}`);
                 }
@@ -250,6 +234,7 @@ function Random() {
             >
             <MdNotStarted />
             </button>
+            </div>
         </div>
       )}
 

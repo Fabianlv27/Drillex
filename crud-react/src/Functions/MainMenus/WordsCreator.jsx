@@ -38,6 +38,9 @@ function WordsCreator() {
     "noun", "verb", "adjective", "adverb", "pronoun",
     "preposition", "conjunction", "interjection", "phrasal verb",
   ];
+  
+  // LÍMITE DE EJEMPLOS (Para que no explote el backend)
+  const MAX_EXAMPLES = 4;
 
   const history = useNavigate();
 
@@ -66,16 +69,19 @@ function WordsCreator() {
           if (element.antonyms) AuAntonyms = [...AuAntonyms, ...element.antonyms];
         });
 
+        // Aplicamos slice(0, 100) y join para respetar límites si la auto-generación trae mucho texto
         if (ASyn && AuSynonyms.length > 0) {
+          const synText = AuSynonyms.filter((e, i, a) => a.indexOf(e) === i).join(' ; ');
           setDataForm((prev) => ({
             ...prev,
-            synonyms: AuSynonyms.filter((e, index, array) => array.indexOf(e) === index).join(' ; '),
+            synonyms: synText.slice(0, 100), // Límite Backend
           }));
         }
         if (AAnt && AuAntonyms.length > 0) {
+          const antText = AuAntonyms.filter((e, i, a) => a.indexOf(e) === i).join(' ; ');
           setDataForm((prev) => ({
             ...prev,
-            antonyms: AuAntonyms.filter((e, index, array) => array.indexOf(e) === index).join(' ; '),
+            antonyms: antText.slice(0, 100), // Límite Backend
           }));
         }
       }
@@ -113,10 +119,13 @@ function WordsCreator() {
 
   const newExample = (e) => {
     e?.preventDefault();
-    setDataForm({
-      ...dataForm,
-      example: [...dataForm.example, ""],
-    });
+    // Validamos el límite antes de añadir
+    if (dataForm.example.length < MAX_EXAMPLES) {
+        setDataForm({
+        ...dataForm,
+        example: [...dataForm.example, ""],
+        });
+    }
   };
 
   const handExampleChange = (index, event) => {
@@ -135,7 +144,8 @@ function WordsCreator() {
     setAddImageBool(!AddImageBool);
   };
 
-  const handleCheckboxChange = (t) => {
+  // Manejador de Tipos (Ahora sin checkbox explícito, solo toggle)
+  const toggleType = (t) => {
     if (dataForm.type.includes(t)) {
       setDataForm({ ...dataForm, type: dataForm.type.filter((x) => x !== t) });
     } else {
@@ -169,20 +179,20 @@ function WordsCreator() {
                 ) : null}
               </div>
               
-              <div className="labels">
+              {/* NUEVA SECCIÓN DE TIPOS (TAGS) */}
+              <div className="type-container">
                 {AllTypes.map((t) => (
-                  <label key={t}>
-                    <input
-                      type="checkbox"
-                      checked={dataForm.type.includes(t)}
-                      onChange={() => handleCheckboxChange(t)}
-                    />
+                  <div 
+                    key={t}
+                    className={`type-tag ${dataForm.type.includes(t) ? 'active' : ''}`}
+                    onClick={() => toggleType(t)}
+                  >
                     {t}
-                  </label>
+                  </div>
                 ))}
               </div>
 
-              {/* Text inputs basicos */}
+              {/* Text inputs basicos (LIMITADOS A 50 chars) */}
               <div>
                 {["name", "past", "participle", "gerund"].map((field) => (
                   <div className="form-control" key={field}>
@@ -190,6 +200,7 @@ function WordsCreator() {
                       className="input-alt"
                       type="text"
                       name={field}
+                      maxLength={50} // Límite Backend
                       placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                       onChange={FormHandlerInput}
                       value={dataForm[field]}
@@ -220,6 +231,7 @@ function WordsCreator() {
                           className="input"
                           name="image"
                           type="text"
+                          maxLength={150} // Límite Backend
                           placeholder="Paste image URL here"
                           onChange={FormHandlerInput}
                           value={dataForm.image}
@@ -259,13 +271,15 @@ function WordsCreator() {
                 <textarea
                   name="meaning"
                   onChange={FormHandlerInput}
+                  // Textarea no suele tener maxLength corto, pero puedes poner 65000 si quieres ser estricto
+                  maxLength={65000} 
                   placeholder="Type description..."
                   value={dataForm.meaning}
                 />
               </div>
               {BoolMeaning && <AutoMeaning nombre={dataForm.name} />}
               
-              {/* Examples */}
+              {/* Examples (LIMITADO) */}
               <div className="examples">
                 <div className="section-header">
                   <button
@@ -278,11 +292,15 @@ function WordsCreator() {
                   >
                     <TbBrightnessAutoFilled />
                   </button>
-
-                  <button className="buttomAdd" onClick={newExample} title="Add Example">
-                    <IoAddCircleSharp />
-                  </button>
-                  <span className="section-label">Examples</span>
+                  
+                  {/* BOTÓN DESAPARECE SI ALCANZAS EL LÍMITE */}
+                  {dataForm.example.length < MAX_EXAMPLES && (
+                    <button className="buttomAdd" onClick={newExample} title="Add Example">
+                        <IoAddCircleSharp />
+                    </button>
+                  )}
+                  
+                  <span className="section-label">Examples ({dataForm.example.length}/{MAX_EXAMPLES})</span>
                 </div>
 
                 {dataForm.example.map((input, index) => (
@@ -302,6 +320,7 @@ function WordsCreator() {
                       className="Input1"
                       type="text"
                       value={input}
+                      maxLength={70} // Límite prudente para que quepan 3 o 4 en 200 chars
                       placeholder={`Example ${index + 1}`}
                       onChange={(event) => handExampleChange(index, event)}
                     />
@@ -315,7 +334,7 @@ function WordsCreator() {
                 </div>
               )}
               
-              {/* Synonyms & Antonyms */}
+              {/* Synonyms & Antonyms (LIMITADO A 100) */}
               <div className="autoSyn">
                 {/* Synonyms Row */}
                 <div className="autoSyn-row">
@@ -334,6 +353,7 @@ function WordsCreator() {
                             className="input-alt"
                             type="text"
                             name="synonyms"
+                            maxLength={100} // Límite Backend
                             placeholder="Synonyms"
                             onChange={(e) => setDataForm({ ...dataForm, synonyms: e.target.value })}
                             value={dataForm.synonyms}
@@ -358,6 +378,7 @@ function WordsCreator() {
                             className="input-alt"
                             type="text"
                             name="antonyms"
+                            maxLength={100} // Límite Backend
                             placeholder="Antonyms"
                             onChange={(e) => setDataForm({ ...dataForm, antonyms: e.target.value })}
                             value={dataForm.antonyms}
