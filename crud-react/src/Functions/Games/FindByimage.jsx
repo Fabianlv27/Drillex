@@ -1,101 +1,158 @@
 import { useState, useContext, useEffect } from "react";
 import { ListsContext } from "../../../Contexts/ListsContext";
 import { WordsContext } from "../../../Contexts/WordsContext";
-import "../SingleSp.css";
-import "../../styles/ImageGame.css";
+import { useParams, useNavigate } from "react-router-dom"; // <--- 1. Importar Hooks de Router
+import "../SingleSp.css"; 
+import "../../styles/ImageGame.css"; 
 import { MdNotStarted } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { Shuffler } from "../../Functions/Actions/Shuffler.js";
 
 function FindByimage() {
-  const { GetList, CurrentListId, setCurrentList, UserLists } = useContext(ListsContext);
+  // --- HOOKS DE ROUTER ---
+  const { listId } = useParams(); 
+  const navigate = useNavigate();
+
+  // --- CONTEXTOS ---
+  const { GetList, UserLists } = useContext(ListsContext);
   const { GetWords } = useContext(WordsContext);
+  
+  // --- ESTADOS ---
   const [ShowGame, setShowGame] = useState(false);
-  const [Choises, setChoises] = useState([]);
+  const [Choices, setChoices] = useState([]); 
   const [Index, setIndex] = useState(0);
-  const [Random, setRandom] = useState([]);
-  const [IsCorrect, setIsCorrect] = useState(0);
-  const [NoWords, setNoWords] = useState(false);
+  const [RandomWords, setRandomWords] = useState([]);
+  const [GameStatus, setGameStatus] = useState("playing"); 
+  const [ErrorMessage, setErrorMessage] = useState("");
+  
+  // Estado local para el Select (igual que en HangedGame)
+  const [selectedList, setSelectedList] = useState(""); 
 
+  // --- EFECTO PRINCIPAL (IGUAL QUE HANGEDGAME) ---
   useEffect(() => {
-    const init = async () => setCurrentList(await GetList());
-    init();
-  }, []);
-
-  const HandlerChoises = (TempRandom, i) => {
-    let NumbersChoise = [];
-    while (NumbersChoise.length < 3) {
-      let RandomNum = Math.floor(Math.random() * (TempRandom.length));
-      if (!NumbersChoise.includes(RandomNum) && RandomNum !== i) {
-        NumbersChoise.push(RandomNum);
+    const initGame = async () => {
+      // 1. Cargar listas si no existen
+      let availableLists = UserLists;
+      if (availableLists.length === 0) {
+        availableLists = await GetList();
       }
-    }
-    NumbersChoise[Math.floor(Math.random() * 3)] = i; // Insert correct answer randomly
-    setChoises(NumbersChoise);
+
+      // 2. Lógica de URL
+      if (listId) {
+        const targetList = availableLists.find((l) => l.id.toString() === listId);
+
+        if (targetList) {
+          // Sincronizamos el select visualmente
+          setSelectedList(targetList.id);
+          
+          // Iniciamos el juego si no está activo o si cambió la lista
+          if (!ShowGame || RandomWords.length === 0) {
+              startGame(targetList.id);
+          }
+        } else {
+          console.warn("Lista no encontrada");
+          navigate("/ImageGame"); // Volver al raíz si el ID es malo
+        }
+      } else {
+        // Si no hay ID en URL, reseteamos a la vista de menú
+        setShowGame(false);
+        setRandomWords([]);
+        setSelectedList("");
+      }
+    };
+
+    initGame();
+  }, [listId, UserLists]); 
+
+  // --- LÓGICA DEL JUEGO ---
+
+  const generateChoices = (currentWord, allWords) => {
+    const distractors = allWords.filter(w => w.id_Word !== currentWord.id_Word);
+    const shuffledDistractors = Shuffler(distractors).slice(0, 3);
+    const options = [...shuffledDistractors, currentWord];
+    return Shuffler(options);
   };
 
-  const DeleteNoImage = (lista) => {
-    return lista.filter(element => element.image && element.image !== "");
-  };
-
-  const startGame = async () => {
-    const words = await GetWords(CurrentListId); // O CurrentListId.id según tu contexto
-    const ListWithImage = DeleteNoImage(words);
+  // Ahora startGame recibe el ID directamente (desde el useEffect)
+  const startGame = async (idToUse) => {
+    setErrorMessage("");
     
-    if (ListWithImage.length >= 4) { // Necesitas al menos 4 para tener opciones incorrectas
-      const TempSh = Shuffler(ListWithImage);
-      setRandom(TempSh);
-      HandlerChoises(TempSh, 0);
-      setShowGame(true);
-      setNoWords(false);
-    } else {
-      setNoWords(true);
-    }
-  };
+    if (!idToUse) return;
 
-  const Check = (nameToTest) => {
-    if (nameToTest == Random[Index].name) {
-      setIsCorrect(2);
-    } else {
-      setIsCorrect(1);
-    }
-  };
+    const words = await GetWords(idToUse, 'image');
+    const validWords = words.filter(w => w.image && w.image.trim() !== "");
 
-  const Next = () => {
-    if (Random[Index + 1]) {
-      setChoises([]);
-      setIsCorrect(0);
-      HandlerChoises(Random, Index + 1);
-      setIndex(Index + 1);
-    } else {
+    if (validWords.length >= 4) {
+      const shuffled = Shuffler(validWords);
+      setRandomWords(shuffled);
       setIndex(0);
+      setChoices(generateChoices(shuffled[0], shuffled));
+      setGameStatus("playing");
+      setShowGame(true);
+    } else {
+      setErrorMessage("Not enough words with images in this list (Minimum 4 required).");
       setShowGame(false);
     }
   };
 
+  const handleAnswer = (selectedWord) => {
+    const correctWord = RandomWords[Index];
+    if (selectedWord.id_Word === correctWord.id_Word) {
+      setGameStatus("won");
+    } else {
+      setGameStatus("lost");
+    }
+  };
+
+  const nextLevel = () => {
+    if (Index + 1 < RandomWords.length) {
+      const nextIdx = Index + 1;
+      setIndex(nextIdx);
+      setGameStatus("playing");
+      setChoices(generateChoices(RandomWords[nextIdx], RandomWords));
+    } else {
+        setIndex(0);
+        setShowGame(false);
+        navigate("/ImageGame"); // Volver al menú al terminar
+        alert("Game Finished!");
+    }
+  };
+
+  // --- RENDER ---
   return (
-    <div className="FindBImage MainBackground">
-      <h1>Image Game</h1>
+    <div className="MainBackground ImageGameContainer">
+      <h1>Visual Memory</h1>
       
-      {/* MENÚ ESTÁNDAR */}
+      {/* MENÚ DE SELECCIÓN ESTÁNDAR (IGUAL QUE HANGEDGAME) */}
       {!ShowGame && (
         <div className="StandardMenuImg">
-           <div className="labelAndOption" style={{display:'flex', gap:'15px', alignItems:'center'}}>
+           <div className="labelAndOption">
             {UserLists.length > 0 ? (
-              <select onChange={(e) => setCurrentList(e.target.value)}>
-                {UserLists.map((list, index) => (
-                  <option key={index} value={list.id}>
+              <select 
+                // 1. Solo actualiza estado local
+                onChange={(e) => setSelectedList(e.target.value)}
+                value={selectedList || ""}
+              >
+                <option value="" disabled>Select a list</option>
+                {UserLists.map((list) => (
+                  <option key={list.id} value={list.id}>
                     {list.title}
                   </option>
                 ))}
               </select>
             ) : (
-              <p>No lists</p>
+              <p>No lists found</p>
             )}
+            
+            {/* 2. El botón navega (trigger) */}
             <button
               className="ActionButtoms s"
-              disabled={UserLists.length == 0}
-              onClick={startGame}
+              disabled={!selectedList}
+              onClick={() => {
+                  if(selectedList) {
+                      navigate(`/ImageGame/${selectedList}`);
+                  }
+              }}
             >
               <MdNotStarted />
             </button>
@@ -103,33 +160,63 @@ function FindByimage() {
         </div>
       )}
 
-      {NoWords && <p style={{ color: "white", marginTop: "2rem" }}>Not enough words with images (need 4+).</p>}
+      {ErrorMessage && (
+          <div style={{
+              background: 'rgba(255, 71, 87, 0.2)', 
+              border: '1px solid #ff4757', 
+              padding: '1rem', 
+              borderRadius: '10px',
+              marginTop: '1rem'
+          }}>
+              <p style={{ color: "white" }}>{ErrorMessage}</p>
+          </div>
+      )}
 
-      {/* JUEGO */}
-      {ShowGame && Random.length > 0 && (
+      {/* ÁREA DE JUEGO */}
+      {ShowGame && RandomWords.length > 0 && (
         <div className="GameImage">
-            <div className={`${IsCorrect !== 0 ? "blocked" : ""}`} style={{width:'100%'}}>
-              <h2>What is it?</h2>
-              {Random[Index] && <img src={Random[Index].image} alt="Guess this" />}
-              <div className="OptionsContainer">
-                {Choises.map((c, i) => (
-                  <button onClick={() => Check(Random[c].name)} key={i}>
-                    {Random[c].name}
-                  </button>
-                ))}
-              </div>
+            
+            <h2>What is this?</h2>
+            
+            <div className="ImageContainer">
+                <img 
+                    src={RandomWords[Index].image} 
+                    alt="Guess the word" 
+                />
             </div>
 
-            {IsCorrect !== 0 && (
-              <div className="LoseMenu" style={{marginTop:'20px'}}>
-                <h2 style={{color: IsCorrect === 2 ? '#00ffaa' : '#ff4757'}}>
-                    {IsCorrect === 2 ? "Correct!" : "Wrong!"}
-                </h2>
-                <p style={{color:'white'}}>Answer: {Random[Index].name}</p>
-                <button className="ActionButtoms" onClick={Next}>
-                  <GrNext />
-                </button>
-              </div>
+            <div className={`OptionsGrid ${GameStatus !== "playing" ? "blocked" : ""}`}>
+                {Choices.map((option, i) => {
+                    let btnClass = "OptionButton";
+                    if (GameStatus !== "playing") {
+                        if (option.id_Word === RandomWords[Index].id_Word) btnClass += " correct";
+                        else btnClass += " wrong";
+                    }
+
+                    return (
+                        <button 
+                            key={i} 
+                            className={btnClass}
+                            onClick={() => handleAnswer(option)}
+                        >
+                            {option.name}
+                        </button>
+                    )
+                })}
+            </div>
+
+            {GameStatus !== "playing" && (
+                <div className="ResultOverlay">
+                    <h3 style={{color: GameStatus === "won" ? "#00ffaa" : "#ff4757"}}>
+                        {GameStatus === "won" ? "Correct!" : "Oops!"}
+                    </h3>
+                    <p style={{color:'white', marginBottom:'10px'}}>
+                        It was: <b>{RandomWords[Index].name}</b>
+                    </p>
+                    <button className="ActionButtoms" onClick={nextLevel}>
+                        <GrNext />
+                    </button>
+                </div>
             )}
         </div>
       )}

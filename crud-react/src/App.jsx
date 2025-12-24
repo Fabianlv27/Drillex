@@ -119,7 +119,7 @@ function AppContent() {
                   }
                 />
                 <Route
-                  path="/ImageGame"
+                  path="/ImageGame/:listId?"
                   element={
                     <ProtectedRoute>
                       <FindByImage />
@@ -143,7 +143,7 @@ function AppContent() {
                   }
                 />
                 <Route
-                  path="/SynAntGame"
+                  path="/SynAntGame/:listId?"
                   element={
                     <ProtectedRoute>
                       <SymAntsGame />
