@@ -66,24 +66,21 @@ function AllWords() {
     setShowMoveMenu(!ShowMoveMenu);
   };
 
-  useEffect(() => {
+useEffect(() => {
     GetList();
-
     const words = async () => {
-
       try {
-        console.log(UserLists)
-        console.log(idCurrentList);
-        const Words = await GetWords(idCurrentList,'default',listName);
-        setAllwordsData(Words);
-        console.log(Words);
+        const Words = await GetWords(idCurrentList, 'default', listName);
+        console.log("Datos recibidos:", Words); // Confirma que esto se imprime
+        
+        // Asegúrate de enviar un array, incluso si Words es null/undefined
+        setAllwordsData(Array.isArray(Words) ? Words : []); 
       } catch (error) {
-        console.log(error)
-       // window.location.href = `/Hero`;
+        console.log(error);
       }
     };
     words();
-  }, []);
+  }, [idCurrentList]);
 
   const CreateRef = (a) => {
     audioRef.current = new Audio(`${a}`);
@@ -383,12 +380,13 @@ function AllWords() {
         )}
       </div>
 
-      <div className="WordsContainer">
-        {AllwordsData.length === 0
-          ? "Empty Array"
-          : AllwordsData.map((word, i) => (
+     <div className="WordsContainer">
+        {/* 2. CORRECCIÓN EN EL RENDERIZADO */}
+        {/* Validamos que AllwordsData exista y sea un array con elementos */}
+        {AllwordsData && AllwordsData.length > 0 ? (
+           AllwordsData.map((word, i) => (
               <WordsItems
-                key={word.id_Word}
+                key={word.id_Word || i} // Usa fallback 'i' por seguridad
                 id={word.id_Word}
                 name={word.name}
                 example={word.example}
@@ -402,7 +400,13 @@ function AllWords() {
                 gerund={word.gerund}
                 index={i}
               />
-            ))}
+            ))
+        ) : (
+            // Mensaje si no hay datos o el array está vacío
+            <p style={{color:'white', textAlign:'center', marginTop:'2rem'}}>
+                {AllwordsData ? "No words found in this list." : "Loading..."}
+            </p>
+        )}
       </div>
     </div>
   );

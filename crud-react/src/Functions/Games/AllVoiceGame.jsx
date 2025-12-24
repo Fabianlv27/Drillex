@@ -221,7 +221,7 @@ function AllVoiceGame() {
             {/* Oraciones */}
             <div className="AllVExamplesMenu">
                 {Random[Index].example.map((e, indexEx) => (
-                    <div key={indexEx} className="inputsAndText">
+                    <div key={indexEx} className="inputsAndTextA">
                         {e.split(" ").map((w, i) => {
                             // Verificamos si esta palabra en esta posición (i) del ejemplo (indexEx) debe estar oculta
                             // La lógica original usaba string matching complejo, aquí usamos indices más seguros si es posible,
@@ -268,7 +268,7 @@ function AllVoiceGame() {
             </div>
 
             {/* Botones de Acción */}
-            <div style={{marginTop: '2rem', width:'100%', display:'flex', justifyContent:'center'}}>
+            <div style={{marginTop: '1rem', width:'100%', display:'flex', justifyContent:'center'}}>
                 {!ShowCorrection ? (
                     <button className="ActionButtoms" onClick={CheckResponses}><FaCheck /></button>
                 ) : (

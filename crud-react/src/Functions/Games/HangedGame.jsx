@@ -255,7 +255,7 @@ function HangedGame() {
           width: "100%", 
           position: "relative",
           padding: "0 20px",
-          marginTop:"12rem"
+          marginTop:"7rem"
       }}>
          {ShowGame && (
             <button 

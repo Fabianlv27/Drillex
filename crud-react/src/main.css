@@ -118,8 +118,7 @@ nav input{
 
 /* 4. FONDO PRINCIPAL */
 .MainBackground {
-  width: 100%;           /* Ocupa todo el ancho disponible */
-  min-height: 100vh;     /* Ocupa al menos toda la altura de la pantalla */
+  width: 100%;           /* Ocupa todo el ancho disponible */  /* Ocupa al menos toda la altura de la pantalla */
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,7 +1,9 @@
 /* --- RESET Y ESTRUCTURA PRINCIPAL --- */
+.MainBackgroundC{
+margin-top: 7rem;
+}
 .MainBackground {
   background-color: #0e0c1d;
-  min-height: 100vh;
   display: flex;
   align-items: flex-start; /* Importante: flex-start para permitir scroll si el form es alto */
   padding: 1rem;

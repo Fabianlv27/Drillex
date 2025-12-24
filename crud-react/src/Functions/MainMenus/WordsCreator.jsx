@@ -154,7 +154,7 @@ function WordsCreator() {
   };
 
   return (
-    <div className="MainBackground">
+    <div className="MainBackground MainBackgroundC">
       <div className="CreateMenu">
         <h1>{mode == "update" ? "EDIT WORD" : "CREATE WORD"}</h1>
         <div className="MiniCreator">

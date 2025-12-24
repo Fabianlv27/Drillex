@@ -28,7 +28,7 @@
 /* Tablero de Juego */
 .GameVoice {
     width: 95%;
-    max-width: 800px; /* Más ancho porque hay oraciones */
+    max-width: 500px; /* Más ancho porque hay oraciones */
     border: 2px solid rgb(0, 195, 255);
     background-color: rgb(7, 33, 56);
     border-radius: 20px;
@@ -41,7 +41,7 @@
 }
 
 .WordToComplete {
-    margin: 1.5rem 0;
+    margin-bottom: 1rem;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -64,7 +64,7 @@
     width: 100%;
 }
 
-.inputsAndText {
+.inputsAndTextA {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -73,9 +73,10 @@
     margin-bottom: 1rem;
     font-size: 1.1rem;
     line-height: 2;
+    background-color: #051624;
 }
 
-.inputsAndText input {
+.inputsAndTextA input {
     border: none;
     border-bottom: 2px dashed whitesmoke;
     background: transparent;
@@ -85,12 +86,12 @@
     font-size: 1rem;
 }
 
-.inputsAndText input.Right {
+.inputsAndTextA input.Right {
     border-bottom: 2px solid #00ffaa;
     color: #00ffaa;
 }
 
-.inputsAndText input.Wrong {
+.inputsAndTextA input.Wrong {
     border-bottom: 2px solid #ff4757;
     color: #ff4757;
 }
@@ -100,6 +101,7 @@ audio {
     width: 100%;
     max-width: 400px;
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 /* Corrección */
