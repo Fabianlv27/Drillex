@@ -105,17 +105,38 @@
     box-shadow: 0 0 15px #47c9ff;
     transform: translateY(-2px);
 }
+.WoLMenu h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-/* MENÚ DE PERDER/GANAR */
+/* MENÚ DE PERDER/GANAR (Refactorizado) */
 .WoLMenu {
     width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 500px;
     text-align: center;
-    background-color: rgba(7, 33, 56, 0.9);
+    background-color: rgb(7, 33, 56); /* Color sólido para tapar lo de atrás */
     padding: 2rem;
     border-radius: 20px;
-    border: 1px solid #47c9ff;
+    border: 2px solid #47c9ff; /* Borde un poco más grueso */
     margin-top: 2rem;
+    
+    /* Centrado Flex automático (por si acaso el padre falla) */
+    align-self: center; 
+    
+    /* Animación suave propia (solo opacidad, sin movimiento raro) */
+    animation: simpleFadeIn 0.3s ease-out;
+    box-shadow: 0 0 30px rgba(0, 195, 255, 0.2); /* Glow cyberpunk */
+}
+/* Animación simple sin saltos de posición */
+@keyframes simpleFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive */

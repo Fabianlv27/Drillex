@@ -241,7 +241,7 @@ function SymAntsGame() {
             </div>
           </div>
         ) : (
-          <div className="LoseMenu WoLMenu">
+          <div className="WoLMenu">
             <h2 style={{color: isRight ? '#00ffaa' : '#ff4757'}}>
                 {isRight ? "Correct!" : "Wrong!"}
             </h2>
