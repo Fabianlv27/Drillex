@@ -254,10 +254,18 @@
         margin-bottom: 10px;
     }
 
-    .navbar .nav-link-main {
-        justify-content: space-between; /* Texto izq, flecha der */
+ .navbar .nav-link-main {
+        /* CAMBIO AQUÍ: */
+        justify-content: flex-start; /* Alinea todo a la izquierda por defecto */
+        gap: 15px; /* Espacio fijo entre el icono y el texto */
         background-color: rgba(255,255,255,0.03);
         font-size: 1.3rem;
+        width: 100%; /* Asegura que ocupe todo el ancho */
+    }
+    /* NUEVA REGLA: Empujar la flecha a la derecha */
+    .navbar .arrow {
+        margin-left: auto; /* Esto fuerza a la flecha a irse al final del contenedor */
+        display: block; /* Asegura que se muestre */
     }
 
     /* En móvil, los dropdowns son estáticos (acordeón) */

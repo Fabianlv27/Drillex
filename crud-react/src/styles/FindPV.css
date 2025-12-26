@@ -1,310 +1,350 @@
-.FindPVMenuMain{
-    margin-top: 10vh;
+/* FindPV.css */
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.FindPVMenuMain {
+    margin-top: 7rem; /* Ajuste Navbar */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    min-height: 80vh;
+}
+
+.FindPVMenuMain h1 {
+    color: rgb(0, 195, 255);
     text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
-.FindPVMenuMain h1{
-font-size: 2.5rem;
-margin-bottom: 1rem;
+
+/* --- TABS DE NAVEGACIÓN (Radio Inputs Modernos) --- */
+.ModeTabs {
+    display: flex;
+    background-color: rgba(7, 33, 56, 0.8);
+    border-radius: 50px;
+    padding: 5px;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+    border: 1px solid rgba(0, 195, 255, 0.3);
 }
-.radio-inputs {
-    position: relative;
-    display: flex;
-    border-radius: 0.5rem;
-    
-    background: rgb(39,117,117);
-background: linear-gradient(0deg, rgba(39,117,117,1) 0%, rgba(20,159,160,1) 24%, rgba(0,195,255,1) 100%);
-    box-sizing: border-box;
-    font-size: 14px;
-    width: 90%;
-    padding: 1rem 1rem 0 1rem;
-    margin-top: 5%;
-    margin-bottom: 10%;
-  }
-  
-  .radio-inputs .radio input {
-    display: none;
-  }
-  
-  .radio-inputs .radio .name {
-    display: flex;
+
+.TabOption {
+    padding: 10px 25px;
+    border-radius: 50px;
     cursor: pointer;
+    color: #aaa;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-    border: none;
-    padding: 0.5rem 0.8rem;
- 
-    transition: all 0.15s ease-in-out;
-    position: relative;
-  }
-  
-  .radio-inputs .radio input:checked + .name {
-    background-color: rgb(7, 33, 56) ;
-    font-weight: 600;
-  }
-  .radio-inputs .radio input + .name:hover {
+}
+
+.TabOption:hover {
     color: white;
-  }
-  .radio-inputs .radio input:checked + .name:hover {
-    color: #ffffff;
-  }
-  
-  .radio-inputs .radio input:checked + .name::after,
-  .radio-inputs .radio input:checked + .name::before {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: transparent;
-    bottom: 0;
-    
-  }
-  
-  .radio-inputs .radio input:checked + .name::after {
-    right: -10px;
-    border-bottom-left-radius: 300px;
-    box-shadow: -3px 3px 0px 3px rgb(7, 33, 56) ;
-    
-  }
-  .radio-inputs .radio input:checked + .name::before {
-    left: -10px;
-    border-bottom-right-radius: 300px;
-    box-shadow: 3px 3px 0px 3px rgb(7, 33, 56) ;
-  }
-  .name{
-font-weight: bolder;
-text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.448);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
- font-size: 20px;
-    color: rgb(255, 255, 255);
-  }
-  .MainModeMenu{
-    height: auto;
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-   margin-left: 3%
-  }
-  .MainModeMenu p{
-  margin: 2%;
-  color: aliceblue;
-  }
-  .AllModes{
-    height: auto;
-    width: 100%;
-  }
+    background-color: rgba(255,255,255,0.05);
+}
 
-  .PVCard{
-    height: auto;
-    width: 24rem;
-    border: solid 5px rgb(7 ,33, 56);
-    background-color: rgba(5, 23, 40, 0.314) ;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    margin-left: 2%;
+.TabOption.active {
+    background-color: #00c3ff;
+    color: #072138;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+}
+
+/* --- CONTENEDORES DE MODO --- */
+.ModeContainer {
+    width: 95%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.ControlPanel {
+    background-color: #072138;
+    border: 1px solid #00c3ff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.ControlPanel h3 {
+    color: #00c3ff;
+    margin-bottom: 0.5rem;
+}
+
+.ControlRow {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.ControlRow select {
+    width: auto;
+    min-width: 100px;
+    padding: 8px;
+    background: #0a1520;
+    color: white;
+    border: 1px solid #00c3ff;
+    border-radius: 5px;
+}
+
+/* --- TARJETA DE PHRASAL VERB --- */
+.PVCard {
+    background-color: rgba(14, 12, 29, 0.9);
+    border: 2px solid #00c3ff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 195, 255, 0.15);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.PV-Header {
+    background: linear-gradient(90deg, #072138, #0a2a4a);
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #00c3ff;
+}
+
+.PV-Header h2 {
+    color: #00c3ff;
+    font-size: 1.8rem;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+.PV-Content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Tabla de Tiempos */
+.PV-Table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.PV-Table th {
+    background: rgba(0, 195, 255, 0.2);
+    color: #00c3ff;
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+.PV-Table td {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 0.95rem;
+}
+
+/* Significado y Ejemplos */
+.PV-Section {
+    background: rgba(255,255,255,0.03);
+    padding: 1rem;
     border-radius: 10px;
-  }
+    border-left: 3px solid #00c3ff;
+}
 
-  .TitleMenu{
-width: 100%;
-height: 7vh;
-background-color: rgb(7, 33, 56) ;
-display: flex;
-text-align: center;
-justify-content: center;
-align-items: center;
-  }
-  .MeaningBox p{
-    font-size: 15px;
-  }
-  .Tenses{
-    margin-top:0.5rem; 
-    width: 100% ;
-    font-family:roboto;
-  }
-  thead,tbody,th,td{
-border: solid 1px #00c3ff00;
-border-collapse: collapse;
-font-size: 1rem;
-text-align: center;
-  color:rgb(0, 195, 255) ;
+.PV-Section h4 {
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
 
+.PV-Section p {
+    color: white;
+    line-height: 1.5;
 }
-thead{
-  background-color: rgba(0, 0, 0, 0.582);
-}
-tbody{
-  background-color:rgba(6, 43, 86, 0.92);
-  overflow: scroll;
-}
-table{
-  width: 100%;
-  border-collapse: collapse;
-} 
-.examplesPVMenu{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-    max-height: 20vh;
-    overflow: scroll;
-    scrollbar-width: none;
-}
-.examplesPVMenu span{
-  font-size: 1.2rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-  .singleExPv{
 
-    height: auto;
-    width: 90%;
-    text-align: left;
-        max-height: 40vh;
-      display: flex;
-      flex-direction: column;
-      overflow: scroll;
-   margin-bottom: 5%;
-   scrollbar-width: none;
-  }
-  .singleExPv p{
-  margin-top: 10px;
-  font-size: 15px;
-  }
-  .AntCardPhr{
-    border: solid 2px red;
-    background-color: rgba(255, 0, 0, 0.674);
-}
-.SynCardPhr{
-    border: solid 2px rgba(0, 195, 255, 0.644);
-    background-color: rgba(0, 195, 255, 0.648); 
-}
-.IntANdFr{
-    height: auto;
-    width: 100%;
+.PV-List li {
+    color: #dfe6e9;
+    margin-bottom: 0.5rem;
+    list-style: none;
     display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-}
-.IntANdFr p{
-  margin: 5%;
-}
-.ButtomsMenuPV{
-  height: auto;
-  width: 100%;
-margin-top: 5%;
-background-color: rgb(7, 33, 56);
-}
-.ButtomsMenuPV button{
-  margin: 2%;
-}
-.ActionButtoms{    
-  height: 30px;
-    width: 30px;}
-.AddMenuPV{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding: 15px;
-  background-color: rgb(7, 33, 56) ;
-  border-radius: 20px;
-  border: 4px double rgb(0, 195, 255);
-  font-size: 1.5rem;
-  color: rgb(0, 195, 255);
-}
-.Note{
-  height: auto;
-  width: 100%;
-  background-color: rgb(6, 145, 138);
-  color: black;
-  margin-left: 7%;
-  margin: 5%;
-}
-.inputAndSearch{
-  width: 100%;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 5%;
-}
-.inputAndSearch button{
-  height: 4rem;
-  width: 4rem;
-  border: none;
-
-}
-.inputAndSearch input{
-  background-color: transparent;
-  border: none;
-  border-bottom: solid white;
-  color: #ffffff;
-  font-size: 15px;
-  margin-top: 1.5rem;
-}
-.inputAndSearch input:focus{
-  outline: none;
-}
-.inputAndSearch ul{
-  background: rgb(39,117,117);
-  background: linear-gradient(0deg, rgba(39,117,117,0.8038865204284839) 0%, rgba(19,92,92,0.8010853999803046) 39%, rgba(20,159,160,0.7982842795321253) 100%, rgba(0,195,255,0.7982842795321253) 100%);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-.inputAndSearch li:hover{
-transform: scale(1.1);
-}
-.MainSpvCard{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto;
-  width: 95%;
-  color: #ffffff;
-  font-size: 20px;
-}
-.AddMenuPV_Internal {
-  width: 100%;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed rgba(0, 195, 255, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: fadeIn 0.3s ease-in;
-}
-
-.AddControls {
-    display: flex;
-    align-items: center;
     gap: 10px;
-    width: 90%;
-    justify-content: center;
 }
 
-.AddControls select {
-    margin: 0; /* Quitamos margen heredado */
-    width: 70%;
-    max-width: 200px;
+/* Tags (Sinónimos/Antónimos/Info) */
+.PV-Tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.AddSuccess {
-    color: rgb(0, 255, 157);
+.Tag {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
     font-weight: bold;
+}
+
+.Tag.Syn { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid #00ffaa; }
+.Tag.Ant { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid #ff4757; }
+.Tag.Info { background: rgba(0, 195, 255, 0.1); color: #00c3ff; border: 1px solid #00c3ff; }
+
+/* Footer de Tarjeta (Botones) */
+.PV-Footer {
+    padding: 1rem;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.NavBtn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.NavBtn:hover {
+    border-color: #00c3ff;
+    color: #00c3ff;
+}
+
+.AddBtn {
+    background: #00c3ff;
+    color: #072138;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 5px;
+    transition: transform 0.2s;
+}
+
+.AddBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.4);
+}
+
+/* --- MENÚ DE AGREGAR (Dropdown interno) --- */
+.AddDropdown {
+    background: #0a1520;
+    padding: 1rem;
+    border-top: 1px solid #00c3ff;
+    animation: fadeIn 0.3s;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.AddDropdown select {
+    background: #072138;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.ConfirmAddBtn {
+    background: #00ffaa;
+    color: #072138;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- BÚSQUEDA --- */
+.SearchContainer {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    display: flex;
+    gap: 10px;
+}
+
+.SearchInput {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    border: 1px solid #00c3ff;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    outline: none;
+}
+
+.SearchBtn {
+    background: #00c3ff;
+    color: #072138;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.SuggestionsList {
+    position: absolute;
+    top: 55px;
+    left: 0;
+    width: 100%;
+    background: #072138;
+    border: 1px solid #444;
+    border-radius: 10px;
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.SuggestionsList li {
+    padding: 10px;
+    color: #ccc;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.SuggestionsList li:hover {
+    background: rgba(0, 195, 255, 0.1);
+    color: white;
 }
 
 @keyframes fadeIn {

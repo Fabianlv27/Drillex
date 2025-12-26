@@ -173,7 +173,7 @@ function AllWords() {
                 <WordCard 
                     key={word.id_Word || i}
                     word={word}
-                    onWordClick={handleWordClick} // <--- Pasamos la función aquí
+                    onWordClick={handleWordClick} 
                     onPlay={playSound}
                     onEdit={handleEditWord}
                     onDelete={(id) => { settempId(id); setShowConfirmDelete(true); }}

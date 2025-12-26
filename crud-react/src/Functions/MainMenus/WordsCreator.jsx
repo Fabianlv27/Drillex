@@ -94,12 +94,13 @@ function WordsCreator() {
       if (mode != "update") {
         await AddWord(CurrentListId.id ? [CurrentListId.id] : [UserLists[0].id], DeleteEmptyExample());
       } else {
-        HandlerUpdate(idCurrentList, dataForm.id);
+        console.log(dataForm)
+        HandlerUpdate(idCurrentList, dataForm.id_Word);
         GetWords(idCurrentList);
         history(`/AllWords/${titleCurrentList}/${idCurrentList}`);
       }
       // Reset logic...
-      setDataForm({ name: "", meaning: "", past: "", participle: "", gerund: "", type: [], example: [""], image: "", synomyms: "", antonyms: "", id: "" });
+      setDataForm({ name: "", meaning: "", past: "", participle: "", gerund: "", type: [], example: [""], image: "", synomyms: "", antonyms: "", id_Word: "" });
       setAuto(false);
       setBoolMeaning(false);
       setAddImageBool(false);

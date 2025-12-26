@@ -89,8 +89,8 @@ def ByLetter(request: Request,Letter: str, n: int, user_id: str = Depends(get_cu
     return phr_list[:n]
 
 @Phrasals.get("/SearchPhr/{word}")
-@limiter.limit("20/minute")
-def getPhr(request: Request,word: str, user_id: str = Depends(get_current_user_id)):
+@limiter.limit("60/minute")
+def getPhr(request: Request,word: str):
     # Buscar frases que coincidan con la palabra
     capitalized_word = word.capitalize()
     
