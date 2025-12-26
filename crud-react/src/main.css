@@ -559,11 +559,14 @@ font-weight: bolder;
   .oneCard img{
     width: 90px;
   }
+ 
 }
 .listMove:hover{
   background-color: rgb(9, 55, 71);
 }
-
+ .MainBackground{
+  margin-top: 6rem;
+}
 /* --- SCROLLBAR PERSONALIZADO --- */
 
 /* 1. Ancho y Alto de la barra */

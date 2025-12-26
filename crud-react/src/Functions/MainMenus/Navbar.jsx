@@ -111,7 +111,7 @@ function Navbar() {
                 <p onClick={() => { history("/Random"); closeMenus(); }}>Random Repetition</p>
                 <p onClick={() => { history("/Hand"); closeMenus(); }}>Hanged</p>
                 <p onClick={() => { history("/ImageGame"); closeMenus(); }}>Visual Memory</p>
-                <p onClick={() => { history("/SynAnts"); closeMenus(); }}>Synonyms & Antonyms</p>
+                <p onClick={() => { history("/SynAntGame"); closeMenus(); }}>Synonyms & Antonyms</p>
                 <p onClick={() => { history("/AllVoiceGame"); closeMenus(); }}>Listening</p>
                 <p onClick={() => { history("/WSkills"); closeMenus(); }}>Writing AI</p>
               </div>

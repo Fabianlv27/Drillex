@@ -4,30 +4,58 @@ import { ListsContext } from "../../../Contexts/ListsContext";
 import ListCreator from "../secondary menus/ListCreator";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { CgCloseO } from "react-icons/cg";
+import { GrPrevious, GrNext } from "react-icons/gr"; // Iconos para paginación
+import "../../styles/SeeLists.css";
+
 function AllLists() {
   const history = useNavigate();
-  const { setCurrentList, GetList, UserLists } =
-    useContext(ListsContext);
+  const { setCurrentList, GetList, UserLists } = useContext(ListsContext);
   const [ShowCreateList, setShowCreateList] = useState(false);
+
+  // --- PAGINACIÓN ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Número de listas por página
 
   useEffect(() => {
     GetList();
   }, []);
 
+  // Lógica de Paginación
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentLists = UserLists.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(UserLists.length / itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <div className="MainBackground MyLists">
       <h1>Your Lists</h1>
+      
+      {/* Botón Crear */}
       <button className="ActionButtoms" onClick={() => setShowCreateList(true)}>
         <MdOutlineCreateNewFolder />
       </button>
+
+      {/* Modal Crear Lista */}
       {ShowCreateList && (
-        <div className="ListsCreatorMenu">
-          <button onClick={() => setShowCreateList(false)}>
-            <CgCloseO />
-          </button>
-          <ListCreator Show={setShowCreateList} />
+        <div className="ModalOverlay">
+            <div className="ListsCreatorMenu">
+            <button className="CloseModalBtn" onClick={() => setShowCreateList(false)}>
+                <CgCloseO />
+            </button>
+            <ListCreator Show={setShowCreateList} />
+            </div>
         </div>
       )}
+
+      {/* Contenedor con SVG */}
       <div className="MyListsMenuContainer custom-shape-divider-top-17208831491">
         <svg
           data-name="Layer 1"
@@ -40,21 +68,40 @@ function AllLists() {
             className="shape-fill"
           ></path>
         </svg>
-        <div className="ListCont2">
-          {UserLists.length > 0
-            ? UserLists.map((list, index) => (
+
+        <div className="ListContentWrapper">
+            {/* GRID DE LISTAS */}
+            <div className="ListsGrid">
+            {currentLists.length > 0 ? (
+                currentLists.map((list, index) => (
                 <div
-                  key={index}
-                  className="MyListsMenu"
-                  onClick={() => {
+                    key={index}
+                    className="MyListsMenu"
+                    onClick={() => {
                     setCurrentList({ id: list.id, title: list.title });
                     history(`/AllWords/${list.title}/${list.id}`);
-                  }}
+                    }}
                 >
-                  <h3>{list.title}</h3>
+                    <h3>{list.title}</h3>
                 </div>
-              ))
-            : null}
+                ))
+            ) : (
+                <p style={{color: 'white', gridColumn: '1/-1'}}>No lists found. Create one!</p>
+            )}
+            </div>
+
+            {/* CONTROLES DE PAGINACIÓN */}
+            {totalPages > 1 && (
+                <div className="PaginationControls">
+                    <button onClick={prevPage} disabled={currentPage === 1} className="PageBtn">
+                        <GrPrevious />
+                    </button>
+                    <span className="PageInfo">Page {currentPage} of {totalPages}</span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="PageBtn">
+                        <GrNext />
+                    </button>
+                </div>
+            )}
         </div>
       </div>
     </div>

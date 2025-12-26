@@ -1,111 +1,87 @@
-
 import { BsFillSendCheckFill } from "react-icons/bs";
-import { useState,useContext ,useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 import { ListsContext } from "../../Contexts/ListsContext";
 import { WordsContext } from "../../Contexts/WordsContext";
 import PropTypes from 'prop-types';
+// Asegúrate de que el CSS esté importado globalmente o aquí
+import "../styles/LyricsAndWords.css";
 
-function AddWordToList({data,ExtraFunction,CurrentListId=""}) {
-     const [ListsToPost, setListsToPost] = useState([]);
-      const { AddWord } = useContext(WordsContext);
-     const {GetList,UserLists, setUserLists} = useContext(ListsContext)
-useEffect(() => {
-    if (UserLists.length == 0) {
+function AddWordToList({ data, ExtraFunction, CurrentListId = "" }) {
+  const [ListsToPost, setListsToPost] = useState([]);
+  const { AddWord } = useContext(WordsContext);
+  const { GetList, UserLists, setUserLists } = useContext(ListsContext);
+
+  useEffect(() => {
+    if (UserLists.length === 0) {
       GetList().then((fetchedLists) => {
-       setUserLists(fetchedLists)  ;
+        setUserLists(fetchedLists);
       });
     }
   }, []);
 
-     const PostData = async () => {
-      console.log(data)
-  await AddWord(ListsToPost,data);
-  if (ExtraFunction) {
-    console.log(ExtraFunction)
-    ExtraFunction();
-  }
+  const handleCheckboxChange = (listId) => {
+    if (ListsToPost.includes(listId)) {
+      setListsToPost(ListsToPost.filter((id) => id !== listId));
+    } else {
+      setListsToPost([...ListsToPost, listId]);
     }
+  };
+
+  const PostData = async () => {
+    if (ListsToPost.length === 0) return;
+    
+    // Enviamos el array de IDs
+    await AddWord(ListsToPost, data);
+    
+    if (ExtraFunction) {
+      ExtraFunction();
+    }
+  };
+
+  // Filtrar listas disponibles (excluyendo la actual)
+  const availableLists = UserLists.filter(list => list.id !== CurrentListId);
+
   return (
-                  <div
-                style={{
-                  height: "auto",
-                  width: "12rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "rgba(0, 0, 0, 0.72)",
-                  borderRadius: "10px",
-                  boxShadow: "0px 0px 20px black",
-                  backdropFilter: "blur(6px)",
-                }}
-              >
-                <div
-                  style={{
-                    marginTop: "1rem",
-                    marginBottom: "1rem",
-                    width: "8rem",
-                    height: "9rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "scroll",
-                    backgroundImage:
-                      "linear-gradient(to right,rgba(16, 15, 16, 0.91),rgba(17, 15, 18, 0.84),rgba(17, 16, 21, 0.86),rgba(16, 17, 23, 0.86),rgba(13, 18, 25, 0.83),rgba(14, 22, 29, 0.84),rgba(14, 25, 34, 0.88),rgba(12, 29, 38, 0.84),rgba(12, 35, 47, 0.87),rgba(10, 34, 45, 0.7),rgba(8, 33, 45, 0.7),rgba(5, 34, 45, 0.6))",
-                    scrollbarWidth: "none",
-                  }}
-                >
-                  <form>
-                    {UserLists.map((list, i) =>
-                      CurrentListId != list.id ? (
-                        <div
-                          key={i}
-                          style={{
-                            display: "flex",
-                            minHeight: "2rem",
-                            width: "99%",
-                            borderBottom: "solid 1px grey",
-                            alignItems: "center",
-                            color: "white",
-                          }}
-                        >
-                          <input
-                            checked={ListsToPost.includes(list.id)}
-                            onClick={() => {
-                              if (!ListsToPost.includes(list.id)) {
-                                setListsToPost([...ListsToPost, list.id]);
-                              } else {
-                                setListsToPost(
-                                  ListsToPost.filter((e) => e != list.id)
-                                );
-                              }
-                            }}
-                            type="radio"
-                            key={i}
-                            style={{ marginLeft: "0.5rem" }}
-                          />
-                          <label
-                            htmlFor="radio-free"
-                            style={{ marginLeft: "1rem" }}
-                          >
-                            {list.title}
-                          </label>
-                        </div>
-                      ) : null
-                    )}
-                  </form>
-                </div>
-                <button
-                  style={{ marginBottom: "1rem" }}
-                  className="ActionButtoms sent"
-                  onClick={PostData}
-                >
-                  <BsFillSendCheckFill />
-                </button>
-              </div>
-  )
+    <div className="AddToListCard">
+      <h4>Add to List</h4>
+      
+      {/* Esta clase ListScrollArea ahora tiene tu scrollbar personalizado */}
+      <div className="ListScrollArea">
+        {availableLists.length > 0 ? (
+          availableLists.map((list) => (
+            <label key={list.id} className="ListOption">
+              <input
+                type="checkbox"
+                checked={ListsToPost.includes(list.id)}
+                onChange={() => handleCheckboxChange(list.id)}
+              />
+              <span>{list.title}</span>
+            </label>
+          ))
+        ) : (
+          <p style={{ color: '#aaa', textAlign: 'center', fontSize: '0.8rem', padding: '10px' }}>
+            No other lists found.
+          </p>
+        )}
+      </div>
+
+      <button
+        className="BtnSendList"
+        onClick={PostData}
+        disabled={ListsToPost.length === 0}
+        title="Confirm selection"
+      >
+        <BsFillSendCheckFill /> 
+        <span>Add Words</span>
+      </button>
+    </div>
+  );
 }
+
 AddWordToList.propTypes = {
-  data: PropTypes.any.isRequired, // obligatorio
-  ExtraFunction: PropTypes.func, // opcional
-  CurrentListId: PropTypes.string // opcional
+  data: PropTypes.object.isRequired,
+  ExtraFunction: PropTypes.func,
+  CurrentListId: PropTypes.string
 };
-export default AddWordToList
+
+export default AddWordToList;

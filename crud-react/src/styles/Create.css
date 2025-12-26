@@ -7,7 +7,6 @@ margin-top: 7rem;
   display: flex;
   align-items: flex-start; /* Importante: flex-start para permitir scroll si el form es alto */
   padding: 1rem;
-  padding-top: 7rem; /* Espacio para el Navbar */
 }
 /* --- SELECCIÓN DE TIPOS (ESTILO CHIPS/TAGS) --- */
 .type-container {
