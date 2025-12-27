@@ -2,12 +2,13 @@
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .FindPVMenuMain {
-    margin-top: 7rem; /* Ajuste Navbar */
+    margin-top: 7rem;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 80vh;
+    padding-bottom: 50px; /* Espacio extra abajo para que no choque */
 }
 
 .FindPVMenuMain h1 {
@@ -19,7 +20,7 @@
     letter-spacing: 2px;
 }
 
-/* --- TABS DE NAVEGACIÓN (Radio Inputs Modernos) --- */
+/* --- TABS --- */
 .ModeTabs {
     display: flex;
     background-color: rgba(7, 33, 56, 0.8);
@@ -53,7 +54,7 @@
     box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
 }
 
-/* --- CONTENEDORES DE MODO --- */
+/* --- MODO CONTAINER --- */
 .ModeContainer {
     width: 95%;
     max-width: 600px;
@@ -63,6 +64,7 @@
     animation: fadeIn 0.3s ease-in;
 }
 
+/* --- PANELES DE CONTROL --- */
 .ControlPanel {
     background-color: #072138;
     border: 1px solid #00c3ff;
@@ -100,30 +102,34 @@
     border-radius: 5px;
 }
 
-/* --- TARJETA DE PHRASAL VERB --- */
+/* --- TARJETA DE PHRASAL VERB (MODIFICADO) --- */
 .PVCard {
     background-color: rgba(14, 12, 29, 0.9);
     border: 2px solid #00c3ff;
     border-radius: 20px;
     width: 100%;
     max-width: 500px;
-    overflow: hidden;
+    /* QUITAMOS overflow: hidden estricto verticalmente */
+    height: auto; /* Altura automática según contenido */
     box-shadow: 0 0 30px rgba(0, 195, 255, 0.15);
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .PV-Header {
     background: linear-gradient(90deg, #072138, #0a2a4a);
-    padding: 1rem;
+    padding: 0.4rem;
     text-align: center;
     border-bottom: 1px solid #00c3ff;
+    border-top-left-radius: 18px; /* Redondear esquinas superiores */
+    border-top-right-radius: 18px;
 }
 
 .PV-Header h2 {
     color: #00c3ff;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-transform: capitalize;
     margin: 0;
 }
@@ -133,6 +139,8 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    /* Aseguramos que el contenido empuje hacia abajo */
+    flex-grow: 1; 
 }
 
 /* Tabla de Tiempos */
@@ -159,12 +167,14 @@
     font-size: 0.95rem;
 }
 
-/* Significado y Ejemplos */
+/* Secciones de Texto */
 .PV-Section {
     background: rgba(255,255,255,0.03);
     padding: 1rem;
     border-radius: 10px;
     border-left: 3px solid #00c3ff;
+    /* Permitir que el texto ocupe lo que necesite */
+    height: auto; 
 }
 
 .PV-Section h4 {
@@ -177,6 +187,7 @@
 .PV-Section p {
     color: white;
     line-height: 1.5;
+    white-space: pre-wrap; /* Respetar saltos de línea si los hay */
 }
 
 .PV-List li {
@@ -185,9 +196,10 @@
     list-style: none;
     display: flex;
     gap: 10px;
+    line-height: 1.4;
 }
 
-/* Tags (Sinónimos/Antónimos/Info) */
+/* Tags */
 .PV-Tags {
     display: flex;
     flex-wrap: wrap;
@@ -200,12 +212,11 @@
     font-size: 0.85rem;
     font-weight: bold;
 }
-
 .Tag.Syn { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid #00ffaa; }
 .Tag.Ant { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid #ff4757; }
 .Tag.Info { background: rgba(0, 195, 255, 0.1); color: #00c3ff; border: 1px solid #00c3ff; }
 
-/* Footer de Tarjeta (Botones) */
+/* Footer */
 .PV-Footer {
     padding: 1rem;
     background: rgba(0,0,0,0.2);
@@ -213,8 +224,11 @@
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
 }
 
+/* Botones y Búsqueda (Sin cambios mayores) */
 .NavBtn {
     background: transparent;
     border: 1px solid #444;
@@ -229,11 +243,7 @@
     justify-content: center;
     font-size: 1.2rem;
 }
-
-.NavBtn:hover {
-    border-color: #00c3ff;
-    color: #00c3ff;
-}
+.NavBtn:hover { border-color: #00c3ff; color: #00c3ff; }
 
 .AddBtn {
     background: #00c3ff;
@@ -248,47 +258,9 @@
     gap: 5px;
     transition: transform 0.2s;
 }
+.AddBtn:hover { transform: scale(1.05); }
 
-.AddBtn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 195, 255, 0.4);
-}
-
-/* --- MENÚ DE AGREGAR (Dropdown interno) --- */
-.AddDropdown {
-    background: #0a1520;
-    padding: 1rem;
-    border-top: 1px solid #00c3ff;
-    animation: fadeIn 0.3s;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.AddDropdown select {
-    background: #072138;
-    color: white;
-    border: 1px solid #444;
-    padding: 8px;
-    border-radius: 5px;
-    width: 60%;
-}
-
-.ConfirmAddBtn {
-    background: #00ffaa;
-    color: #072138;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* --- BÚSQUEDA --- */
+/* Búsqueda */
 .SearchContainer {
     width: 100%;
     max-width: 400px;
@@ -296,7 +268,6 @@
     display: flex;
     gap: 10px;
 }
-
 .SearchInput {
     width: 100%;
     padding: 12px;
@@ -306,7 +277,6 @@
     color: white;
     outline: none;
 }
-
 .SearchBtn {
     background: #00c3ff;
     color: #072138;
@@ -320,7 +290,6 @@
     justify-content: center;
     font-size: 1.2rem;
 }
-
 .SuggestionsList {
     position: absolute;
     top: 55px;
@@ -334,18 +303,13 @@
     overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
-
 .SuggestionsList li {
     padding: 10px;
     color: #ccc;
     cursor: pointer;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
-.SuggestionsList li:hover {
-    background: rgba(0, 195, 255, 0.1);
-    color: white;
-}
+.SuggestionsList li:hover { background: rgba(0, 195, 255, 0.1); color: white; }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }

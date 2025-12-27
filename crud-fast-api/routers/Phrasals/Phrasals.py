@@ -49,6 +49,8 @@ async def add_phr(
 @Phrasals.get("/RandomPhrasals/{n}")
 @limiter.limit("20/minute")
 def RandomPhr(request: Request,n: int, user_id: str = Depends(get_current_user_id)):
+    if n>25:
+        return []
     # Obtener letras aleatorias
     letters = list(collection.find({}, {"Letter": 1, "_id": 0}))
     
@@ -78,6 +80,8 @@ def RandomPhr(request: Request,n: int, user_id: str = Depends(get_current_user_i
 @Phrasals.get("/PhrByLetter/{Letter}/{n}")
 @limiter.limit("20/minute")
 def ByLetter(request: Request,Letter: str, n: int, user_id: str = Depends(get_current_user_id)):
+    if n>25:
+        return []
     # Obtener frases por letra
     item = collection.find_one({"Letter": Letter})
     if not item:

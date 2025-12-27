@@ -91,3 +91,12 @@ textarea {
     border-radius: 5px;
     text-align: left;
 }
+
+.word-chips{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.word-chips span{
+    margin: 5px;
+    font-size: 18px;
+}
