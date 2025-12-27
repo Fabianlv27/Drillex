@@ -1,48 +1,30 @@
 import axios from "axios";
 
-const Ahost = "https://dibylocal.com:8000"; // Tu URL del backend
+const BASE_URL = "https://dibylocal.com:8000"; // Tu URL del backend
 
 const api = axios.create({
-  baseURL: Ahost,
-  withCredentials: true, // ¡IMPORTANTE! Esto permite enviar/recibir Cookies
+  baseURL: BASE_URL,
+  withCredentials: true, // IMPORTANTE: Permite enviar/recibir cookies (refresh token)
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// INTERCEPTOR DE RESPUESTA
-// Este "vigilante" revisa todas las respuestas antes de que lleguen a tus componentes
-api.interceptors.response.use(
-  (response) => {
-    // Si todo salió bien (status 200-299), deja pasar la respuesta
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
-
-    // Si el error es 401 (No autorizado) y no hemos reintentado ya...
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Marcamos para no entrar en bucle infinito
-
-      try {
-        // 1. Intentamos refrescar el token
-        // El navegador enviará automáticamente la cookie "refresh_token" aquí
-        await api.post("/refresh");
-
-        // 2. Si funciona, el backend habrá puesto una nueva cookie "access_token"
-        // 3. Reintentamos la petición original que falló
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Si el refresh también falla (ej. pasaron los 30 días o es inválido)
-        console.error("Sesión expirada, redirigiendo al login...");
-        // Aquí puedes redirigir al usuario al login
-        window.location.href = "/signin"; 
-        return Promise.reject(refreshError);
-      }
+// INTERCEPTOR DE SOLICITUD (Inyectar Token)
+api.interceptors.request.use(async (config) => {
+  // En una extensión, chrome.storage es asíncrono
+  // Verificamos si estamos en entorno de extensión
+  if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+    const result = await chrome.storage.local.get(['access_token']);
+    if (result.access_token) {
+      config.headers.Authorization = `Bearer ${result.access_token}`;
     }
-
-    return Promise.reject(error);
+  } else {
+    // Fallback para desarrollo web normal (localStorage)
+    const token = localStorage.getItem('access_token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+}, (error) => Promise.reject(error));
 
 export default api;

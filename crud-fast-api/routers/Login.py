@@ -1,3 +1,4 @@
+import json
 import mysql.connector
 from fastapi import BackgroundTasks, Form, HTTPException, Cookie, APIRouter, Depends, Body,responses,Response
 from typing import Annotated
@@ -77,35 +78,30 @@ async def google_signin(data: TokenRequest):
 async def google_login(id_token: str = Body(...)):
     user_info = await verify_google_token(id_token)
     email = user_info.get("email")
-    sub = user_info.get("sub")  # ID único de usuario en Google
+    sub = user_info.get("sub")
 
     if not email or not sub:
-        return {"status":False, "detail":"Missing email or sub in token"}
+        return {"status": False, "detail": "Missing email or sub in token"}
 
     conexion = get_db_connection()
     cursor = conexion.cursor()
 
-    # Revisa si el usuario ya existe
     sql_check = "SELECT id_User,name_User FROM users WHERE id_User = %s"
     cursor.execute(sql_check, (sub,))
     result = cursor.fetchone()
     
-    # Si no existe, lo inserta (solo para login por Google, usamos el 'sub' como ID)
     if not result:
         cursor.close()
         conexion.close()
-        return {"status":False, "detail":"User does not exist, please sign in"}
+        return {"status": False, "detail": "User does not exist, please sign in"}
     
-    # 1. CREAR ACCESS TOKEN (15 min)
+    # 1. CREAR ACCESS TOKEN
     access_token = create_access_token({"email": email, "id": sub, "username": result[1]})
 
-    # 2. CREAR REFRESH TOKEN (30 días)
+    # 2. CREAR REFRESH TOKEN
     refresh_token, jti, refresh_expire = create_refresh_token(sub)
     
-    # 3. GUARDAR REFRESH TOKEN EN BD (Para seguridad extra)
-    # Primero borramos tokens viejos de este usuario para no llenar la BD (opcional)
-    # cursor.execute("DELETE FROM user_refresh_tokens WHERE user_id = %s", (sub,))
-    
+    # 3. GUARDAR REFRESH TOKEN EN BD
     sql_save_refresh = """
         INSERT INTO user_refresh_tokens (user_id, token_jti, expires_at) 
         VALUES (%s, %s, %s)
@@ -115,30 +111,48 @@ async def google_login(id_token: str = Body(...)):
     cursor.close()
     conexion.close()
     
-   # 4. RESPUESTA
-    # Nota: Es mejor NO mandar el token en la URL (?e=token), pero lo dejo por compatibilidad con tu front actual.
-    response = JSONResponse(content={"redirect_url": f"{host}?e={access_token}"})
+    # --- CORRECCIÓN AQUÍ ---
+    
+    # Preparamos el contenido final PRIMERO
+    final_content = {
+        "status": True,
+        "access_token": access_token,
+        "user": {
+            "id": sub,
+            "username": result[1],
+            "email": email
+        },
+        # Si aun necesitas la url por compatibilidad vieja, agrégala aquí, 
+        # pero ya no es necesaria con la nueva lógica del frontend
+        # "redirect_url": f"{host}?e={access_token}" 
+    }
 
-    # Cookie Access Token (15 min)
+    # Creamos la respuesta con el contenido FINAL para que calcule bien el tamaño
+    response = JSONResponse(content=final_content)
+
+    # Ahora sí seteamos las cookies (esto solo toca headers, no el body)
     response.set_cookie(
         key="access_token",
         value=access_token,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         httponly=True,
         secure=True,
-        samesite="None"
+        samesite="None",
+        path="/" # Asegúrate que el path sea raíz para que se envíe en todas las peticiones
     )
 
-    # Cookie Refresh Token (30 días) -> ESTA ES LA CLAVE PARA NO LOGUEARSE DE NUEVO
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
         max_age=REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        httponly=True, # Súper importante: JS no puede leer esto
+        httponly=True,
         secure=True,
         samesite="None",
-        path="/refresh" # Solo se envía a la ruta de refresco (Seguridad extra)
+        path="/refresh"
     )
+
+    # YA NO HACEMOS response.body = ...
+    
     return response
 
 @log_router.post("/logout")
