@@ -1,22 +1,36 @@
-from fastapi import APIRouter, HTTPException, Request # <--- Importar Request
-from fastapi.concurrency import run_in_threadpool # <--- Para no bloquear el servidor
-from googletrans import Translator
-from routers.LimiterConfig import limiter # <--- Importar limiter
+from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel, Field
+from deep_translator import GoogleTranslator
+from routers.functions.GeminiService import generate_response
+from routers.LimiterConfig import limiter # Importamos el limitador
 
 Translator_Router = APIRouter()
 
-@Translator_Router.get("/Translate/{text}")
-@limiter.limit("15/minute") # <--- LÍMITE ESTRICTO: Google bloquea rápido el traductor
-async def GetTranslate(request: Request, text: str): # <--- Añadir request
+class TransRequest(BaseModel):
+    # Restricción 1: Límite de caracteres para evitar textos gigantes
+    text: str = Field(..., min_length=1, max_length=2500) 
+    source: str = "auto"
+    target: str = "es"
+    use_ai: bool = False
+
+@Translator_Router.post("/Translate/Process")
+@limiter.limit("15/minute") # Restricción 2: Límite de velocidad más estricto
+async def process_translation(request: Request, data: TransRequest):
     try:
-        translator = Translator()
-        
-        # Ejecutamos la traducción en un hilo aparte para no bloquear FastAPI
-        # ya que 'translator.translate' es una operación de red bloqueante
-        translation = await run_in_threadpool(translator.translate, text, dest='es')
-        
-        return translation.text
+        # Opción A: IA (Gemini)
+        if data.use_ai:
+            translation = await generate_response(
+                data.text, 
+                context_type="translator", 
+                target_lang=data.target
+            )
+            return translation
+
+        # Opción B: Deep Translator
+        else:
+            translated = GoogleTranslator(source=data.source, target=data.target).translate(data.text)
+            return translated
+
     except Exception as e:
-        print(f"Translation error: {e}")
-        # Devolver el texto original es una buena estrategia de fallback
-        return text
+        print(f"Translation Error: {e}")
+        return f"Error: {str(e)}"

@@ -22,7 +22,7 @@ from routers.functions.SongLyrics import SongsLyric
 from Data.Dictionary.ItalianDictionary import ItalianDictRouter
 from routers.Dicts.italianDictRouter import italian_Dict_router
 from routers.functions.GeminiAI import Gemini_Router
-
+from routers.functions.Dictionary import Dictionary_Router
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -51,7 +51,7 @@ app.include_router(SongsLyric, tags=["SongLyrics"])
 app.include_router(ItalianDictRouter, tags=["ItalianDictionary"])
 app.include_router(italian_Dict_router,tags=["Dicts_creator"])
 app.include_router(Gemini_Router, tags=["AI Tools"])
-    
+app.include_router(Dictionary_Router, tags=["AI Dictionary"])
 @app.get("/")
 def root():
     return {"message": "Welcome to the API"}
@@ -92,16 +92,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://192.168.0.14:5173",
-                   "https://dibylocal.com:5173",
-                   "https://dibylocal.com:5173/signin",
-                   "https://dibylocal.com:5173/login",
-                   "https://dibylocal.com",
-                   
-                   ],  # Cambia esto según tu dominio
+    allow_origins=["*"],  # Acepta peticiones de localhost y de la extensión
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"],    
 )
 
 

@@ -1,27 +1,46 @@
-import { useState, useContext, useEffect } from 'react';
-import { useDraggable } from '../../hooks/useDraggable'; // Importa el hook del paso 1
-import { FaTools, FaSearch, FaTimes } from 'react-icons/fa';
+import { useState, useContext, useEffect } from "react";
+import { useDraggable } from "../../hooks/useDraggable";
+import { FaTools, FaSearch, FaTimes, FaRobot } from "react-icons/fa";
+import { IoSettingsSharp } from "react-icons/io5"; // Icono de engranaje
 import { BsTranslate } from "react-icons/bs";
 import { CiPlay1 } from "react-icons/ci";
+
 import { Context } from "../../../Contexts/Context";
 import { DiccionaryContext } from "../../../Contexts/DiccionaryContext";
 import { ListsContext } from "../../../Contexts/ListsContext";
 import api from "../../../api/axiosClient";
-import ElementCard from "../secondary menus/ElementCard"; // Ajusta ruta
-import '../../translate.css'; // Reusa tus estilos o crea nuevos
+import ElementCard from "../secondary menus/ElementCard";
+import "../../translate.css";
 
 const FloatingMenu = () => {
-  const { bind, isDragging } = useDraggable(window.innerHeight - 150, window.innerWidth - 80);
+  const { bind, isDragging, x, y } = useDraggable(
+    window.innerHeight - 150,
+    window.innerWidth - 80
+  );
+
   const [isOpen, setIsOpen] = useState(false);
+  const [showSettings, setShowSettings] = useState(false); // Estado para mostrar/ocultar ajustes
   const [inputValue, setInputValue] = useState("");
   const [translation, setTranslation] = useState("");
-  
-  // Contextos
-  const { SelectedObjects, setSelectedObjects, Language } = useContext(Context);
+
+  const [useAI, setUseAI] = useState(false);
+  const [sourceLang, setSourceLang] = useState("auto");
+  const [targetLang, setTargetLang] = useState("es");
+
+  const { SelectedObjects, setSelectedObjects } = useContext(Context);
   const { searchWord } = useContext(DiccionaryContext);
   const { UserLists, GetList } = useContext(ListsContext);
 
-  // Detectar selección de texto automáticamente (opcional, para pre-llenar)
+  const languages = [
+    { code: "auto", name: "Detect" },
+    { code: "en", name: "English" },
+    { code: "es", name: "Spanish" },
+    { code: "fr", name: "French" },
+    { code: "de", name: "German" },
+    { code: "it", name: "Italian" },
+    { code: "pt", name: "Portuguese" },
+  ];
+
   useEffect(() => {
     const handleSelection = () => {
       const text = window.getSelection().toString().trim();
@@ -30,26 +49,30 @@ const FloatingMenu = () => {
       }
     };
     document.addEventListener("selectionchange", handleSelection);
-    return () => document.removeEventListener("selectionchange", handleSelection);
+    return () =>
+      document.removeEventListener("selectionchange", handleSelection);
   }, [isOpen]);
 
-  // --- ACCIONES ---
-
   const handleToggle = () => {
-    if (!isDragging) { // Evita abrir el menú si solo estabas arrastrando el botón
-        setIsOpen(!isOpen);
-        setTranslation(""); // Limpiar traducciones previas
-        if(!isOpen && window.getSelection().toString()){
-             setInputValue(window.getSelection().toString().trim());
-        }
+    if (!isDragging) {
+      setIsOpen(!isOpen);
+      setTranslation("");
+      setShowSettings(false); // Resetear ajustes al cerrar
+      const currentSelection = window.getSelection().toString().trim();
+      if (!isOpen && currentSelection) setInputValue(currentSelection);
     }
   };
 
   const handleTranslate = async () => {
     if (!inputValue) return;
+    setTranslation("Translating...");
     try {
-      // Backend: POST /translate { text: "...", target: "es" }
-      const response = await api.get(`/Translate/${inputValue}`); 
+      const response = await api.post(`/Translate/Process`, {
+        text: inputValue,
+        source: sourceLang,
+        target: targetLang,
+        use_ai: useAI,
+      });
       setTranslation(response.data);
     } catch (error) {
       setTranslation("Error translating.");
@@ -58,95 +81,222 @@ const FloatingMenu = () => {
 
   const handleDefinition = async () => {
     if (!inputValue) return;
-    
-    // 1. Llamada al contexto refactorizado (pasa el idioma al backend)
-    const result = await searchWord(inputValue);
+    setTranslation("Searching...");
+    const langForDict = sourceLang === "auto" ? "en" : sourceLang;
+    const result = await searchWord(inputValue, {
+      language: langForDict,
+      useAI: useAI,
+    });
 
-    // 2. Mostrar resultado en ElementCard
-    if (result && !result.error) {
-        if (UserLists.length === 0) await GetList(); // Asegurar listas
-        setIsOpen(false); // Cerramos el menú pequeño
-        
-        // Asumimos que el backend devuelve un objeto estandarizado
-        // Si devuelve array, tomamos el primero o adaptamos
-        const wordData = Array.isArray(result) ? result[0] : result;
-        
-        // Aquí deberías normalizar si tu ElementCard espera un formato específico
-        // pero idealmente el backend ya te lo da limpio.
-        setSelectedObjects([...SelectedObjects, wordData]); 
+    if (
+      result &&
+      Array.isArray(result) &&
+      result.length > 0 &&
+      !result[0].error
+    ) {
+      if (UserLists.length === 0) await GetList();
+      setIsOpen(false);
+      setTranslation("");
+      setSelectedObjects([...SelectedObjects, result[0]]);
     } else {
-        alert("Definition not found");
+      const msg =
+        result?.message || result[0]?.meaning || "Definition not found.";
+      setTranslation(msg);
     }
   };
 
   const handleVoice = async () => {
     if (!inputValue) return;
     try {
-      const response = await api.get(`/texto_a_voz/${inputValue}/${Language}`, { responseType: 'blob' });
+      const langToSpeak = sourceLang === "auto" ? "en" : sourceLang;
+      const response = await api.get(
+        `/texto_a_voz/${inputValue}/${langToSpeak}`,
+        { responseType: "blob" }
+      );
       const audioUrl = URL.createObjectURL(response.data);
       const audio = new Audio(audioUrl);
       audio.play();
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    }
   };
-return (
+
+  return (
     <>
-      {/* 1. CONTENEDOR DRAGGABLE */}
       <div {...bind} className="floating-fab-container">
-        
-        {/* BOTÓN PRINCIPAL */}
-        <button 
-            className="fab-button" 
-            onClick={handleToggle}
-        >
+        <button className="fab-button" onClick={handleToggle}>
           {isOpen ? <FaTimes /> : <FaTools />}
         </button>
 
-        {/* 2. EL MENÚ DESPLEGABLE */}
         {isOpen && (
-            <div className="fab-menu"> {/* Usa la clase CSS, borra el style={} */}
-                
-                {/* Input Area */}
-                <input 
-                    type="text" 
-                    value={inputValue} 
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Select text or type..."
-                    className="fab-input"
-                />
+          <div className="fab-menu">
+            {/* --- HEADER: BOTÓN DE SETTINGS --- */}
+            <div className="fab-header">
+              <button
+                className="fab-settings-btn"
+                onClick={() => setShowSettings(!showSettings)}
+                title="Settings"
+              >
+                <IoSettingsSharp />
+              </button>
+            </div>
 
-                {/* Botones de Acción */}
-                <div className="fab-actions-row">
-                    <button onClick={handleTranslate} className="fab-action-btn" title="Translate">
-                        <BsTranslate />
-                    </button>
-                    <button onClick={handleDefinition} className="fab-action-btn" title="Define">
-                        <FaSearch />
-                    </button>
-                    <button onClick={handleVoice} className="fab-action-btn" title="Listen">
-                        <CiPlay1 />
-                    </button>
+            {/* --- PANEL DE AJUSTES (CONDICIONAL) --- */}
+            {showSettings && (
+              <div className="fab-settings-panel">
+                {/* 1. AI Toggle (Botón ON/OFF) */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: "bold",
+                      color: "#555",
+                    }}
+                  >
+                    AI Mode:
+                  </span>
+                  <button
+                    onClick={() => setUseAI(!useAI)}
+                    style={{
+                      background: useAI ? "#00c3ff" : "#ccc",
+                      color: useAI ? "#fff" : "#555",
+                      border: "none",
+                      borderRadius: "20px",
+                      padding: "5px 15px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      fontSize: "0.8rem",
+                      transition: "0.3s",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      boxShadow: useAI
+                        ? "0 0 10px rgba(0,195,255,0.4)"
+                        : "none",
+                    }}
+                  >
+                    <FaRobot /> {useAI ? "ON" : "OFF"}
+                  </button>
                 </div>
 
-                {/* Resultado */}
-                {translation && (
-                    <div className="fab-result">
-                        {translation}
-                    </div>
-                )}
+                {/* 2. Selectores de Idioma */}
+                <div className="fab-language-row">
+                  {/* COLUMNA IZQUIERDA (FROM) */}
+                  <div className="fab-lang-column">
+                    <label className="fab-lang-label">From:</label>
+                    <select
+                      value={sourceLang}
+                      onChange={(e) => setSourceLang(e.target.value)}
+                      className="fab-lang-select"
+                    >
+                      {languages.map((l) => (
+                        <option key={l.code} value={l.code}>
+                          {l.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* FLECHA CENTRAL */}
+                  <div className="fab-lang-arrow">➜</div>
+
+                  {/* COLUMNA DERECHA (TO) */}
+                  <div className="fab-lang-column">
+                    <label className="fab-lang-label">To:</label>
+                    <select
+                      value={targetLang}
+                      onChange={(e) => setTargetLang(e.target.value)}
+                      className="fab-lang-select"
+                    >
+                      {languages
+                        .filter((l) => l.code !== "auto")
+                        .map((l) => (
+                          <option key={l.code} value={l.code}>
+                            {l.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* --- INPUT (Ahora es input normal, no textarea) --- */}
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Type or select text..."
+              className="fab-input"
+            />
+
+            {/* --- ACCIONES --- */}
+            <div className="fab-actions-row">
+              <button
+                onClick={handleTranslate}
+                className="fab-action-btn"
+                title="Translate"
+              >
+                <BsTranslate />
+              </button>
+              <button
+                onClick={handleDefinition}
+                className="fab-action-btn"
+                title="Define"
+              >
+                <FaSearch />
+              </button>
+              <button
+                onClick={handleVoice}
+                className="fab-action-btn"
+                title="Listen"
+              >
+                <CiPlay1 />
+              </button>
             </div>
+
+            {/* --- RESULTADO --- */}
+            {translation && <div className="fab-result">{translation}</div>}
+          </div>
         )}
       </div>
 
-      {/* 3. ELEMENT CARD (Se mantiene igual) */}
       {SelectedObjects.length > 0 && (
-        <div style={{ position: "fixed", top: 0, left: 0, zIndex: 99999, width: '100vw', height: '100vh', pointerEvents: 'none' }}>
-          <div style={{ pointerEvents: 'auto' }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            zIndex: 2147483647,
+            width: "100vw",
+            height: "100vh",
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{ pointerEvents: "auto", width: "100%", height: "100%" }}>
             <ElementCard Lists={UserLists} CurrentListId={"none"} />
           </div>
         </div>
       )}
     </>
   );
+};
+
+const selectStyle = {
+  width: "100%",
+  padding: "4px",
+  borderRadius: "4px",
+  border: "1px solid #ccc",
+  background: "white",
+  fontSize: "0.85rem",
+  color: "#333",
 };
 
 export default FloatingMenu;

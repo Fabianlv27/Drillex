@@ -12,17 +12,20 @@ const DiccionaryContextProvider = ({ children }) => {
   const [Meaning, setMeaning] = useState([]);
   
   // Refactor: La función ahora delega todo al backend
-  const searchWord = async (word, overrideLang = null) => {
-    const cleanWord = word.replace(/[.,!()]+$/, "").trim();
-    // Usamos el idioma que pasan o el global del contexto
-    const langToUse = overrideLang || Language; 
+  const searchWord = async (word, config = {}) => {
+   const cleanWord = word.replace(/[.,!()]+$/, "").trim();
+    
+    // Valores por defecto
+    const langToUse = config.language || "en"; 
+    const useAI = config.useAI || false;
 
     try {
       // LLAMADA UNIFICADA AL BACKEND
       // El backend decidirá si usa la API externa inglesa, el scraper italiano, o tu BD.
       const response = await api.post(`/dictionary/search`, {
           word: cleanWord,
-          language: langToUse
+          language: langToUse,
+          use_ai: useAI 
       });
 
       const data = response.data;

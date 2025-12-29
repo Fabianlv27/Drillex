@@ -151,8 +151,6 @@ async def google_login(id_token: str = Body(...)):
         path="/refresh"
     )
 
-    # YA NO HACEMOS response.body = ...
-    
     return response
 
 @log_router.post("/logout")
