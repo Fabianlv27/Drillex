@@ -20,11 +20,10 @@
     align-items: center; /* Centrado vertical y horizontal */
     
     /* CAMBIO: Z-Index justo debajo del FAB */
-    z-index: 2147483640 !important; 
+    z-index: 214748364 !important; 
     
     padding: 1rem;
     overflow-y: hidden; /* El overlay no scrollea, solo el contenedor */
-    animation: fadeIn 0.3s ease;
 }
 
 /* Contenedor Principal de la Tarjeta */
@@ -32,66 +31,101 @@
     background-color: #072138;
     border: 2px solid #00c3ff32;
     border-radius: 15px;
+    
     width: 100%;
-    max-width: 500px; /* Ancho máximo en escritorio */
-    max-height: 90vh; /* Altura máxima */
+    max-width: 500px; 
+    max-height: 90vh; 
+    
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Para que el contenido no se salga */
+    overflow: hidden; 
     position: relative;
     box-shadow: 0 0 20px rgba(0, 195, 255, 0.2);
-    animation: fadeInScale 0.3s ease-out;
-}
-
-/* --- BARRA DE NAVEGACIÓN DE PALABRAS (NUEVO) --- */
-.EC-WordNav {
-    background-color: rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto; /* Scroll horizontal si hay muchas palabras */
-    white-space: nowrap;
-    border-top: 1px solid rgba(0, 195, 255, 0.2);
     
-    /* Scrollbar estilo Firefox */
+    /* --- CORRECCIÓN DEL SALTO --- */
+    margin: auto; /* Fuerza el centrado absoluto dentro del flex padre */
+    will-change: transform, opacity; /* Prepara al navegador para la animación */
+    animation: fadeInScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote suave */
+}
+/* --- BARRA DE NAVEGACIÓN TIPO PESTAÑAS --- */
+.EC-WordNav {
+    background-color: transparent; /* Fondo transparente para ver las pestañas flotar */
+    padding: 10px 10px 0 10px; /* Padding solo arriba y lados, abajo pegado al footer */
+    display: flex;
+    gap: 4px; /* Las pestañas suelen ir juntas */
+    white-space: nowrap;
+    
+    /* Línea base para que parezcan apoyadas */
+    border-bottom: 2px solid rgba(0, 195, 255, 0.3);
+    
+    /* Scrollbar fina */
     scrollbar-width: thin;
-    scrollbar-color: #007ea7 rgba(14, 12, 29, 0.5);
+    scrollbar-color: #007ea7 transparent;
+}
+.EC-WordNav::-webkit-scrollbar {
+    height: 4px;
+}
+.EC-WordNav::-webkit-scrollbar-thumb {
+    background: #007ea7;
+    border-radius: 4px;
+}
+/* Estilo PESTAÑA (Browser Tab) */
+.EC-WordNavItem {
+    background: rgba(7, 33, 56, 0.5); /* Oscuro transparente */
+    border: 1px solid rgba(0, 195, 255, 0.3);
+    border-bottom: none; /* Sin borde abajo para conectar */
+    color: #8899a6;
+    
+    /* Tamaño compacto y legible */
+    padding: 8px 16px; 
+    font-size: 0.9rem;
+    max-width: 150px; /* Ancho máximo por pestaña */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    border-radius: 8px 8px 0 0; /* Solo bordes superiores redondos */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+    top: 2px; /* Ligeramente bajado para tocar la línea */
 }
 
-/* Scrollbar estilo Chrome para la barra horizontal */
+.EC-WordNavItem:hover {
+    background: rgba(0, 195, 255, 0.1);
+    color: #00c3ff;
+}
+
+.EC-WordNavItem.active {
+    background: rgba(0, 195, 255, 0.15); /* Fondo activo sutil */
+    color: #00c3ff;
+    font-weight: bold;
+    border-color: #00c3ff;
+    border-top: 2px solid #00c3ff; /* Línea superior destacada */
+    
+    /* Truco visual: conectar con el footer/borde */
+    padding-bottom: 10px; 
+    margin-bottom: -2px; 
+    z-index: 2; 
+    box-shadow: 0 -5px 10px rgba(0, 195, 255, 0.1);
+}
+
+/* Scrollbar estilo Chrome/Edge mejorado */
 .EC-WordNav::-webkit-scrollbar {
-    height: 6px; /* Altura fina */
+    height: 10px; /* Barra un poco más alta para que sea fácil de clicar */
 }
 .EC-WordNav::-webkit-scrollbar-track {
-    background: rgba(14, 12, 29, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
+    margin: 0 10px;
 }
 .EC-WordNav::-webkit-scrollbar-thumb {
     background-color: #007ea7;
     border-radius: 10px;
+    border: 2px solid rgba(0,0,0,0.2); /* Borde para separarlo del track */
 }
-
-.EC-WordNavItem {
-    background: transparent;
-    border: 1px solid #00c3ff;
-    color: #00c3ff;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    flex-shrink: 0; /* Evita que se aplasten */
-}
-
-.EC-WordNavItem:hover {
-    background: rgba(0, 195, 255, 0.15);
-}
-
-.EC-WordNavItem.active {
-    background: #00c3ff;
-    color: #072138;
-    font-weight: bold;
-    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+.EC-WordNav::-webkit-scrollbar-thumb:hover {
+    background-color: #00c3ff;
 }
 
 /* Header del Modal (Título y Botón Cerrar) */
@@ -102,6 +136,7 @@
     align-items: center; /* Alineación vertical */
     border-bottom: 1px solid #00c3ff;
     z-index: 10;
+    justify-content: space-between;
     /* Quitamos sticky porque ahora el contenedor es flex */
 }
 
@@ -300,52 +335,70 @@
     margin-top: 3px;
 }
 
-/* Footer (Navegación y Añadir) */
+/* --- FOOTER CON CENTRADO PERFECTO --- */
 .EC-Footer {
-    background: rgba(14, 12, 29, 0.95);
+    background: rgba(14, 12, 29, 0.98);
     padding: 1rem;
+    position: relative; /* Necesario para posicionar las flechas */
     display: flex;
-    justify-content: space-between; /* Botones a los extremos */
+    justify-content: center; /* Centra el contenido principal (Botón Añadir) */
     align-items: center;
-    border-top: 1px solid rgba(0, 195, 255, 0.2);
+    border-top: 1px solid #00c3ff; /* Línea neón superior */
+    min-height: 70px; /* Altura mínima para asegurar espacio */
 }
 
+/* Flechas de navegación (Posición Absoluta) */
 .EC-NavBtn {
+    position: absolute; /* Sacadas del flujo para no empujar el centro */
+    top: 50%;
+    transform: translateY(-50%);
+    
     background: transparent;
-    border: 1px solid #00c3ff;
+    border: 1px solid rgba(0, 195, 255, 0.5);
     color: #00c3ff;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
     transition: 0.2s;
+    z-index: 5;
+}
+
+/* Posiciones específicas */
+.EC-Footer .EC-NavBtn:first-of-type {
+    left: 20px; /* Flecha izquierda */
+}
+
+.EC-Footer .EC-NavBtn:last-of-type {
+    right: 20px; /* Flecha derecha */
 }
 
 .EC-NavBtn:hover {
     background: #00c3ff;
-    color: black;
+    color: #072138;
     box-shadow: 0 0 10px #00c3ff;
 }
-
+/* Botón Central (Añadir) */
 .EC-AddBtn {
+    /* Flujo normal (Flex center del padre lo pone en medio) */
     background: #00c3ff;
     color: #072138;
-    width: 50px;
-    height: 50px;
+    width: 45px; /* Un poco más compacto */
+    height: 45px;
     border-radius: 50%;
     border: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
+    font-size: 1.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.4);
     transition: transform 0.2s;
+    z-index: 10; /* Encima de todo */
 }
 
 .EC-AddBtn:hover {
@@ -354,8 +407,14 @@
 }
 
 @keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    0% { 
+        opacity: 0; 
+        transform: scale(0.95); /* Empezar un poco más grande evita saltos bruscos */
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
 }
 
 @keyframes fadeIn {

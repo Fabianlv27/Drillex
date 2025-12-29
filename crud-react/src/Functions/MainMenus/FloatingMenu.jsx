@@ -275,7 +275,7 @@ const FloatingMenu = () => {
             position: "fixed",
             top: 0,
             left: 0,
-            zIndex: 2147483647,
+            zIndex: 214748364,
             width: "100vw",
             height: "100vh",
             pointerEvents: "none",

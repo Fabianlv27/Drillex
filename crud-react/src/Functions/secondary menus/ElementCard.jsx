@@ -64,7 +64,7 @@ function ElementCard({ CurrentListId }) {
 
   return (
     // Z-INDEX AJUSTADO: 2147483640 (Menor que el FloatingMenu que es ...47)
-    <div className="ElementCardOverlay" style={{ zIndex: 2147483640 }}>
+    <div className="ElementCardOverlay">
       <div className="ElementCardContainer">
         
         {/* HEADER */}
@@ -73,12 +73,13 @@ function ElementCard({ CurrentListId }) {
                  <button className="EC-CloseBtn" onClick={handleClose}>
                     <IoMdClose />
                  </button>
-                 {/* Contador de posición */}
+              <h3 className="EC-Title">{currentWord.name}</h3>
+            </div>
+               {/* Contador de posición */}
                  <span style={{fontSize:'0.8rem', color:'#aaa'}}>
                     {Index + 1} / {SelectedObjects.length}
                  </span>
-            </div>
-          <h3 className="EC-Title">{currentWord.name}</h3>
+          
         </div>
 
         {/* CONTENIDO PRINCIPAL */}
@@ -199,7 +200,7 @@ function ElementCard({ CurrentListId }) {
         <div className="EC-Footer">
             {/* Botón Anterior */}
             {SelectedObjects.length > 1 && (
-                <button className="EC-NavBtn" onClick={handlePrev}>
+                <button className="EC-NavBtn" style={{ left: '15px' }} onClick={handlePrev}>
                     <IoIosArrowBack />
                 </button>
             )}
@@ -217,7 +218,7 @@ function ElementCard({ CurrentListId }) {
 
             {/* Botón Siguiente */}
             {SelectedObjects.length > 1 && (
-                <button className="EC-NavBtn" onClick={handleNext}>
+                <button className="EC-NavBtn" style={{ right: '15px' }} onClick={handleNext}>
                     <IoIosArrowForward />
                 </button>
             )}
