@@ -48,6 +48,7 @@ const FloatingMenu = () => {
         setInputValue(text);
       }
     };
+    
     document.addEventListener("selectionchange", handleSelection);
     return () =>
       document.removeEventListener("selectionchange", handleSelection);

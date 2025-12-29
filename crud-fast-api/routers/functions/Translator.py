@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 from deep_translator import GoogleTranslator
 from routers.functions.GeminiService import generate_response
+from routers.functions.CacheService import get_translation_cache, save_translation_cache
 from routers.LimiterConfig import limiter # Importamos el limitador
 
 Translator_Router = APIRouter()
@@ -14,23 +15,28 @@ class TransRequest(BaseModel):
     use_ai: bool = False
 
 @Translator_Router.post("/Translate/Process")
-@limiter.limit("15/minute") # Restricción 2: Límite de velocidad más estricto
+@limiter.limit("15/minute")
 async def process_translation(request: Request, data: TransRequest):
-    try:
-        # Opción A: IA (Gemini)
-        if data.use_ai:
-            translation = await generate_response(
-                data.text, 
-                context_type="translator", 
-                target_lang=data.target
-            )
-            return translation
+    # 1. VERIFICAR CACHÉ
+    cached_trans = get_translation_cache(data.text, data.source, data.target, data.use_ai)
+    if cached_trans:
+        return cached_trans
 
-        # Opción B: Deep Translator
+    final_translation = ""
+
+    try:
+        if data.use_ai:
+            final_translation = await generate_response(
+                data.text, context_type="translator", target_lang=data.target
+            )
         else:
-            translated = GoogleTranslator(source=data.source, target=data.target).translate(data.text)
-            return translated
+            final_translation = GoogleTranslator(source=data.source, target=data.target).translate(data.text)
+        
+        # 2. GUARDAR EN CACHÉ (Solo si hay resultado)
+        if final_translation:
+            save_translation_cache(data.text, data.source, data.target, data.use_ai, final_translation)
+            
+        return final_translation
 
     except Exception as e:
-        print(f"Translation Error: {e}")
         return f"Error: {str(e)}"

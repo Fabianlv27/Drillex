@@ -1,5 +1,11 @@
 /* LyricsAndWords.css - Estilos para ElementCard */
 
+/* --- Z-INDEX MANAGEMENT (NUEVO) --- */
+/* El menú flotante debe ser el MÁS alto */
+.floating-fab-container {
+    z-index: 2147483647 !important; /* Max 32-bit int */
+}
+
 /* Overlay oscuro (Fondo bloqueante) */
 .ElementCardOverlay {
     position: fixed; /* Fixed para bloquear toda la pantalla */
@@ -7,14 +13,18 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7); /* Ligeramente más oscuro para foco */
     backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center; /* Centrado vertical y horizontal */
-    z-index: 10000;
+    
+    /* CAMBIO: Z-Index justo debajo del FAB */
+    z-index: 2147483640 !important; 
+    
     padding: 1rem;
-    overflow-y: auto; /* Permitir scroll si el modal es muy alto */
+    overflow-y: hidden; /* El overlay no scrollea, solo el contenedor */
+    animation: fadeIn 0.3s ease;
 }
 
 /* Contenedor Principal de la Tarjeta */
@@ -29,7 +39,59 @@
     flex-direction: column;
     overflow: hidden; /* Para que el contenido no se salga */
     position: relative;
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.2);
     animation: fadeInScale 0.3s ease-out;
+}
+
+/* --- BARRA DE NAVEGACIÓN DE PALABRAS (NUEVO) --- */
+.EC-WordNav {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto; /* Scroll horizontal si hay muchas palabras */
+    white-space: nowrap;
+    border-top: 1px solid rgba(0, 195, 255, 0.2);
+    
+    /* Scrollbar estilo Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #007ea7 rgba(14, 12, 29, 0.5);
+}
+
+/* Scrollbar estilo Chrome para la barra horizontal */
+.EC-WordNav::-webkit-scrollbar {
+    height: 6px; /* Altura fina */
+}
+.EC-WordNav::-webkit-scrollbar-track {
+    background: rgba(14, 12, 29, 0.5);
+    border-radius: 10px;
+}
+.EC-WordNav::-webkit-scrollbar-thumb {
+    background-color: #007ea7;
+    border-radius: 10px;
+}
+
+.EC-WordNavItem {
+    background: transparent;
+    border: 1px solid #00c3ff;
+    color: #00c3ff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0; /* Evita que se aplasten */
+}
+
+.EC-WordNavItem:hover {
+    background: rgba(0, 195, 255, 0.15);
+}
+
+.EC-WordNavItem.active {
+    background: #00c3ff;
+    color: #072138;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
 }
 
 /* Header del Modal (Título y Botón Cerrar) */
@@ -37,11 +99,10 @@
     background-color: rgba(14, 12, 29, 0.95);
     padding: 1rem;
     display: flex;
-    align-items: center;
+    align-items: center; /* Alineación vertical */
     border-bottom: 1px solid #00c3ff;
-    position: sticky;
-    top: 0;
     z-index: 10;
+    /* Quitamos sticky porque ahora el contenedor es flex */
 }
 
 .EC-CloseBtn {
@@ -58,7 +119,7 @@
     align-items: center;
     justify-content: center;
     transition: 0.2s;
-    margin-right: 15px;
+    margin-right: 0; /* Quitamos margen derecho porque ahora está en un div flex */
     flex-shrink: 0;
 }
 
@@ -76,17 +137,34 @@
     text-overflow: ellipsis;
     text-transform: capitalize;
     flex-grow: 1;
+    text-align: right; /* Título a la derecha o centro */
+    margin-left: 15px;
 }
 
 /* Contenido Scrolleable */
 .EC-Content {
+    flex: 1; /* Ocupa el espacio restante */
     overflow-y: auto;
     padding: 1.5rem;
-    scrollbar-width: thin;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    
+    /* Scrollbar */
+    scrollbar-width: thin;
     scrollbar-color: #007ea7 rgba(14, 12, 29, 0.5);
+}
+
+/* Scrollbar Webkit para contenido */
+.EC-Content::-webkit-scrollbar {
+    width: 8px;
+}
+.EC-Content::-webkit-scrollbar-track {
+    background: rgba(14, 12, 29, 0.5);
+}
+.EC-Content::-webkit-scrollbar-thumb {
+    background-color: #007ea7;
+    border-radius: 4px;
 }
 
 /* Sección de Tipo (Noun, Verb...) */
@@ -227,10 +305,9 @@
     background: rgba(14, 12, 29, 0.95);
     padding: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Botones a los extremos */
     align-items: center;
     border-top: 1px solid rgba(0, 195, 255, 0.2);
-    gap: 20px;
 }
 
 .EC-NavBtn {
@@ -251,6 +328,7 @@
 .EC-NavBtn:hover {
     background: #00c3ff;
     color: black;
+    box-shadow: 0 0 10px #00c3ff;
 }
 
 .EC-AddBtn {
@@ -263,17 +341,26 @@
     font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
     transition: transform 0.2s;
 }
 
 .EC-AddBtn:hover {
     transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(0, 195, 255, 0.7);
 }
 
 @keyframes fadeInScale {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* Responsive */
@@ -292,9 +379,7 @@
     }
 }
 
-
-/* --- AddWordToList Styles --- */
-
+/* --- AddWordToList Styles (Se mantienen igual) --- */
 .AddToListCard {
   background-color: #051727;
   border: 1px solid #00c3ff75;
@@ -321,39 +406,32 @@
 .ListScrollArea {
   width: 100%;
   max-height: 150px;
-  overflow-y: auto; /* Activa el scroll */
+  overflow-y: auto;
   margin-bottom: 1rem;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   border: 1px solid rgba(0, 195, 255, 0.1);
   padding: 5px;
-  
-  /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: #007ea7 rgba(14, 12, 29, 0.5);
 }
 
-/* --- SCROLLBAR PERSONALIZADO (Estilo Proyecto) --- */
 .ListScrollArea::-webkit-scrollbar {
     width: 8px;
 }
-
 .ListScrollArea::-webkit-scrollbar-track {
     background: rgba(14, 12, 29, 0.5);
     border-radius: 10px;
 }
-
 .ListScrollArea::-webkit-scrollbar-thumb {
     background-color: #007ea7;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
-
 .ListScrollArea::-webkit-scrollbar-thumb:hover {
     background-color: #00c3ff;
     box-shadow: 0 0 10px #00c3ff;
 }
-/* ------------------------------------------------ */
 
 .ListOption {
   display: flex;
@@ -373,7 +451,6 @@
   border-bottom: none;
 }
 
-/* Checkbox Neon */
 .ListOption input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;

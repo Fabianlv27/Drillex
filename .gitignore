@@ -81,3 +81,6 @@ Thumbs.db
 *.bak
 *.tmp
 *.cache
+# Ignorar la caché de audio pero mantener la carpeta
+static/audio_cache/*
+!static/audio_cache/.gitkeep

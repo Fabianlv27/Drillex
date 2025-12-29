@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 import httpx
 import json
 from routers.functions.GeminiService import generate_response
+from routers.functions.CacheService import get_dictionary_cache, save_dictionary_cache
 from routers.LimiterConfig import limiter # Importamos tu limitador
 #falta que la IA me devuelva el texto al idioma que quiero
 Dictionary_Router = APIRouter()
@@ -14,29 +15,28 @@ class DictRequest(BaseModel):
     use_ai: bool = False
 
 @Dictionary_Router.post("/dictionary/search")
-@limiter.limit("15/minute") # Restricción 2: Límite de velocidad
+@limiter.limit("30/minute")
 async def search_dictionary(request: Request, data: DictRequest):
     clean_word = data.word.strip()
+    
+    # 1. VERIFICAR CACHÉ (Lo primero que hacemos)
+    cached_result = get_dictionary_cache(clean_word, data.language, data.use_ai)
+    if cached_result:
+        return cached_result # ¡Retorno inmediato! Ahorraste dinero y tiempo.
 
-    # Restricción 3: Validación lógica (No permitir oraciones)
-    # Si tiene más de 4 espacios, probablemente es una oración, no una palabra/phrasal verb
+    # Validación lógica de longitud...
     if len(clean_word.split()) > 4:
-         return [{
-            "name": clean_word, 
-            "meaning": "⚠️ Dictionary searches are limited to single words or short phrasal verbs.",
-            "example": [],
-            "error": True
-        }]
+         return [{ "error": True, "meaning": "⚠️ Too many words." }]
 
-    # --- CASO 1: USO DE IA (Gemini) ---
+    result_data = []
+
+    # --- LÓGICA DE BÚSQUEDA (Gemini o API) ---
     if data.use_ai:
         json_str = await generate_response(clean_word, context_type="dictionary", target_lang=data.language)
         try:
-            return json.loads(json_str)
+            result_data = json.loads(json_str)
         except:
-            return [{"name": clean_word, "meaning": "Error parsing AI response", "example": []}]
-
-    # --- CASO 2: SIN IA (API TRADICIONAL) ---
+            result_data = [{"name": clean_word, "meaning": "Error parsing AI", "example": []}]
     else:
         if data.language == "en":
             async with httpx.AsyncClient() as client:
@@ -70,7 +70,6 @@ async def search_dictionary(request: Request, data: DictRequest):
                         return {"error": True, "message": "Word not found in API"}
                 except Exception as e:
                     return {"error": True, "message": str(e)}
-        
         else:
             return [{
                 "name": clean_word, 
@@ -78,3 +77,9 @@ async def search_dictionary(request: Request, data: DictRequest):
                 "example": [],
                 "error": True
             }]
+
+    # 2. GUARDAR EN CACHÉ SI FUE EXITOSO
+    if result_data and not isinstance(result_data, dict) and not result_data[0].get('error'):
+         save_dictionary_cache(clean_word, data.language, data.use_ai, result_data)
+
+    return result_data

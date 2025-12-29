@@ -2,7 +2,7 @@
 
 /* --- CONTENEDOR PRINCIPAL FLOTANTE --- */
 .floating-fab-container {
-    z-index: 2147483647;
+   z-index: 2147483647 !important;
     position: fixed; 
     display: flex;
     flex-direction: column; 
