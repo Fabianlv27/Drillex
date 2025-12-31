@@ -1,40 +1,30 @@
 import { useState, useEffect, useContext } from "react";
-import { Context } from "../../../Contexts/Context";
+import { Context } from "../Contexts/Context"; // Ruta corregida
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import { IoIosArrowForward, IoIosArrowBack, IoMdAdd, IoMdClose } from "react-icons/io";
 import { FaBookOpen } from "react-icons/fa";
-import AddWordToList from "../../Componets/AddWordToList.jsx"; 
-import ImageSearch from './ImageSeach.jsx';
-import "../../styles/LyricsAndWords.css";
+import AddWordToList from "./AddWordToList"; // Misma carpeta
+import ImageSearch from './ImageSearch'; // Misma carpeta
 
-// AHORA ACEPTA PROPS (Para la extensión)
 function ElementCard({ 
     CurrentListId, 
-    // Nuevas props opcionales:
     selectedObjects: propSelectedObjects, 
     setSelectedObjects: propSetSelectedObjects 
 }) {
   
-  // 1. INTENTAMOS OBTENER DEL CONTEXTO (Para la Web)
-  // Nota: Si esto corre en la extensión sin Provider, devolverá undefined/default, 
-  // pero como usamos las props, no importa.
   const contextData = useContext(Context);
-
-  // 2. DEFINIMOS LA FUENTE DE LA VERDAD (Props > Contexto)
   const SelectedObjects = propSelectedObjects || contextData?.SelectedObjects || [];
   const setSelectedObjects = propSetSelectedObjects || contextData?.setSelectedObjects || (() => {});
 
   const [AddWordB, setAddWordB] = useState(false);
   const [Index, setIndex] = useState(0);
 
-  // Al cargar o cambiar objetos, ir al último
   useEffect(() => {
     if(SelectedObjects.length > 0) {
         setIndex(SelectedObjects.length - 1);
     }
   }, [SelectedObjects.length]); 
 
-  // Bloquear scroll del body
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -78,7 +68,6 @@ function ElementCard({
     <div className="ElementCardOverlay">
       <div className="ElementCardContainer">
         
-        {/* HEADER */}
         <div className="EC-Header">
             <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                  <button className="EC-CloseBtn" onClick={handleClose}>
@@ -91,7 +80,6 @@ function ElementCard({
              </span>
         </div>
 
-        {/* CONTENIDO PRINCIPAL */}
         <div className="EC-Content">
             
             <div className="EC-Type">
@@ -100,7 +88,6 @@ function ElementCard({
                     : (Array.isArray(currentWord.type) ? currentWord.type.join(", ") : currentWord.type || "Word")}
             </div>
 
-            {/* IMPORTANTE: Pasamos dataWord explícitamente a ImageSearch */}
             {!currentWord.image && (
                 <ImageSearch 
                     word={currentWord.name} 
@@ -189,7 +176,6 @@ function ElementCard({
             )}
         </div>
 
-        {/* BARRA DE NAVEGACIÓN */}
         {SelectedObjects.length > 1 && (
             <div className="EC-WordNav">
                 {SelectedObjects.map((obj, i) => (
@@ -205,7 +191,6 @@ function ElementCard({
             </div>
         )}
 
-        {/* FOOTER */}
         <div className="EC-Footer">
             {SelectedObjects.length > 1 && (
                 <button className="EC-NavBtn" style={{ left: '15px' }} onClick={handlePrev}>

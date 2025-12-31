@@ -42,7 +42,7 @@ function GoogleLoginMenu() {
 
         // 4. Actualizar estado y redirigir
         setIsLogged(true);
-        navigate("/Hero");
+       document.location.href="/Hero"
       } else {
         throw new Error("No token received from server");
       }
@@ -61,7 +61,7 @@ function GoogleLoginMenu() {
     setisSuccesful(0);
   };
 
-  // ... (El resto del return se mantiene IGUAL) ...
+
   return (
     <div className="login-container">
       {isSuccesful === 1 ? (

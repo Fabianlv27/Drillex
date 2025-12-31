@@ -1,4 +1,5 @@
 import json
+from fastapi.responses import JSONResponse
 from os import getenv
 from fastapi import Depends, FastAPI, Request, HTTPException
 from fastapi.middleware import Middleware
@@ -23,6 +24,8 @@ from Data.Dictionary.ItalianDictionary import ItalianDictRouter
 from routers.Dicts.italianDictRouter import italian_Dict_router
 from routers.functions.GeminiAI import Gemini_Router
 from routers.functions.Dictionary import Dictionary_Router
+from fastapi.middleware.cors import CORSMiddleware # Movido arriba por orden
+
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -57,59 +60,101 @@ def root():
     return {"message": "Welcome to the API"}
 
 ALGORITHM = "HS256"
+# --- LISTA DE RUTAS PÚBLICAS (Sin token) ---
 PUBLIC_ROUTES = {
-    "/", 
+    "",                 # Raíz vacía
+    "/",                # Raíz con barra
     "/users/dashboard",
     "/users/login",
     "/users/signin",
-    "/Dicts_creator/it/index"
+    "/Dicts_creator/it/index",
+    "/openapi.json",    # Docs
+    "/docs",            # Docs
+    "/google_login",    # <--- IMPORTANTE: Ruta exacta sin barra final
+    "/google_signin",   # <--- IMPORTANTE
+    "/validate-token"   # <--- IMPORTANTE: Si la usas para validar
 }
 
-
-class AuthMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        # Excluir rutas públicas y solicitudes OPTIONS
-        print(f"Request URL: {request.url}")
-        print(f"Request Headers: {request.headers}")
-        if request.method == "OPTIONS" or request.url.path in PUBLIC_ROUTES:
-            return await call_next(request)
-        token = request.headers.get("Authorization")
-        if not token:
-            token = request.cookies.get("access_token")
-        if not token:
-            raise HTTPException(status_code=401, detail="Token missing")
-        try:
-            # Decodificar el token JWT
-            payload = jwt.decode(token, getenv('KEYSECRET'), algorithms=[ALGORITHM])
-            request.state.user = payload  # Almacenar datos del usuario en el estado de la solicitud
-        except JWTError:
-            raise HTTPException(status_code=401, detail="Invalid token")
-
-        return await call_next(request)
-
-# Agregar el middleware de CORS
-from fastapi.middleware.cors import CORSMiddleware
-
+# --- MIDDLEWARE DE CORS (CORREGIDO) ---
+# Debe ir ANTES del AuthMiddleware si quieres que las peticiones OPTIONS (preflight) pasen sin auth
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Acepta peticiones de localhost y de la extensión
-    allow_credentials=True,
+    # ### CAMBIO IMPORTANTE: ###
+    # allow_origins=["*"] NO funciona con allow_credentials=True.
+    # Usamos regex para permitir cualquier origen HTTPS (necesario para extensiones en Wikipedia, Youtube, etc)
+    allow_origin_regex="https://.*", 
+    
+    # También permitimos explícitamente tus dominios locales/dev
+    allow_origins=[
+        "http://localhost:5173",
+        "https://dibylocal.com:5173",
+        "https://dibylocal.com:8000"
+    ],
+    allow_credentials=True, # Esto permite pasar Cookies y Headers de Auth
     allow_methods=["*"],
     allow_headers=["*"],    
 )
 
+class AuthMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # 1. Normalizamos la ruta (quitamos la barra final si existe)
+        current_path = request.url.path.rstrip("/")
+        
+        # DEBUG: Descomenta esto si sigue fallando para ver qué ruta llega
+        print(f"🔍 Middleware Check: {current_path}") 
+
+        # 2. Comprobamos si es pública
+        # Verificamos la ruta exacta O la ruta sin barra final
+        if (request.method == "OPTIONS" or 
+            current_path in PUBLIC_ROUTES or 
+            request.url.path in PUBLIC_ROUTES):
+            return await call_next(request)
+        
+        # 3. Extracción del Token
+        token = request.headers.get("Authorization")
+        
+        if token and token.startswith("Bearer "):
+            token = token.split(" ")[1]
+
+        if not token:
+            token = request.cookies.get("access_token")
+            
+        if not token:
+            # Validación extra para docs (por si acaso)
+            if current_path == "" or current_path.startswith("/docs") or current_path.startswith("/openapi.json"):
+                return await call_next(request)
+            
+            # --- CAMBIO CLAVE: Usamos JSONResponse en lugar de raise HTTPException ---
+            return JSONResponse(status_code=401, content={"detail": "Token missing"})
+            
+        try:
+            # Decodificar el token JWT
+            payload = jwt.decode(token, getenv('KEYSECRET'), algorithms=[ALGORITHM])
+            request.state.user = payload
+        except JWTError:
+             # --- CAMBIO CLAVE: JSONResponse para evitar el error 500 ---
+            return JSONResponse(status_code=401, content={"detail": "Invalid token"})
+
+        return await call_next(request)
+# Añadimos tu Auth Middleware
+app.add_middleware(AuthMiddleware)
+
 
 if __name__ == "__main__":
     # Cargar configuración desde config.json
-    with open("./config.json") as f:
-        config = json.load(f)
+    try:
+        with open("./config.json") as f:
+            config = json.load(f)
+    except FileNotFoundError:
+        config = {} # Fallback por si no existe
 
-    # Ejecutar Uvicorn con los parámetros del JSON
+    # Ejecutar Uvicorn
     uvicorn.run(
         "main:app",
-        host=config.get("host", "127.0.0.1"),
+        # Asegúrate de que esto coincida con tu hosts (0.0.0.0 permite acceso externo, 127.0.0.1 solo local)
+        host=config.get("host", "0.0.0.0"), 
         port=config.get("port", 8000),
         ssl_keyfile=config.get("ssl_keyfile"),
         ssl_certfile=config.get("ssl_certfile"),
-        reload=True,  # <--- Agrega esta línea para activar el modo reload
+        reload=True,
     )

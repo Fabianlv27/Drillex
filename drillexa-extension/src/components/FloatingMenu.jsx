@@ -1,16 +1,16 @@
 import { useState, useContext, useEffect } from "react";
-import { useDraggable } from "../../hooks/useDraggable";
+import { useDraggable } from "../hooks/useDraggable"; // Ruta corregida
 import { FaTools, FaSearch, FaTimes, FaRobot } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { BsTranslate } from "react-icons/bs";
 import { CiPlay1 } from "react-icons/ci";
 
-import { Context } from "../../../Contexts/Context";
-import { DiccionaryContext } from "../../../Contexts/DiccionaryContext";
-import { ListsContext } from "../../../Contexts/ListsContext";
-import defaultApi from "../../../api/axiosClient"; // API por defecto (Web)
-import ElementCard from "../secondary menus/ElementCard";
-import "../../translate.css";
+// RUTAS CORREGIDAS
+import { Context } from "../Contexts/Context";
+import { DiccionaryContext } from "../Contexts/DiccionaryContext";
+import { ListsContext } from "../Contexts/ListsContext";
+import defaultApi from "../api/extensionClient"; // Apuntamos al cliente de la extensión
+import ElementCard from "./ElementCard"; // Misma carpeta
 
 const FloatingMenu = ({
     // Props Opcionales para Extensión
@@ -18,8 +18,9 @@ const FloatingMenu = ({
     setSelectedObjects: propSetSelectedObjects,
     userLists: propUserLists,
     setUserLists: propSetUserLists,
-    customApi, // Cliente API inyectado (para extensión)
-    customSearchWord // Función de búsqueda inyectada (opcional)
+    customApi,
+    customSearchWord ,
+    addWordFunction
 }) => {
   
   // 1. OBTENER CONTEXTOS (Puede fallar o ser null en extensión, no importa)
@@ -34,13 +35,11 @@ const FloatingMenu = ({
   const UserLists = propUserLists || listContext?.UserLists || [];
   const GetList = listContext?.GetList || (() => {});
 
-  // 3. ELEGIR API (La inyectada o la default)
+  // 3. ELEGIR API 
   const api = customApi || defaultApi;
 
   // 4. Lógica de búsqueda (Diccionario)
-  // Si estamos en la extensión y no hay context, usamos una función local simple
   const searchWord = customSearchWord || dictContext?.searchWord || (async (word, options) => {
-      // Fallback simple para la extensión: llamada directa a API
       try {
           const res = await api.post("/dictionary/search", { 
               word, 
@@ -51,7 +50,6 @@ const FloatingMenu = ({
       } catch (e) { return [{ error: true, meaning: "Connection Error" }]; }
   });
 
-  // --- Lógica normal del componente ---
   const { bind, isDragging } = useDraggable(
     window.innerHeight - 150,
     window.innerWidth - 80
@@ -117,7 +115,6 @@ const FloatingMenu = ({
     if (!inputValue) return;
     setTranslation("Searching...");
     
-    // Usamos la función searchWord que definimos arriba (Context o Fallback)
     const langForDict = sourceLang === "auto" ? "en" : sourceLang;
     const result = await searchWord(inputValue, {
       language: langForDict,
@@ -125,8 +122,7 @@ const FloatingMenu = ({
     });
 
     if (result && Array.isArray(result) && result.length > 0 && !result[0].error) {
-      // En la extensión, UserLists puede estar vacío al inicio, intentamos cargar
-      if (UserLists.length === 0 && !propUserLists) await GetList(); // Solo llama GetList si estamos en Web
+      if (UserLists.length === 0 && !propUserLists) await GetList();
       
       setIsOpen(false);
       setTranslation("");
@@ -224,11 +220,12 @@ const FloatingMenu = ({
       {SelectedObjects.length > 0 && (
         <div style={{ position: "fixed", top: 0, left: 0, zIndex: 214748364, width: "100vw", height: "100vh", pointerEvents: "none" }}>
           <div style={{ pointerEvents: "auto", width: "100%", height: "100%" }}>
-            {/* Pasamos también las props a ElementCard para que siga la cadena */}
             <ElementCard 
                 CurrentListId={"none"} 
                 selectedObjects={SelectedObjects}
                 setSelectedObjects={setSelectedObjects}
+                userLists={propUserLists}      // <--- IMPORTANTE
+                addWordFunction={addWordFunction} // <--- IMPORTANTE
             />
           </div>
         </div>

@@ -1,46 +1,42 @@
 import { useState, useEffect, useContext } from "react";
-import { Context } from "../../../Contexts/Context";
+// 1. IMPORTS DE CONTEXTOS (SIEMPRE ARRIBA)
+import { Context } from "../Contexts/Context";
+import { ListsContext } from "../Contexts/ListsContext"; 
+
+// 2. IMPORTS DE ICONOS Y COMPONENTES
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import { IoIosArrowForward, IoIosArrowBack, IoMdAdd, IoMdClose } from "react-icons/io";
 import { FaBookOpen } from "react-icons/fa";
-import AddWordToList from "../../Componets/AddWordToList.jsx"; 
-import ImageSearch from './ImageSeach.jsx';
-import "../../styles/LyricsAndWords.css";
+import AddWordToList from "./AddWordToList";
+import ImageSearch from './ImageSearch';
 
-// AHORA ACEPTA PROPS (Para la extensión)
 function ElementCard({ 
     CurrentListId, 
-    // Nuevas props opcionales:
     selectedObjects: propSelectedObjects, 
-    setSelectedObjects: propSetSelectedObjects 
+    setSelectedObjects: propSetSelectedObjects,
+    userLists: propUserLists,
+    addWordFunction
 }) {
   
-  // 1. INTENTAMOS OBTENER DEL CONTEXTO (Para la Web)
-  // Nota: Si esto corre en la extensión sin Provider, devolverá undefined/default, 
-  // pero como usamos las props, no importa.
+  // --- 1. HOOKS DE CONTEXTO (DECLARADOS PRIMERO) ---
   const contextData = useContext(Context);
+  const listContext = useContext(ListsContext); // <--- Declaramos 'listContext' antes de usarlo
 
-  // 2. DEFINIMOS LA FUENTE DE LA VERDAD (Props > Contexto)
+  // --- 2. DEFINICIÓN DE VARIABLES (USANDO LOS CONTEXTOS) ---
   const SelectedObjects = propSelectedObjects || contextData?.SelectedObjects || [];
   const setSelectedObjects = propSetSelectedObjects || contextData?.setSelectedObjects || (() => {});
+  
+  // Ahora es seguro usar 'listContext' porque ya fue declarado arriba
+  const UserLists = propUserLists || listContext?.UserLists || [];
 
   const [AddWordB, setAddWordB] = useState(false);
   const [Index, setIndex] = useState(0);
 
-  // Al cargar o cambiar objetos, ir al último
   useEffect(() => {
     if(SelectedObjects.length > 0) {
         setIndex(SelectedObjects.length - 1);
     }
   }, [SelectedObjects.length]); 
-
-  // Bloquear scroll del body
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
 
   const handleClose = () => {
     setSelectedObjects([]);
@@ -55,7 +51,15 @@ function ElementCard({
   };
 
   const currentWord = SelectedObjects[Index] || {};
+  
+  // --- SEGURIDAD: Evitamos que intente renderizar si no hay datos ---
+  if (!currentWord || !currentWord.name) return null;
+
   const isPhrasal = currentWord.mode == 2;
+
+  // Helpers seguros para strings
+  const safeString = (val) => (typeof val === 'string' ? val : "");
+  const safeArray = (val) => (Array.isArray(val) ? val : []);
 
   const PostData = () => {
     return {
@@ -66,19 +70,26 @@ function ElementCard({
       meaning: currentWord.meaning,
       example: currentWord.example,
       type: isPhrasal ? ["Phrasal Verb"] : currentWord.type,
-      synonyms: Array.isArray(currentWord.synonyms) ? currentWord.synonyms.join(",") : currentWord.synonyms,
-      antonyms: Array.isArray(currentWord.antonyms) ? currentWord.antonyms.join(",") : currentWord.antonyms,
+      synonyms: Array.isArray(currentWord.synonyms) ? currentWord.synonyms.join(",") : safeString(currentWord.synonyms),
+      antonyms: Array.isArray(currentWord.antonyms) ? currentWord.antonyms.join(",") : safeString(currentWord.antonyms),
       image: currentWord.image 
     };
   };
 
-  if (!currentWord.name) return null;
+  // --- PREPARACIÓN SEGURA DE DATOS PARA RENDER ---
+  const imageList = safeString(currentWord.image) ? currentWord.image.split(";") : [];
+  const meaningList = safeString(currentWord.meaning) ? currentWord.meaning.split("\n") : [];
+  
+  const renderListOrString = (val) => {
+      if (Array.isArray(val)) return val.join(", ");
+      if (typeof val === 'object') return JSON.stringify(val); 
+      return val;
+  };
 
   return (
     <div className="ElementCardOverlay">
       <div className="ElementCardContainer">
         
-        {/* HEADER */}
         <div className="EC-Header">
             <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                  <button className="EC-CloseBtn" onClick={handleClose}>
@@ -91,16 +102,14 @@ function ElementCard({
              </span>
         </div>
 
-        {/* CONTENIDO PRINCIPAL */}
         <div className="EC-Content">
             
             <div className="EC-Type">
                 {isPhrasal 
                     ? "Phrasal Verb" 
-                    : (Array.isArray(currentWord.type) ? currentWord.type.join(", ") : currentWord.type || "Word")}
+                    : renderListOrString(currentWord.type) || "Word"}
             </div>
 
-            {/* IMPORTANTE: Pasamos dataWord explícitamente a ImageSearch */}
             {!currentWord.image && (
                 <ImageSearch 
                     word={currentWord.name} 
@@ -111,18 +120,18 @@ function ElementCard({
             )}
 
             <div className="EC-MediaSection">
-                {currentWord.image && (
+                {imageList.length > 0 && (
                     <div className="EC-Images">
-                        {currentWord.image.split(";").map((imgSrc, i) => (
-                            <img key={i} src={imgSrc} alt={`${currentWord.name} ${i}`} />
+                        {imageList.map((imgSrc, i) => (
+                            <img key={i} src={imgSrc} alt={`${currentWord.name} ${i}`} onError={(e) => e.target.style.display='none'} />
                         ))}
                     </div>
                 )}
 
-                {currentWord.meaning && (
+                {meaningList.length > 0 && (
                     <div className="EC-Meaning">
                         <h4><FaBookOpen style={{marginRight:'5px'}}/> Meaning</h4>
-                        {currentWord.meaning.split("\n").map((line, i) => (
+                        {meaningList.map((line, i) => (
                             <p key={i}>{line}</p>
                         ))}
                     </div>
@@ -130,16 +139,16 @@ function ElementCard({
             </div>
 
             <div className="EC-SynAnt">
-                {(currentWord.synonyms && currentWord.synonyms.length > 0) && (
+                {currentWord.synonyms && (
                     <div className="EC-TagBox Syn">
                         <strong>Synonyms:</strong> 
-                        {Array.isArray(currentWord.synonyms) ? currentWord.synonyms.join(", ") : currentWord.synonyms}
+                        {renderListOrString(currentWord.synonyms)}
                     </div>
                 )}
-                {(currentWord.antonyms && currentWord.antonyms.length > 0) && (
+                {currentWord.antonyms && (
                     <div className="EC-TagBox Ant">
                         <strong>Antonyms:</strong> 
-                        {Array.isArray(currentWord.antonyms) ? currentWord.antonyms.join(", ") : currentWord.antonyms}
+                        {renderListOrString(currentWord.antonyms)}
                     </div>
                 )}
             </div>
@@ -165,13 +174,13 @@ function ElementCard({
                 </div>
             )}
 
-            {currentWord.example && currentWord.example.length > 0 && (
+            {safeArray(currentWord.example).length > 0 && (
                 <div className="EC-Examples">
                     <h4>Examples:</h4>
                     <ul>
                         {currentWord.example.map((ex, i) => (
                             <li key={i}>
-                                <MdOutlineRadioButtonChecked /> {ex}
+                                <MdOutlineRadioButtonChecked /> {typeof ex === 'string' ? ex : JSON.stringify(ex)}
                             </li>
                         ))}
                     </ul>
@@ -184,12 +193,13 @@ function ElementCard({
                         ExtraFunction={() => setAddWordB(false)} 
                         data={PostData()} 
                         CurrentListId={CurrentListId} 
+                        userLists={UserLists}
+                        addWordFunction={addWordFunction}
                     />
                 </div>
             )}
         </div>
 
-        {/* BARRA DE NAVEGACIÓN */}
         {SelectedObjects.length > 1 && (
             <div className="EC-WordNav">
                 {SelectedObjects.map((obj, i) => (
@@ -205,7 +215,6 @@ function ElementCard({
             </div>
         )}
 
-        {/* FOOTER */}
         <div className="EC-Footer">
             {SelectedObjects.length > 1 && (
                 <button className="EC-NavBtn" style={{ left: '15px' }} onClick={handlePrev}>
