@@ -23,7 +23,7 @@ async def generate_response(prompt: str, context_type: str = "general", target_l
                     "example": ["ejemplo 1", "ejemplo 2"],
                     "synonyms": ["sinonimo1", "sinonimo2"],
                     "antonyms": ["antonimo1"],
-                    "type": ["Noun/Verb"],
+                    "type": ["Noun","Verb"],
                     "image": ""
                 }}
             ]

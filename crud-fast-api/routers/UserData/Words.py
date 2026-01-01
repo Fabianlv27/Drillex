@@ -73,26 +73,29 @@ def PostWord(wordData: Word, user_id: str):
         """       
         cursor.executemany(sql, listsValues)
     
-        # Lógica de Tipos (Types)
+       # --- LÓGICA DE TIPOS OPTIMIZADA ---
         if wordData.type and len(wordData.type) > 0:
-            existing_types = GetTypes(cursor)
-            wordData.type = list(set(wordData.type))
+            # 1. Normalización en Python (Set para únicos, lower y strip)
+            # Esto maneja chino/árabe sin problemas en memoria
+            clean_types = list({t.strip().lower() for t in wordData.type if t.strip()})
             
-            Values = [] 
-            placeholders = []
+            if clean_types:
             
-            for id_word_tuple in listsValues: 
-                current_word_id = id_word_tuple[0]
-                for ty in wordData.type:
-                    if ty not in existing_types:
-                        PostType(ty, cursor)
-                        existing_types.append(ty)
-                    placeholders.append("(%s, %s)")
-                    Values.extend([ty, current_word_id])
-            
-            if Values:
-                InsertTypes = "INSERT INTO types_words (nameType, id_Word) VALUES " + ",".join(placeholders)
-                cursor.execute(InsertTypes, tuple(Values))
+                sql_insert_catalog = "INSERT IGNORE INTO types (nameType) VALUES (%s)"
+                catalog_values = [(t,) for t in clean_types]
+                cursor.executemany(sql_insert_catalog, catalog_values)
+                Values = [] 
+                placeholders = []
+                
+                for id_word_tuple in listsValues: 
+                    current_word_id = id_word_tuple[0]
+                    for ty in clean_types:
+                        placeholders.append("(%s, %s)")
+                        Values.extend([ty, current_word_id])
+                
+                if Values:
+                    InsertTypes = "INSERT IGNORE INTO types_words (nameType, id_Word) VALUES " + ",".join(placeholders)
+                    cursor.execute(InsertTypes, tuple(Values))
     
         conexion.commit()
     
@@ -248,6 +251,8 @@ def CreateWord(request: Request,wordData: Word, user_id: str = Depends(get_curre
     # Usamos user_id para asegurar que está logueado, 
     # aunque PostWord confía en los IDs de lista que envía el frontend.
     try:
+        if not wordData.ListsId or len(wordData.ListsId) == 0:
+            raise HTTPException(status_code=400, detail="Debes seleccionar al menos una lista.")
         PostWord(wordData,user_id)
         return {"status": True, "detail": "Word created"}
     except ValidationError as err:

@@ -81,9 +81,11 @@ Thumbs.db
 *.bak
 *.tmp
 *.cache
-# Ignorar la caché de audio pero mantener la carpeta
-static/audio_cache/*
-!static/audio_cache/.gitkeep
+
+# Ignora los archivos dentro de audio_cache en el backend
+crud-fast-api/static/audio_cache/*
+
+!crud-fast-api/static/audio_cache/.gitkeep
 
 /node_modules
 /.pnp
