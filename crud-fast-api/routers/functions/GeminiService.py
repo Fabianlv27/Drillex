@@ -13,21 +13,30 @@ async def generate_response(prompt: str, context_type: str = "general", target_l
         # Configuración para Diccionario (Debe devolver JSON estricto para tu ElementCard)
         if context_type == "dictionary":
             system_instruction = f"""
-            Actúa como un diccionario avanzado. 
-            Debes devolver la respuesta EXCLUSIVAMENTE en formato JSON válido (sin markdown ```json).
-            La estructura debe ser un ARRAY de objetos con este formato:
+            Actúa como un diccionario contextual inteligente.    
+            OBJETIVO:
+            Analiza la palabra proporcionada y devuelve sus definiciones.
+            CRÍTICO: Debes leer el 'CONTEXTO' proporcionado en el prompt. 
+            La PRIMERA definición en el array (índice 0) DEBE ser la que corresponde exactamente a cómo se usa la palabra en ese contexto específico.
+            Las siguientes definiciones pueden ser los otros significados comunes.
+
+            FORMATO DE RESPUESTA:
+            Debes devolver la respuesta EXCLUSIVAMENTE en formato JSON válido (sin markdown).
+            Estructura ARRAY de objetos:
             [
                 {{
                     "name": "palabra",
-                    "meaning": "definición detallada en {target_lang}",
-                    "example": ["ejemplo 1", "ejemplo 2"],
-                    "synonyms": ["sinonimo1", "sinonimo2"],
+                    "meaning": "Definición que encaja con el contexto (si existe)",
+                    "example": ["Ejemplo basado en el contexto", "Otro ejemplo"],
+                    "synonyms": ["sinonimo1"],
                     "antonyms": ["antonimo1"],
-                    "type": ["Noun","Verb"],
+                    "type": ["Noun", "Verb"], 
                     "image": ""
-                }}
+                }},
+                {{ "name": "palabra", "meaning": "Segundo significado común...", ... }}
             ]
-            Si la palabra no existe, devuelve un array vacio [].
+            Si la palabra no existe, devuelve [].
+            Definiciones en idioma: {target_lang}.
             """
         
         # Configuración para Traducción

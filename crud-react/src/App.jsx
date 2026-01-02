@@ -26,9 +26,7 @@ import GameVoice from "./Functions/Games/GameVoice";
 import Dash from "./Functions/MainMenus/Dash";
 import SymAntsGame from "./Functions/Games/SymAntsGame";
 import PhrData from "./Functions/MainMenus/PhrData";
-import AboveMenu from "./AboveMenu";
 import Navbar from "./Functions/MainMenus/Navbar";
-import FloatingMenu from "./Functions/MainMenus/FloatingMenu";
 import ProtectedRoute from "./ProtectedRoute";
 import GoogleLoginMenu from "./Functions/MainMenus/user/GoogleLoginMenu";
 import GoogleSigninMenu from "./Functions/MainMenus/user/GoogleSigninMenu";
@@ -44,11 +42,6 @@ function AppContent() {
             <DiccionaryContextProvider>
               {location.pathname !== "/login" &&
                 location.pathname !== "/signin" && <Navbar />}
-              {location.pathname !== "/login" &&
-                location.pathname !== "/signin" &&
-                location.pathname !== "/createWords" &&
-                location.pathname !== "/Hero"&&
-                <FloatingMenu />}
               <Routes>
                 <Route path="/login" element={<GoogleLoginMenu />} />
                 <Route path="/signin" element={<GoogleSigninMenu />} />

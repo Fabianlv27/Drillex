@@ -13,6 +13,9 @@ class DictRequest(BaseModel):
     word: str = Field(..., min_length=1, max_length=60, description="Palabra o frase corta a definir")
     language: str = "en"
     use_ai: bool = False
+    context:str=""
+    title:str=""
+    url:str=""
 
 @Dictionary_Router.post("/dictionary/search")
 @limiter.limit("30/minute")
@@ -32,7 +35,22 @@ async def search_dictionary(request: Request, data: DictRequest):
 
     # --- LÓGICA DE BÚSQUEDA (Gemini o API) ---
     if data.use_ai:
-        json_str = await generate_response(clean_word, context_type="dictionary", target_lang=data.language)
+        final_prompt = f"""
+        PALABRA A DEFINIR: "{clean_word}"
+
+        INFORMACIÓN DE CONTEXTO:
+        1. Párrafo original: "{data.context}"
+        2. Título de la web: "{data.title}"
+        3. URL: "{data.url}"
+
+        INSTRUCCIÓN:
+        1. Analiza el contexto y determina el significado exacto de "{clean_word}".
+        2. Coloca ese significado como el PRIMERO en la lista.
+        3. IMPORTANTE: El campo 'meaning' y los 'example' deben estar traducidos al idioma: {data.language}.
+           (Si el idioma es 'es', define en español. Si es 'en', en inglés).
+        4. Mantén la estructura JSON estricta solicitada por el sistema.
+        """
+        json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.language)
         try:
             result_data = json.loads(json_str)
         except:

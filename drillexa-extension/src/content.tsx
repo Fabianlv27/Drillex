@@ -93,9 +93,7 @@ useEffect(() => {
          // Login exitoso
          if (event.data && event.data.type === "DRILLEXA_LOGIN_SUCCESS") {
          console.log("Login detectado vía mensaje -> Forzando actualización");
-             // Borramos caché vieja de "no logueado" por si acaso
              chrome.storage.local.remove(["auth_status", "last_check", "cached_lists"], () => {
-                 // Forzamos la verificación inmediata
                  checkAuth(true); 
              });
 

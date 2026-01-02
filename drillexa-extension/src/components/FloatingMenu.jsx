@@ -44,7 +44,10 @@ const FloatingMenu = ({
           const res = await api.post("/dictionary/search", { 
               word, 
               language: options.language, 
-              use_ai: options.useAI 
+              use_ai: options.useAI ,
+              context: options.context || "",
+              title: options.title || "",
+              url: options.url || ""
           });
           return res.data;
       } catch (e) { return [{ error: true, meaning: "Connection Error" }]; }
@@ -114,11 +117,21 @@ const FloatingMenu = ({
   const handleDefinition = async () => {
     if (!inputValue) return;
     setTranslation("Searching...");
-    
+    // --- 1. CAPTURAR CONTEXTO ---
+    const selection = window.getSelection();
+    // Obtenemos el texto del elemento padre (párrafo, div, span) donde está la selección
+    const contextParagraph = selection.anchorNode?.parentElement?.innerText || ""; 
+    const pageTitle = document.title;
+    const pageUrl = window.location.href;
+
+
     const langForDict = sourceLang === "auto" ? "en" : sourceLang;
     const result = await searchWord(inputValue, {
       language: langForDict,
       useAI: useAI,
+      context: contextParagraph, 
+      title: pageTitle,         
+      url: pageUrl               
     });
 
     if (result && Array.isArray(result) && result.length > 0 && !result[0].error) {
