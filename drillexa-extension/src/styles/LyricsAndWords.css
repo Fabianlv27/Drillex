@@ -130,6 +130,7 @@
 
 /* Header del Modal (Título y Botón Cerrar) */
 .EC-Header {
+    height: 40px;
     background-color: rgba(14, 12, 29, 0.95);
     padding: 1rem;
     display: flex;
@@ -344,7 +345,7 @@
     justify-content: center; /* Centra el contenido principal (Botón Añadir) */
     align-items: center;
     border-top: 1px solid #00c3ff; /* Línea neón superior */
-    min-height: 70px; /* Altura mínima para asegurar espacio */
+    min-height: 30px; /* Altura mínima para asegurar espacio */
 }
 
 /* Flechas de navegación (Posición Absoluta) */

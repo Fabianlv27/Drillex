@@ -52,21 +52,19 @@ const checkAuth = useCallback(async (force = false) => {
 
         // --- ESCENARIO B: Petición Real (Caché vieja o forzada) ---
         try {
-            console.log("🔄 Verificando sesión con Backend...");
+            console.log("Verificando sesión con Backend...");
             await api.get("/users/me"); // Si falla lanza error 401
             
-            // Si llegamos aquí, está autenticado. Pedimos listas.
-            // (Podrías optimizar y pedir listas solo si no están en caché, pero mejor actualizar)
-            const listsRes = await api.get("/lists/get_lists");
+            const listsRes = await api.get("/users/Lists");
             
             // ACTUALIZAMOS EL ESTADO LOCAL
             setIsAuthenticated(true);
-            setUserLists(listsRes.data);
+            setUserLists(listsRes.data.content);
 
             // ACTUALIZAMOS LA CACHÉ COMPARTIDA (Para las otras pestañas)
             chrome.storage.local.set({
                 auth_status: true,
-                cached_lists: listsRes.data,
+                cached_lists: listsRes.data.content,
                 last_check: now
             });
 
@@ -86,27 +84,41 @@ const checkAuth = useCallback(async (force = false) => {
   }, []);
 
 useEffect(() => {
-    // 1. Carga inicial
     checkAuth();
 
-    // 2. Al enfocar la pestaña (ahora es seguro y barato gracias a la caché)
     const handleFocus = () => checkAuth();
     window.addEventListener("focus", handleFocus);
 
-    // 3. Listener de mensajes (Si Login.jsx manda "DRILLEXA_LOGIN_SUCCESS")
-    // Esto fuerza la actualización ignorando la caché
     const handleMessage = (event) => {
+         // Login exitoso
          if (event.data && event.data.type === "DRILLEXA_LOGIN_SUCCESS") {
-             checkAuth(true); // true = forzar actualización
+         console.log("Login detectado vía mensaje -> Forzando actualización");
+             // Borramos caché vieja de "no logueado" por si acaso
+             chrome.storage.local.remove(["auth_status", "last_check", "cached_lists"], () => {
+                 // Forzamos la verificación inmediata
+                 checkAuth(true); 
+             });
+
+         }
+         
+         // --- NUEVO: Logout detectado ---
+         if (event.data && event.data.type === "DRILLEXA_LOGOUT") {
+             console.log("Cierre de sesión recibido -> Limpiando caché");
+             // Borramos todo rastro de sesión en la extensión
+             chrome.storage.local.remove(["auth_status", "last_check", "cached_lists"], () => {
+                 setIsAuthenticated(false);
+                 setUserLists([]);
+             });
          }
     };
+    
     window.addEventListener("message", handleMessage);
 
     return () => {
       window.removeEventListener("focus", handleFocus);
       window.removeEventListener("message", handleMessage);
     };
-  }, [checkAuth]);
+}, [checkAuth]);
 
 const handleAddWordExtension = async (listIds: any, wordData: any) => {
 try {
@@ -155,7 +167,11 @@ try {
     return (
       <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 2147483647 }}>
         <button 
-          onClick={() => window.open(LOGIN_URL, "_blank")}
+         onClick={() => {
+
+            chrome.storage.local.remove(["last_check", "auth_status", "cached_lists"], () => {
+                 window.open(LOGIN_URL, "_blank");
+            })}}
           style={{
             width: '60px', height: '60px', borderRadius: '50%',
             backgroundColor: '#222', border: '2px solid #00c3ff',

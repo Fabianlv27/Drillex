@@ -95,7 +95,7 @@
 
 /* --- INPUT DE TEXTO COMPACTO --- */
 .fab-input {
-    width: 100%;
+    width: 90%;
     height: 40px; /* Altura fija de input normal */
     padding: 0 10px; /* Padding lateral */
     border-radius: 8px;

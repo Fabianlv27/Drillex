@@ -53,14 +53,22 @@ function Navbar() {
   };
 
   // --- LOGOUT ---
-  const LogoutHandler = async () => {
+const LogoutHandler = async () => {
     try {
+      // 1. AVISO INMEDIATO A LA EXTENSIÓN
+      // Esto le dice a content.tsx: "¡Borra la caché ya!"
+      window.postMessage({ type: "DRILLEXA_LOGOUT" }, "*");
+
+      // 2. Petición al backend para borrar cookies HttpOnly
       await api.post("/logout");
       console.log("Sesión cerrada");
-      window.location.href = `${Rhost || ''}/Hero`; 
+      
+      // 3. Redirección forzada a /login (Recarga completa)
+      window.location.href = `${Rhost || ''}/login`; 
     } catch (error) {
       console.error("Error logout:", error);
-      window.location.href = `${Rhost || ''}/Hero`;
+      // Fallback en caso de error
+      window.location.href = `${Rhost || ''}/login`;
     }
   };
 
