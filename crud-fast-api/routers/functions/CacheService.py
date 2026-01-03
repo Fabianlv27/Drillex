@@ -25,9 +25,9 @@ except Exception as e:
 # 1. CACHÉ DE DICCIONARIO (JSON)
 # ==========================================
 
-def get_dictionary_cache(word: str, language: str, use_ai: bool):
+def get_dictionary_cache(word: str, language: str):
     clean_word = word.lower().strip()
-    cache_key = f"dict:{clean_word}:{language}:{use_ai}"
+    cache_key = f"dict:{clean_word}:{language}"
 
     # 1. Intentar Redis
     if redis_client:
@@ -41,8 +41,8 @@ def get_dictionary_cache(word: str, language: str, use_ai: bool):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        sql = "SELECT result_json FROM dictionary_cache WHERE word=%s AND language=%s AND use_ai=%s"
-        cursor.execute(sql, (clean_word, language, use_ai))
+        sql = "SELECT result_json FROM dictionary_cache WHERE word=%s AND language=%s"
+        cursor.execute(sql, (clean_word, language))
         result = cursor.fetchone()
         cursor.close()
         conn.close()

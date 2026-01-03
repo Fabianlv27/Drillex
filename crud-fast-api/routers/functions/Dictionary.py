@@ -23,7 +23,7 @@ async def search_dictionary(request: Request, data: DictRequest):
     clean_word = data.word.strip()
     
     # 1. VERIFICAR CACHÉ (Lo primero que hacemos)
-    cached_result = get_dictionary_cache(clean_word, data.language, data.use_ai)
+    cached_result = get_dictionary_cache(clean_word, data.language)
     if cached_result:
         return cached_result # ¡Retorno inmediato! Ahorraste dinero y tiempo.
 
