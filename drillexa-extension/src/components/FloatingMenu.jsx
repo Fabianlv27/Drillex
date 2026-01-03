@@ -119,12 +119,15 @@ const FloatingMenu = ({
     setTranslation("Searching...");
     // --- 1. CAPTURAR CONTEXTO ---
     const selection = window.getSelection();
-    // Obtenemos el texto del elemento padre (párrafo, div, span) donde está la selección
     const contextParagraph = selection.anchorNode?.parentElement?.innerText || ""; 
+    const contextNode = selection.anchorNode?.nodeType === 3 
+        ? selection.anchorNode.textContent 
+        : selection.anchorNode?.parentElement?.innerText || "";
+    console.log(contextParagraph)
     const pageTitle = document.title;
     const pageUrl = window.location.href;
-
-
+  
+   
     const langForDict = sourceLang === "auto" ? "en" : sourceLang;
     const result = await searchWord(inputValue, {
       language: langForDict,
@@ -139,7 +142,11 @@ const FloatingMenu = ({
       
       setIsOpen(false);
       setTranslation("");
-      setSelectedObjects([...SelectedObjects, result[0]]);
+      const wordWithContext = {
+          ...result[0],
+          originalContext: contextNode // Guardamos el contexto AQUÍ
+      };
+      setSelectedObjects([...SelectedObjects, wordWithContext]);
     } else {
       const msg = result?.message || result[0]?.meaning || "Definition not found.";
       setTranslation(msg);

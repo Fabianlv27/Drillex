@@ -34,6 +34,7 @@ async def search_dictionary(request: Request, data: DictRequest):
     result_data = []
 
     # --- LÓGICA DE BÚSQUEDA (Gemini o API) ---
+    print(data.context)
     if data.use_ai:
         final_prompt = f"""
         PALABRA A DEFINIR: "{clean_word}"
@@ -41,8 +42,6 @@ async def search_dictionary(request: Request, data: DictRequest):
         INFORMACIÓN DE CONTEXTO:
         1. Párrafo original: "{data.context}"
         2. Título de la web: "{data.title}"
-        3. URL: "{data.url}"
-
         INSTRUCCIÓN:
         1. Analiza el contexto y determina el significado exacto de "{clean_word}".
         2. Coloca ese significado como el PRIMERO en la lista.
@@ -51,6 +50,7 @@ async def search_dictionary(request: Request, data: DictRequest):
         4. Mantén la estructura JSON estricta solicitada por el sistema.
         """
         json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.language)
+        print(json_str)
         try:
             result_data = json.loads(json_str)
         except:
@@ -83,6 +83,7 @@ async def search_dictionary(request: Request, data: DictRequest):
                                 "type": [m.get("partOfSpeech") for m in entry.get("meanings", [])],
                                 "image": ""
                             })
+                            print(formatted_data)
                         return formatted_data
                     else:
                         return {"error": True, "message": "Word not found in API"}

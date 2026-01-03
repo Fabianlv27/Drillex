@@ -17,24 +17,25 @@ async def generate_response(prompt: str, context_type: str = "general", target_l
             OBJETIVO:
             Analiza la palabra proporcionada y devuelve sus definiciones.
             CRÍTICO: Debes leer el 'CONTEXTO' proporcionado en el prompt. 
-            La PRIMERA definición en el array (índice 0) DEBE ser la que corresponde exactamente a cómo se usa la palabra en ese contexto específico.
-            Las siguientes definiciones pueden ser los otros significados comunes.
-
-            FORMATO DE RESPUESTA:
-            Debes devolver la respuesta EXCLUSIVAMENTE en formato JSON válido (sin markdown).
-            Estructura ARRAY de objetos:
-            [
-                {{
-                    "name": "palabra",
-                    "meaning": "Definición que encaja con el contexto (si existe)",
-                    "example": ["Ejemplo basado en el contexto", "Otro ejemplo"],
-                    "synonyms": ["sinonimo1"],
-                    "antonyms": ["antonimo1"],
-                    "type": ["Noun", "Verb"], 
-                    "image": ""
-                }},
-                {{ "name": "palabra", "meaning": "Segundo significado común...", ... }}
-            ]
+            1. Devuelve un ARRAY JSON que contenga EXACTAMENTE UN (1) OBJETO.
+        2. Ese objeto debe consolidar todos los significados posibles de la palabra:
+           - "meaning": DEBE ser un SOLO STRING. Pon la definición que coincide con el contexto PRIMERO. Si hay otros significados, agrégalos debajo separados por un salto de línea (\\n).
+           - "type": Un array combinando todos los tipos gramaticales encontrados (ej: ["Noun", "Verb"]).
+           - "synonyms": Un array combinando los mejores sinónimos de todos los significados.
+           - "antonyms": Un array combinando los mejores antónimos.
+           - "example": Un array con 3 o 4 ejemplos (prioriza el del contexto).     
+           Ejemplo de estructura esperada (JSON válido):
+        [
+            {{
+                "name": "la palabra",
+                "meaning": "1. (Contextual) Definición principal aquí.\\n2. Segunda definición común.\\n3. Tercera definición...",
+                "type": ["Noun", "Verb"],
+                "example": ["Ejemplo del contexto", "Ejemplo genérico"],
+                "synonyms": ["sinonimo1", "sinonimo2"],
+                "antonyms": ["antonimo1"],
+                "image": ""
+            }}
+        ]
             Si la palabra no existe, devuelve [].
             Definiciones en idioma: {target_lang}.
             """

@@ -49,7 +49,7 @@ function GoogleLoginMenu() {
 
         // Pequeño delay opcional para asegurar que el mensaje se procese antes de cambiar de página
         setTimeout(() => {
-          document.location.href = "/Hero";
+         navigate("/Hero")
         }, 100);
       } else {
         throw new Error("No token received from server");

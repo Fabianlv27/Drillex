@@ -131,6 +131,27 @@ function ElementCard({
                 {meaningList.length > 0 && (
                     <div className="EC-Meaning">
                         <h4><FaBookOpen style={{marginRight:'5px'}}/> Meaning</h4>
+                        {currentWord.originalContext && (
+                            <div className="EC-ContextBox" style={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                padding: '8px',
+                                borderRadius: '6px',
+                                marginBottom: '10px',
+                                borderLeft: '3px solid #00c3ff'
+                            }}>
+                                <h5 style={{margin: '0 0 5px 0', color: '#00c3ff', fontSize:'0.85rem'}}>
+                                    Original Context:
+                                </h5>
+                                <p style={{
+                                    margin: 0, 
+                                    fontSize: '0.9rem', 
+                                    fontStyle: 'italic', 
+                                    color: '#ddd'
+                                }}>
+                                    "{currentWord.originalContext}"
+                                </p>
+                            </div>
+                        )}
                         {meaningList.map((line, i) => (
                             <p key={i}>{line}</p>
                         ))}
