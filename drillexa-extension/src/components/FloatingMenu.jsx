@@ -4,6 +4,8 @@ import { FaTools, FaSearch, FaTimes, FaRobot } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { BsTranslate } from "react-icons/bs";
 import { CiPlay1 } from "react-icons/ci";
+import GrammarCard from "./GrammarCard";
+import { FaPuzzlePiece } from "react-icons/fa";
 
 // RUTAS CORREGIDAS
 import { Context } from "../Contexts/Context";
@@ -44,6 +46,7 @@ const FloatingMenu = ({
           const res = await api.post("/dictionary/search", { 
               word, 
               language: options.language, 
+              t_lang:options.targetLang,
               use_ai: options.useAI ,
               context: options.context || "",
               title: options.title || "",
@@ -62,7 +65,7 @@ const FloatingMenu = ({
   const [showSettings, setShowSettings] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [translation, setTranslation] = useState("");
-
+  const [grammarData, setGrammarData] = useState(null);
   const [useAI, setUseAI] = useState(false);
   const [sourceLang, setSourceLang] = useState("auto");
   const [targetLang, setTargetLang] = useState("es");
@@ -88,6 +91,7 @@ const FloatingMenu = ({
     return () => document.removeEventListener("selectionchange", handleSelection);
   }, [isOpen]);
 
+
   const handleToggle = () => {
     if (!isDragging) {
       setIsOpen(!isOpen);
@@ -95,6 +99,38 @@ const FloatingMenu = ({
       setShowSettings(false);
       const currentSelection = window.getSelection().toString().trim();
       if (!isOpen && currentSelection) setInputValue(currentSelection);
+    }
+  };
+
+const handleGrammar = async () => {
+    if (!inputValue) return;
+    
+    // Si la selección es muy corta (menos de 2 palabras), avisamos
+    if (inputValue.trim().split(/\s+/).length < 2) {
+        setTranslation("Please select a full phrase/sentence for grammar analysis.");
+        return;
+    }
+
+    setTranslation("Analyzing grammar..."); // Feedback visual en el menú
+    
+    try {
+        const langToExplain = targetLang === "auto" ? "en" : targetLang;
+        
+        const response = await api.post("/grammar/analyze", {
+            text: inputValue,
+            language: langToExplain
+        });
+
+        if (response.data.status) {
+            setIsOpen(false); // Cerramos menú flotante
+            setGrammarData(response.data.data); // Abrimos GrammarCard
+            setTranslation("");
+        } else {
+            setTranslation(response.data.message || "Analysis failed.");
+        }
+    } catch (error) {
+        console.error(error);
+        setTranslation("Error connecting to Grammar AI.");
     }
   };
 
@@ -128,9 +164,10 @@ const FloatingMenu = ({
     const pageUrl = window.location.href;
   
    
-    const langForDict = sourceLang === "auto" ? "en" : sourceLang;
+    const langForDict = sourceLang === "auto" ? "en" : targetLang;
     const result = await searchWord(inputValue, {
-      language: langForDict,
+      language: sourceLang,
+      targetLang:langForDict,
       useAI: useAI,
       context: contextParagraph, 
       title: pageTitle,         
@@ -229,6 +266,7 @@ const FloatingMenu = ({
             <div className="fab-actions-row">
               <button onClick={handleTranslate} className="fab-action-btn" title="Translate"><BsTranslate /></button>
               <button onClick={handleDefinition} className="fab-action-btn" title="Define"><FaSearch /></button>
+              <button onClick={handleGrammar} className="fab-action-btn" title="Grammar Analysis"><FaPuzzlePiece /></button>
               <button onClick={handleVoice} className="fab-action-btn" title="Listen"><CiPlay1 /></button>
             </div>
 
@@ -237,7 +275,7 @@ const FloatingMenu = ({
         )}
       </div>
 
-      {SelectedObjects.length > 0 && (
+      {SelectedObjects.length > 0 && !grammarData&& (
         <div style={{ position: "fixed", top: 0, left: 0, zIndex: 214748364, width: "100vw", height: "100vh", pointerEvents: "none" }}>
           <div style={{ pointerEvents: "auto", width: "100%", height: "100%" }}>
             <ElementCard 
@@ -246,6 +284,16 @@ const FloatingMenu = ({
                 setSelectedObjects={setSelectedObjects}
                 userLists={propUserLists}      // <--- IMPORTANTE
                 addWordFunction={addWordFunction} // <--- IMPORTANTE
+            />
+          </div>
+        </div>
+      )}
+      {grammarData && (
+        <div style={{ position: "fixed", top: 0, left: 0, zIndex: 214748365, width: "100vw", height: "100vh", pointerEvents: "none" }}>
+          <div style={{ pointerEvents: "auto", width: "100%", height: "100%" }}>
+            <GrammarCard 
+                grammarData={grammarData}
+                onClose={() => setGrammarData(null)}
             />
           </div>
         </div>

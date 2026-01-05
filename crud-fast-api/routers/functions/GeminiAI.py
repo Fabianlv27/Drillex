@@ -5,7 +5,8 @@ from routers.UserData.BasicUserData import get_current_user_id
 # Importamos el limitador que configuramos antes
 from routers.LimiterConfig import limiter
 # Importamos nuestro nuevo servicio
-from routers.functions.GeminiService import generate_response
+from routers.functions.IATextService import generate_response
+
 
 Gemini_Router = APIRouter()
 

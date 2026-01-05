@@ -25,7 +25,7 @@ except Exception as e:
 # 1. CACHÉ DE DICCIONARIO (JSON)
 # ==========================================
 
-def get_dictionary_cache(word: str, language: str):
+def get_dictionary_cache(word: str, language: str,t_lang:str):
     clean_word = word.lower().strip()
     cache_key = f"dict:{clean_word}:{language}"
 
@@ -41,8 +41,8 @@ def get_dictionary_cache(word: str, language: str):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        sql = "SELECT result_json FROM dictionary_cache WHERE word=%s AND language=%s"
-        cursor.execute(sql, (clean_word, language))
+        sql = "SELECT result_json FROM dictionary_cache WHERE word=%s AND language=%s AND target_lang=%s"
+        cursor.execute(sql, (clean_word, language,t_lang))
         result = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -59,7 +59,7 @@ def get_dictionary_cache(word: str, language: str):
 
     return None
 
-def save_dictionary_cache(word: str, language: str, use_ai: bool, data: list):
+def save_dictionary_cache(word: str, language: str,t_lang:str ,use_ai: bool, data: list):
     clean_word = word.lower().strip()
     cache_key = f"dict:{clean_word}:{language}:{use_ai}"
     json_data = json.dumps(data)
@@ -74,10 +74,10 @@ def save_dictionary_cache(word: str, language: str, use_ai: bool, data: list):
         conn = get_db_connection()
         cursor = conn.cursor()
         sql = """
-        INSERT IGNORE INTO dictionary_cache (word, language, use_ai, result_json) 
-        VALUES (%s, %s, %s, %s)
+        INSERT IGNORE INTO dictionary_cache (word, language,target_lang, use_ai, result_json) 
+        VALUES (%s, %s, %s, %s,%s)
         """
-        cursor.execute(sql, (clean_word, language, use_ai, json_data))
+        cursor.execute(sql, (clean_word, language,t_lang,use_ai, json_data))
         conn.commit()
         cursor.close()
         conn.close()

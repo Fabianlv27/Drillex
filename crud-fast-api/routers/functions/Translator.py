@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 from deep_translator import GoogleTranslator
-from routers.functions.GeminiService import generate_response
 from routers.functions.CacheService import get_translation_cache, save_translation_cache
 from routers.LimiterConfig import limiter # Importamos el limitador
+from routers.functions.IATextService import generate_response
 
 Translator_Router = APIRouter()
 

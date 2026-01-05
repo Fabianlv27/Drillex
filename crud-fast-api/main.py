@@ -24,6 +24,7 @@ from Data.Dictionary.ItalianDictionary import ItalianDictRouter
 from routers.Dicts.italianDictRouter import italian_Dict_router
 from routers.functions.GeminiAI import Gemini_Router
 from routers.functions.Dictionary import Dictionary_Router
+from routers.functions.Grammar import Grammar_Router
 from fastapi.middleware.cors import CORSMiddleware # Movido arriba por orden
 
 app = FastAPI()
@@ -55,6 +56,7 @@ app.include_router(ItalianDictRouter, tags=["ItalianDictionary"])
 app.include_router(italian_Dict_router,tags=["Dicts_creator"])
 app.include_router(Gemini_Router, tags=["AI Tools"])
 app.include_router(Dictionary_Router, tags=["AI Dictionary"])
+app.include_router(Grammar_Router, tags=["AI Grammar"])
 @app.get("/")
 def root():
     return {"message": "Welcome to the API"}

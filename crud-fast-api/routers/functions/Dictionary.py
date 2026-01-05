@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Request, Depends
 from pydantic import BaseModel, Field
 import httpx
 import json
-from routers.functions.GeminiService import generate_response
+from routers.functions.IATextService import generate_response
 from routers.functions.CacheService import get_dictionary_cache, save_dictionary_cache
 from routers.LimiterConfig import limiter # Importamos tu limitador
 #falta que la IA me devuelva el texto al idioma que quiero
@@ -12,6 +12,7 @@ class DictRequest(BaseModel):
     # Restricción 1: Máximo 60 caracteres (suficiente para palabras largas o phrasal verbs)
     word: str = Field(..., min_length=1, max_length=60, description="Palabra o frase corta a definir")
     language: str = "en"
+    t_lang:str="en"
     use_ai: bool = False
     context:str=""
     title:str=""
@@ -42,17 +43,28 @@ async def search_dictionary(request: Request, data: DictRequest):
         INFORMACIÓN DE CONTEXTO:
         1. Párrafo original: "{data.context}"
         2. Título de la web: "{data.title}"
-        INSTRUCCIÓN:
-        1. Analiza el contexto y determina el significado exacto de "{clean_word}".
-        2. Coloca ese significado como el PRIMERO en la lista.
-        3. IMPORTANTE: El campo 'meaning' y los 'example' deben estar traducidos al idioma: {data.language}.
-           (Si el idioma es 'es', define en español. Si es 'en', en inglés).
-        4. Mantén la estructura JSON estricta solicitada por el sistema.
         """
         json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.language)
         print(json_str)
         try:
             result_data = json.loads(json_str)
+            parsed_json = json.loads(json_str)
+            
+            # --- CORRECCIÓN DE SEGURIDAD ---
+            # 1. Si devuelve un dict suelto {}, lo metemos en una lista []
+            if isinstance(parsed_json, dict):
+                result_data = [parsed_json]
+                
+            # 2. Si devuelve una lista [], forzamos que solo tenga EL PRIMER elemento
+            elif isinstance(parsed_json, list):
+                if len(parsed_json) > 0:
+                    result_data = [parsed_json[0]] # <--- AQUÍ CORTAMOS LOS DUPLICADOS
+                else:
+                    result_data = [] # Lista vacía si la IA no devolvió nada
+            
+            else:
+                # Caso raro: devolvió un string o número
+                result_data = []
         except:
             result_data = [{"name": clean_word, "meaning": "Error parsing AI", "example": []}]
     else:
@@ -99,6 +111,6 @@ async def search_dictionary(request: Request, data: DictRequest):
 
     # 2. GUARDAR EN CACHÉ SI FUE EXITOSO
     if result_data and not isinstance(result_data, dict) and not result_data[0].get('error'):
-         save_dictionary_cache(clean_word, data.language, data.use_ai, result_data)
+         save_dictionary_cache(clean_word, result_data[0]["language"],data.t_lang, data.use_ai, result_data)
 
     return result_data
