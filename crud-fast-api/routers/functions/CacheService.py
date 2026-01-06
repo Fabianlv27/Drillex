@@ -27,7 +27,7 @@ except Exception as e:
 
 def get_dictionary_cache(word: str, language: str,t_lang:str):
     clean_word = word.lower().strip()
-    cache_key = f"dict:{clean_word}:{language}"
+    cache_key = f"dict:{clean_word}:{language}:{t_lang}"
 
     # 1. Intentar Redis
     if redis_client:

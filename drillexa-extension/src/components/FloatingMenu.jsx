@@ -153,7 +153,6 @@ const handleGrammar = async () => {
   const handleDefinition = async () => {
     if (!inputValue) return;
     setTranslation("Searching...");
-    // --- 1. CAPTURAR CONTEXTO ---
     const selection = window.getSelection();
     const contextParagraph = selection.anchorNode?.parentElement?.innerText || ""; 
     const contextNode = selection.anchorNode?.nodeType === 3 
@@ -164,10 +163,12 @@ const handleGrammar = async () => {
     const pageUrl = window.location.href;
   
    
-    const langForDict = sourceLang === "auto" ? "en" : targetLang;
+   // const SlangForDict = sourceLang === "auto" ? "en" : sourceLang;
+    const TlangForDict=targetLang==="auto"?"en":targetLang
+  
     const result = await searchWord(inputValue, {
       language: sourceLang,
-      targetLang:langForDict,
+      targetLang:TlangForDict,
       useAI: useAI,
       context: contextParagraph, 
       title: pageTitle,         

@@ -7,25 +7,24 @@ from groq import AsyncGroq
 api_key = os.getenv("GROQ_API_KEY")
 client = AsyncGroq(api_key=api_key)
 
-def GetPrompt(context_type, target_lang):
-    print(target_lang)
+def GetPrompt(context_type,language,target_lang):
+    print("idioma objetivo:" + target_lang)
+    if language =="default":
+        language=""
     if context_type == "dictionary":
-        # CORRECCIÓN: Usamos dobles llaves {{ }} para el JSON literal
-        # y llaves simples { } SOLO para la variable {target_lang}
         return f"""
-        Actúa como un DICCIONARIO MULTILINGÜE experto.
-        
+        Actúa como un DICCIONARIO MULTILINGÜE experto.        
         OBJETIVO:
         Tu tarea es generar definiciones para una palabra.
-        
         INSTRUCCIÓN CRÍTICA DE IDIOMA:
-        Todo el contenido de el campo 'meaning' DEBE estar escrito EXCLUSIVAMENTE en el idioma objetivo: "{target_lang}".
+        Todo el contenido de el campo 'meaning' y SOLO ESE CAMPO DEBE estar escrito EXCLUSIVAMENTE en el idioma objetivo: "{target_lang}",
+        los DEMAS CAMPOS como example,synonyms,antonyms y types DEBEN estar en el IDIOMA ORIGINAL {language}.
         (Si "{target_lang}" es 'en', escribe en Inglés. Si es 'it', en Italiano. Si es 'es', en Español).
         IGNORA el hecho de que estas instrucciones están en español. Tu output es para un usuario que habla "{target_lang}".
 
         REGLAS DE ORO:
         1. **CONTEXTO**: La definición 1. DEBE coincidir con cómo se usa la palabra en el 'CONTEXTO' provisto.
-        2. **EJEMPLOS**: Provee 3 ejemplos en el idioma "{target_lang}".
+        2. **EJEMPLOS**: Provee 3 ejemplos en el idioma original de la palabra.
         3. **FORMATO**: Devuelve un objeto JSON con una propiedad "result" que contenga un array.(Recuerda COLOCAR los \n literalmente cuando se solicita ,MUY IMPORTANTE)
 
         EJEMPLO DE COMPORTAMIENTO (Si el idioma objetivo fuera 'en'):
@@ -35,7 +34,7 @@ def GetPrompt(context_type, target_lang):
         "result": [
     {{
       "name": "brave",
-      "language": "en",
+      "language": "(coloca el que tu creas que es la palabra , en este caso esta en ingles entonces: "en")",
       "meaning": "1. Ready to face and endure danger or pain; showing courage (Contextual).\n2. Fine or splendid in appearance.",
       "type": ["Adjective", "Verb"],
       "example": [

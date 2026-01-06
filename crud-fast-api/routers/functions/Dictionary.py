@@ -4,7 +4,7 @@ import httpx
 import json
 from routers.functions.IATextService import generate_response
 from routers.functions.CacheService import get_dictionary_cache, save_dictionary_cache
-from routers.LimiterConfig import limiter # Importamos tu limitador
+from routers.LimiterConfig import limiter 
 #falta que la IA me devuelva el texto al idioma que quiero
 Dictionary_Router = APIRouter()
 
@@ -24,9 +24,9 @@ async def search_dictionary(request: Request, data: DictRequest):
     clean_word = data.word.strip()
     
     # 1. VERIFICAR CACHÉ (Lo primero que hacemos)
-    cached_result = get_dictionary_cache(clean_word, data.language)
+    cached_result = get_dictionary_cache(clean_word, data.language,data.t_lang)
     if cached_result:
-        return cached_result # ¡Retorno inmediato! Ahorraste dinero y tiempo.
+        return cached_result 
 
     # Validación lógica de longitud...
     if len(clean_word.split()) > 4:
@@ -44,7 +44,8 @@ async def search_dictionary(request: Request, data: DictRequest):
         1. Párrafo original: "{data.context}"
         2. Título de la web: "{data.title}"
         """
-        json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.language)
+        print("t_lang antes de pasar"+ data.t_lang)
+        json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.t_lang)
         print(json_str)
         try:
             result_data = json.loads(json_str)
@@ -63,7 +64,6 @@ async def search_dictionary(request: Request, data: DictRequest):
                     result_data = [] # Lista vacía si la IA no devolvió nada
             
             else:
-                # Caso raro: devolvió un string o número
                 result_data = []
         except:
             result_data = [{"name": clean_word, "meaning": "Error parsing AI", "example": []}]
@@ -75,32 +75,56 @@ async def search_dictionary(request: Request, data: DictRequest):
                     if resp.status_code == 200:
                         raw_data = resp.json()
                         formatted_data = []
-                        for entry in raw_data:
-                            meanings_text = ""
-                            examples_list = []
-                            synonyms_list = []
-                            
-                            for m in entry.get("meanings", []):
-                                for d in m.get("definitions", []):
-                                    meanings_text += f"- {d.get('definition')}\n"
-                                    if "example" in d:
-                                        examples_list.append(d["example"])
-                                synonyms_list.extend(m.get("synonyms", []))
 
+                        for entry in raw_data:
+                            all_meanings = []
+                            all_examples = []
+                            all_synonyms = set()
+                            all_antonyms = set()
+                            all_types = set()
+
+                            for m in entry.get("meanings", []):
+                                part_of_speech = m.get("partOfSpeech", "").capitalize()
+                                if part_of_speech:
+                                    all_types.add(part_of_speech)
+
+                                # Procesamos definiciones
+                                for i, d in enumerate(m.get("definitions", [])):
+                                    definition_text = d.get("definition")
+                                    # Formato: "1. (Noun) Definición..." para dar contexto
+                                    formatted_def = f"{len(all_meanings) + 1}. ({part_of_speech}) {definition_text}"
+                                    all_meanings.append(formatted_def)
+
+                                    # Recolectamos ejemplos si existen
+                                    if "example" in d:
+                                        all_examples.append(d["example"])
+
+                                # Recolectamos sinónimos/antónimos del nivel 'meaning'
+                                all_synonyms.update(m.get("synonyms", []))
+                                all_antonyms.update(m.get("antonyms", []))
+
+                            # Construimos el objeto IDENTICO al de la IA
                             formatted_data.append({
                                 "name": entry.get("word"),
-                                "meaning": meanings_text,
-                                "example": examples_list[:3],
-                                "synonyms": synonyms_list[:5],
-                                "type": [m.get("partOfSpeech") for m in entry.get("meanings", [])],
-                                "image": ""
+                                # Unimos con \n para que ElementCard lo corte línea por línea
+                                "meaning": "\n".join(all_meanings), 
+                                "type": list(all_types), # Convertimos set a list
+                                "example": all_examples[:4], # Limitamos a 4 ejemplos para no saturar
+                                "synonyms": list(all_synonyms)[:6],
+                                "antonyms": list(all_antonyms)[:6],
+                                "image": "",
+                                # Agregamos campos vacíos para evitar errores de 'undefined'
+                                "language": "en",
+                                "originalContext": "" 
                             })
-                            print(formatted_data)
+                        
+                        # Si devuelve múltiples entradas (ej: "bank" verbo y "bank" sustantivo),
+                        # devolvemos la primera o todas según prefieras. Aquí devolvemos todas.
                         return formatted_data
                     else:
-                        return {"error": True, "message": "Word not found in API"}
+                        return [{"error": True, "message": "Word not found in API"}]
                 except Exception as e:
-                    return {"error": True, "message": str(e)}
+                    return [{"error": True, "message": f"API Error: {str(e)}"}]
         else:
             return [{
                 "name": clean_word, 
