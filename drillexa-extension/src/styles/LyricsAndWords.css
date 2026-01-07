@@ -1,7 +1,50 @@
-/* LyricsAndWords.css - Estilos para ElementCard */
+EC-AddListOverlay/* LyricsAndWords.css - Estilos para ElementCard */
 
 /* --- Z-INDEX MANAGEMENT (NUEVO) --- */
 /* El menú flotante debe ser el MÁS alto */
+.EC-ListPopupPositioner {
+    position: absolute;
+    /* Ajusta este valor según la altura real de tu footer (~70px suele estar bien) */
+    bottom: 80px; 
+    left: 50%;
+    transform: translateX(-50%); /* Centrado horizontal perfecto */
+    z-index: 100; /* Asegura que flote sobre el contenido */
+    
+    /* Efecto de aparición */
+    animation: slideUpPopup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    
+    /* Sombra para que destaque sobre el texto de fondo */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+}
+
+@keyframes slideUpPopup {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+.EC-AddListOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px);
+    z-index: 20; /* Por encima de todo el contenido de la tarjeta */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrado perfecto */
+    
+    opacity: 0;
+    animation: fadeInOverlay 0.2s forwards;
+}
 .floating-fab-container {
     z-index: 2147483647 !important; /* Max 32-bit int */
 }
@@ -441,19 +484,25 @@
 
 /* --- AddWordToList Styles (Se mantienen igual) --- */
 .AddToListCard {
-  background-color: #051727;
-  border: 1px solid #00c3ff75;
-  border-radius: 10px;
-  padding: 1rem;
-  width: 100%;
-  max-width: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease-in-out;
+    box-shadow: 0 0 30px rgba(0, 195, 255, 0.3);
+    transform: scale(0.9);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes popIn {
+    to { transform: scale(1); }
 }
 
+/* Botón cerrar específico para este sub-menú (opcional) */
+.EC-CloseListBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #ff4757;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
 .AddToListCard h4 {
   color: #00c3ff;
   margin-bottom: 0.8rem;

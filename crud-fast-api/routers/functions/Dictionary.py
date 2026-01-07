@@ -45,7 +45,7 @@ async def search_dictionary(request: Request, data: DictRequest):
         2. Título de la web: "{data.title}"
         """
         print("t_lang antes de pasar"+ data.t_lang)
-        json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.t_lang)
+        json_str = await generate_response(final_prompt, context_type="dictionary", target_lang=data.t_lang,language=data.language)
         print(json_str)
         try:
             result_data = json.loads(json_str)

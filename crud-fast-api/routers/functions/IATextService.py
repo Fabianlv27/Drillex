@@ -9,55 +9,49 @@ client = AsyncGroq(api_key=api_key)
 
 def GetPrompt(context_type,language,target_lang):
     print("idioma objetivo:" + target_lang)
-    if language =="default":
-        language=""
+    source_lang_instruction = f"del idioma '{language}'" if language and language != "auto" else "del idioma detectado de la palabra"
     if context_type == "dictionary":
-        return f"""
-        Actúa como un DICCIONARIO MULTILINGÜE experto.        
-        OBJETIVO:
-        Tu tarea es generar definiciones para una palabra.
-        INSTRUCCIÓN CRÍTICA DE IDIOMA:
-        Todo el contenido de el campo 'meaning' y SOLO ESE CAMPO DEBE estar escrito EXCLUSIVAMENTE en el idioma objetivo: "{target_lang}",
-        los DEMAS CAMPOS como example,synonyms,antonyms y types DEBEN estar en el IDIOMA ORIGINAL {language}.
-        (Si "{target_lang}" es 'en', escribe en Inglés. Si es 'it', en Italiano. Si es 'es', en Español).
-        IGNORA el hecho de que estas instrucciones están en español. Tu output es para un usuario que habla "{target_lang}".
+        return  f"""
+        Actúa como un DICCIONARIO BILINGÜE Y CONTEXTUAL INTELIGENTE.
+        
+        INPUT: Una palabra y un contexto.
+        IDIOMA DE LA PALABRA (ORIGEN): {source_lang_instruction}.
+        IDIOMA DE LA DEFINICIÓN (DESTINO): {target_lang}.
 
-        REGLAS DE ORO:
-        1. **CONTEXTO**: La definición 1. DEBE coincidir con cómo se usa la palabra en el 'CONTEXTO' provisto.
-        2. **EJEMPLOS**: Provee 3 ejemplos en el idioma original de la palabra.
-        3. **FORMATO**: Devuelve un objeto JSON con una propiedad "result" que contenga un array.(Recuerda COLOCAR los \n literalmente cuando se solicita ,MUY IMPORTANTE)
+        INSTRUCCIONES CRÍTICAS DE SEPARACIÓN DE IDIOMAS:
+        1. Campo 'meaning': DEBE estar escrito EXCLUSIVAMENTE en el idioma DESTINO ({target_lang}).
+        2. Campos 'example', 'synonyms', 'antonyms': DEBEN mantenerse OBLIGATORIAMENTE en el idioma ORIGEN ({source_lang_instruction}).
+        3. Campo 'type': Debe estar en el idioma DESTINO ({target_lang}) (ej: 'Noun', 'Verb').
 
-        EJEMPLO DE COMPORTAMIENTO (Si el idioma objetivo fuera 'en'):
-        [Input]: Word: "brave", Context: "The brave firefighter saved the cat from the tree."
-        [Output JSON]:
+        REGLAS DE CONTEXTO:
+        1. La primera definición (1.) y el primer ejemplo DEBEN coincidir con el uso de la palabra en el 'CONTEXTO' provisto.
+        2. Genera 3 ejemplos en total.
+
+        FORMATO DE SALIDA (JSON ARRAY con un solo objeto):
+        
+        EJEMPLO DE COMPORTAMIENTO (Cross-Language):
+        [Input]: Word: "Gato" (Spanish), Target Lang: "en" (English)
+        [Output]:
         {{
-        "result": [
-    {{
-      "name": "brave",
-      "language": "(coloca el que tu creas que es la palabra , en este caso esta en ingles entonces: "en")",
-      "meaning": "1. Ready to face and endure danger or pain; showing courage (Contextual).\n2. Fine or splendid in appearance.",
-      "type": ["Adjective", "Verb"],
-      "example": [
-        "The brave firefighter saved the cat from the burning building.",
-        "She put on a brave face despite the bad news.",
-        "Soldiers brave the elements to protect the border."
-      ],
-      "synonyms": [
-        "courageous",
-        "fearless",
-        "heroic",
-        "valiant"
-      ],
-      "antonyms": [
-        "cowardly",
-        "fearful",
-        "afraid",
-        "timid"
-      ],
-      "image": ""
-    }}
-  ]
-}}
+            "result": [
+                {{
+                    "name": "Gato",
+                    "language": "es",
+                    "meaning": "1. A small domesticated carnivorous mammal with soft fur (Contextual).\\n2. A mechanical device used for lifting heavy loads.",
+                    "type": ["Noun"],
+                    "example": [
+                        "El gato duerme en el sofá.", 
+                        "Mi vecino tiene un gato siamés.", 
+                        "Necesito el gato para cambiar la rueda del coche."
+                    ],
+                    "synonyms": ["felino", "minino"],
+                    "antonyms": [],
+                    "image": ""
+                }}
+            ]
+        }}
+        
+        NOTA: Si la palabra no existe, devuelve "result": [].
         """
     
     elif context_type == "grammar":
@@ -76,15 +70,15 @@ def GetPrompt(context_type,language,target_lang):
         """
         
     elif context_type == "translator":
-        return f"Traduce al idioma {target_lang}. Devuelve JSON: {{ 'translation': 'texto traducido' }}"
+        return f"Traduce al idioma {target_lang}. Devuelve JSON: {{ 'translation': 'texto traducido' ,'status':true}} si no se puede traducir devolver: {{ 'translation': '(vacio)' ,'status':false}}"
     
     return "Asistente útil."
 
 
-async def generate_response(prompt: str, context_type: str = "general", target_lang: str = "en") -> str:
+async def generate_response(prompt: str, context_type: str = "general", target_lang: str = "en",language:str="default") -> str:
     
     try:
-        system_instruction=GetPrompt(context_type,target_lang)
+        system_instruction=GetPrompt(context_type,language,target_lang)
         chat_completion = await client.chat.completions.create(
     messages=[
         {
@@ -102,19 +96,20 @@ async def generate_response(prompt: str, context_type: str = "general", target_l
     model="llama-3.3-70b-versatile",
     temperature=0.1 if context_type in ["dictionary", "grammar"] else 0.6,
     # Truco Pro: Activar modo JSON nativo para asegurar que no falle el parseo
-    response_format={"type": "json_object"} if context_type in ["dictionary", "grammar"] else None,
+    response_format={"type": "json_object"} if context_type in ["dictionary", "grammar","translator"] else None,
     max_completion_tokens=1024,
 )
         text_resp=chat_completion.choices[0].message.content
         # Limpieza básica por si Gemini devuelve Markdown
-        if context_type == "dictionary" or context_type == "grammar":
+        if context_type in ["dictionary", "grammar","translator"]:
             try:
                 parsed = json.loads(text_resp)
                 if "result" in parsed:
                     # Devolvemos solo el contenido de 'result' como string JSON
                     return json.dumps(parsed["result"])
+                return parsed
             except:
-                pass # Si falla, devolvemos el texto original
+                pass 
         print(text_resp)
         return text_resp
 

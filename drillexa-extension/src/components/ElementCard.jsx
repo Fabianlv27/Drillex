@@ -1,9 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-// 1. IMPORTS DE CONTEXTOS (SIEMPRE ARRIBA)
 import { Context } from "../Contexts/Context";
 import { ListsContext } from "../Contexts/ListsContext"; 
-
-// 2. IMPORTS DE ICONOS Y COMPONENTES
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import { IoIosArrowForward, IoIosArrowBack, IoMdAdd, IoMdClose } from "react-icons/io";
 import { FaBookOpen } from "react-icons/fa";
@@ -18,15 +15,11 @@ function ElementCard({
     addWordFunction
 }) {
   
-  // --- 1. HOOKS DE CONTEXTO (DECLARADOS PRIMERO) ---
   const contextData = useContext(Context);
-  const listContext = useContext(ListsContext); // <--- Declaramos 'listContext' antes de usarlo
+  const listContext = useContext(ListsContext); 
 
-  // --- 2. DEFINICIÓN DE VARIABLES (USANDO LOS CONTEXTOS) ---
   const SelectedObjects = propSelectedObjects || contextData?.SelectedObjects || [];
   const setSelectedObjects = propSetSelectedObjects || contextData?.setSelectedObjects || (() => {});
-  
-  // Ahora es seguro usar 'listContext' porque ya fue declarado arriba
   const UserLists = propUserLists || listContext?.UserLists || [];
 
   const [AddWordB, setAddWordB] = useState(false);
@@ -38,26 +31,14 @@ function ElementCard({
     }
   }, [SelectedObjects.length]); 
 
-  const handleClose = () => {
-    setSelectedObjects([]);
-  };
-
-  const handleNext = () => {
-    setIndex((prev) => (prev < SelectedObjects.length - 1 ? prev + 1 : 0));
-  };
-
-  const handlePrev = () => {
-    setIndex((prev) => (prev > 0 ? prev - 1 : SelectedObjects.length - 1));
-  };
+  const handleClose = () => setSelectedObjects([]);
+  const handleNext = () => setIndex((prev) => (prev < SelectedObjects.length - 1 ? prev + 1 : 0));
+  const handlePrev = () => setIndex((prev) => (prev > 0 ? prev - 1 : SelectedObjects.length - 1));
 
   const currentWord = SelectedObjects[Index] || {};
-  
-  // --- SEGURIDAD: Evitamos que intente renderizar si no hay datos ---
   if (!currentWord || !currentWord.name) return null;
 
   const isPhrasal = currentWord.mode == 2;
-
-  // Helpers seguros para strings
   const safeString = (val) => (typeof val === 'string' ? val : "");
   const safeArray = (val) => (Array.isArray(val) ? val : []);
 
@@ -76,7 +57,6 @@ function ElementCard({
     };
   };
 
-  // --- PREPARACIÓN SEGURA DE DATOS PARA RENDER ---
   const imageList = safeString(currentWord.image) ? currentWord.image.split(";") : [];
   const meaningList = safeString(currentWord.meaning) ? currentWord.meaning.split("\n") : [];
   
@@ -88,14 +68,13 @@ function ElementCard({
 
   return (
     <div className="ElementCardOverlay">
-      <div className="ElementCardContainer">
+      {/* ElementCardContainer debe tener position: relative en CSS (ya lo tiene por defecto o agrégaselo) */}
+      <div className="ElementCardContainer" style={{ position: 'relative' }}>
         
         <div className="EC-Header">
             <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                 <button className="EC-CloseBtn" onClick={handleClose}>
-                    <IoMdClose />
-                 </button>
-              <h3 className="EC-Title">{currentWord.name}</h3>
+                 <button className="EC-CloseBtn" onClick={handleClose}><IoMdClose /></button>
+                 <h3 className="EC-Title">{currentWord.name}</h3>
             </div>
              <span style={{fontSize:'0.8rem', color:'#aaa'}}>
                 {Index + 1} / {SelectedObjects.length}
@@ -103,11 +82,8 @@ function ElementCard({
         </div>
 
         <div className="EC-Content">
-            
             <div className="EC-Type">
-                {isPhrasal 
-                    ? "Phrasal Verb" 
-                    : renderListOrString(currentWord.type) || "Word"}
+                {isPhrasal ? "Phrasal Verb" : renderListOrString(currentWord.type) || "Word"}
             </div>
 
             {!currentWord.image && (
@@ -123,7 +99,7 @@ function ElementCard({
                 {imageList.length > 0 && (
                     <div className="EC-Images">
                         {imageList.map((imgSrc, i) => (
-                            <img key={i} src={imgSrc} alt={`${currentWord.name} ${i}`} onError={(e) => e.target.style.display='none'} />
+                            <img key={i} src={imgSrc} alt="visual" onError={(e) => e.target.style.display='none'} />
                         ))}
                     </div>
                 )}
@@ -139,39 +115,18 @@ function ElementCard({
                                 marginBottom: '10px',
                                 borderLeft: '3px solid #00c3ff'
                             }}>
-                                <h5 style={{margin: '0 0 5px 0', color: '#00c3ff', fontSize:'0.85rem'}}>
-                                    Original Context:
-                                </h5>
-                                <p style={{
-                                    margin: 0, 
-                                    fontSize: '0.9rem', 
-                                    fontStyle: 'italic', 
-                                    color: '#ddd'
-                                }}>
-                                    "{currentWord.originalContext}"
-                                </p>
+                                <h5 style={{margin: '0 0 5px 0', color: '#00c3ff', fontSize:'0.85rem'}}>Original Context:</h5>
+                                <p style={{margin: 0, fontSize: '0.9rem', fontStyle: 'italic', color: '#ddd'}}>"{currentWord.originalContext}"</p>
                             </div>
                         )}
-                        {meaningList.map((line, i) => (
-                            <p key={i}>{line}</p>
-                        ))}
+                        {meaningList.map((line, i) => <p key={i}>{line}</p>)}
                     </div>
                 )}
             </div>
 
             <div className="EC-SynAnt">
-                {currentWord.synonyms && (
-                    <div className="EC-TagBox Syn">
-                        <strong>Synonyms:</strong> 
-                        {renderListOrString(currentWord.synonyms)}
-                    </div>
-                )}
-                {currentWord.antonyms && (
-                    <div className="EC-TagBox Ant">
-                        <strong>Antonyms:</strong> 
-                        {renderListOrString(currentWord.antonyms)}
-                    </div>
-                )}
+                {currentWord.synonyms && <div className="EC-TagBox Syn"><strong>Synonyms:</strong> {renderListOrString(currentWord.synonyms)}</div>}
+                {currentWord.antonyms && <div className="EC-TagBox Ant"><strong>Antonyms:</strong> {renderListOrString(currentWord.antonyms)}</div>}
             </div>
 
             {(currentWord.past || currentWord.participle || currentWord.gerund) && (
@@ -200,36 +155,30 @@ function ElementCard({
                     <h4>Examples:</h4>
                     <ul>
                         {currentWord.example.map((ex, i) => (
-                            <li key={i}>
-                                <MdOutlineRadioButtonChecked /> {typeof ex === 'string' ? ex : JSON.stringify(ex)}
-                            </li>
+                            <li key={i}><MdOutlineRadioButtonChecked /> {typeof ex === 'string' ? ex : JSON.stringify(ex)}</li>
                         ))}
                     </ul>
                 </div>
             )}
-
-            {AddWordB && (
-                <div style={{marginTop: '1rem', borderTop:'1px solid #333', paddingTop:'1rem',display:"flex",justifyContent:"center"}}>
-                    <AddWordToList 
-                        ExtraFunction={() => setAddWordB(false)} 
-                        data={PostData()} 
-                        CurrentListId={CurrentListId} 
-                        userLists={UserLists}
-                        addWordFunction={addWordFunction}
-                    />
-                </div>
-            )}
         </div>
+
+        {/* MENÚ DE AGREGAR (Ahora dentro del contenedor y posicionado absolutamente) */}
+        {AddWordB && (
+            <div className="EC-ListPopupPositioner">
+                <AddWordToList 
+                    ExtraFunction={() => setAddWordB(false)} 
+                    data={PostData()} 
+                    CurrentListId={CurrentListId} 
+                    userLists={UserLists}
+                    addWordFunction={addWordFunction}
+                />
+            </div>
+        )}
 
         {SelectedObjects.length > 1 && (
             <div className="EC-WordNav">
                 {SelectedObjects.map((obj, i) => (
-                    <button 
-                        key={i} 
-                        className={`EC-WordNavItem ${Index === i ? 'active' : ''}`}
-                        onClick={() => setIndex(i)}
-                        title={obj.name}
-                    >
+                    <button key={i} className={`EC-WordNavItem ${Index === i ? 'active' : ''}`} onClick={() => setIndex(i)} title={obj.name}>
                         {obj.name}
                     </button>
                 ))}
@@ -237,24 +186,17 @@ function ElementCard({
         )}
 
         <div className="EC-Footer">
-            {SelectedObjects.length > 1 && (
-                <button className="EC-NavBtn" style={{ left: '15px' }} onClick={handlePrev}>
-                    <IoIosArrowBack />
-                </button>
-            )}
-
+            {SelectedObjects.length > 1 && <button className="EC-NavBtn" style={{ left: '15px' }} onClick={handlePrev}><IoIosArrowBack /></button>}
+            
             {!currentWord.error && (
                 <button className="EC-AddBtn" onClick={() => setAddWordB(!AddWordB)}>
                     {AddWordB ? <IoMdClose /> : <IoMdAdd />}
                 </button>
             )}
 
-            {SelectedObjects.length > 1 && (
-                <button className="EC-NavBtn" style={{ right: '15px' }} onClick={handleNext}>
-                    <IoIosArrowForward />
-                </button>
-            )}
+            {SelectedObjects.length > 1 && <button className="EC-NavBtn" style={{ right: '15px' }} onClick={handleNext}><IoIosArrowForward /></button>}
         </div>
+         
       </div>
     </div>
   );

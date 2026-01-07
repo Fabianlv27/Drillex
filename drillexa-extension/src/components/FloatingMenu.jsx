@@ -134,9 +134,10 @@ const handleGrammar = async () => {
     }
   };
 
-  const handleTranslate = async () => {
+const handleTranslate = async () => {
     if (!inputValue) return;
-    setTranslation("Translating...");
+    setTranslation("Translating..."); 
+    
     try {
       const response = await api.post(`/Translate/Process`, {
         text: inputValue,
@@ -144,9 +145,21 @@ const handleGrammar = async () => {
         target: targetLang,
         use_ai: useAI,
       });
-      setTranslation(response.data);
+
+      if (response.data && response.data.status) {
+          setTranslation(response.data.translation);
+      } else {
+          const errorMsg = response.data?.translation || "Translation not found.";
+          setTranslation(`⚠️ ${errorMsg}`);
+      }
+
     } catch (error) {
-      setTranslation("Error translating.");
+      console.error("Translation error:", error);
+      if (error.response?.status === 429) {
+          setTranslation("⚠️ Too many requests. Please wait.");
+      } else {
+          setTranslation("⚠️ Error connecting to server.");
+      }
     }
   };
 
